@@ -33,8 +33,6 @@ typedef struct	s_env
 	struct	s_env	*next;
 }				t_env;
 
-
-// " = 34   ' = 39
 //returns 1 if string have opened quote
 int	check_q(char *s);
 
