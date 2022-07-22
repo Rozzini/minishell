@@ -34,6 +34,13 @@ typedef struct	s_env
 	struct	s_env	*next;
 }				t_env;
 
+//====================BUILTINS=====================//
+
+void    ft_env(t_env **env_list);
+
+//=================================================//
+
+
 //returns 1 if string have opened quote
 int	    check_q(char *s);
 
@@ -46,10 +53,11 @@ void	delete_node(t_env **head);
 //duplicates env variables into list t_env
 void    init_env_list(t_env **env_list, char **env);
 
+//prints duplicated env variables
+void	print_env(t_env **head);
+
 
 //---------SECTION FOR TEMP FUNCTIONS---------------//
 
-//prints duplicated env variables
-void	print_env(t_env **head);
 
 #endif

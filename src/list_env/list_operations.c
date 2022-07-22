@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 21:01:04 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/22 22:14:05 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/22 22:26:40 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,9 @@ void	print_env(t_env **head)
 	t_env *temp;
 
 	temp = *head;
-	printf("MYMYMYMYMYMYMYMYMYMYMYMYMYMYMYMMMYMYMYMYMYMYMYM\n");
 	while (temp->next != NULL)
 	{
 		printf("%s=%s\n", temp->key, temp->val);
 		temp = temp->next;
 	}
-	printf("MYMYMYMYMYMYMYMYMYMYMYMYMYMYMYMMMYMYMYMYMYMYMYM\n");
 }
