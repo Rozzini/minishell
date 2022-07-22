@@ -36,6 +36,12 @@ typedef struct	s_env
 
 //====================BUILTINS=====================//
 
+void	ft_echo(char **av);
+
+void	ft_pwd(int ac, char **av);
+
+void	ft_cd(int ac, char **av);
+
 void    ft_env(t_env **env_list);
 
 //=================================================//

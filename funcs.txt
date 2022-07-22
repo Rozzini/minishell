@@ -494,29 +494,34 @@ https://tiswww.case.edu/php/chet/readline/readline.html#IDX304
 
 
 
-char *
-readline (const char *prompt);
+char *readline (const char *prompt);
 
 _____________________________________________________________________________________
 _____________________________________________________________________________________
 
 void rl_clear_history (void)
 
-Clear the history list by deleting all of the entries, in the same manner as the History library's clear_history() function. This differs from clear_history because it frees private data Readline saves in the history list.
+Clear the history list by deleting all of the entries, in the same 
+manner as the History library's clear_history() function. 
+This differs from clear_history because it frees private data 
+Readline saves in the history list.
 
 _____________________________________________________________________________________
 _____________________________________________________________________________________
 
 int rl_on_new_line (void)
 
-Tell the update functions that we have moved onto a new (empty) line, usually after outputting a newline.
+Tell the update functions that we have moved onto a new (empty) line, 
+usually after outputting a newline.
 
 _____________________________________________________________________________________
 _____________________________________________________________________________________
 
 void rl_replace_line (const char *text, int clear_undo)
 
-Replace the contents of rl_line_buffer with text. The point and mark are preserved, if possible. If clear_undo is non-zero, the undo list associated with the current line is cleared.
+Replace the contents of rl_line_buffer with text. The point and mark are 
+preserved, if possible. If clear_undo is non-zero, the undo list 
+associated with the current line is cleared.
 
 _____________________________________________________________________________________
 _____________________________________________________________________________________
@@ -530,7 +535,8 @@ ________________________________________________________________________________
 
 add_history (line);
 
-If you want the user to be able to get at the line later, (with C-p for example), you must call add_history() to save the line away in a history list of such lines.
+If you want the user to be able to get at the line later, (with C-p for example), 
+you must call add_history() to save the line away in a history list of such lines.
 
 _____________________________________________________________________________________
 _____________________________________________________________________________________
@@ -539,14 +545,22 @@ ________________________________________________________________________________
 
 int access(const char *path, int amode);
 
-The access() function shall check the file named by the pathname pointed to by the path argument for accessibility according to the bit pattern contained in amode, using the real user ID in place of the effective user ID and the real group ID in place of the effective group ID.
+The access() function shall check the file named by the pathname pointed 
+to by the path argument for accessibility according to the bit pattern 
+contained in amode, using the real user ID in place of the effective 
+user ID and the real group ID in place of the effective group ID.
 
-The value of amode is either the bitwise-inclusive OR of the access permissions to be checked (R_OK, W_OK, X_OK) or the existence test (F_OK).
+The value of amode is either the bitwise-inclusive OR of the access 
+permissions to be checked (R_OK, W_OK, X_OK) or the existence test (F_OK).
 
-If any access permissions are checked, each shall be checked individually, as described in the Base Definitions volume of IEEE Std 1003.1-2001, Chapter 3, Definitions. If the process has appropriate privileges, an implementation may indicate success for X_OK even if none of the execute file permission bits are set.
+If any access permissions are checked, each shall be checked individually, 
+as described in the Base Definitions volume of IEEE Std 1003.1-2001, Chapter 3, 
+Definitions. If the process has appropriate privileges, an implementation may 
+indicate success for X_OK even if none of the execute file permission bits are set.
 
 RETURN VALUE
-If the requested access is permitted, access() succeeds and shall return 0; otherwise, -1 shall be returned and errno shall be set to indicate the error.
+If the requested access is permitted, access() succeeds and shall return 0; 
+otherwise, -1 shall be returned and errno shall be set to indicate the error.
 
 _____________________________________________________________________________________
 _____________________________________________________________________________________
@@ -556,7 +570,8 @@ Wait() waits for any child process but waitpid() waits for a specific child equa
 _____________________________________________________________________________________
 _____________________________________________________________________________________
 
-In other words,wait3() waits of any child, while wait4() can be used to select a specific child, or children, on which to wait.
+In other words,wait3() waits of any child, while wait4() can be used to select a 
+specific child, or children, on which to wait.
 
 _____________________________________________________________________________________
 _____________________________________________________________________________________
