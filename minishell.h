@@ -34,6 +34,12 @@ typedef struct	s_env
 }				t_env;
 
 //returns 1 if string have opened quote
-int	check_q(char *s);
+int	    check_q(char *s);
+
+//adds new node to list of env
+void	push(t_env **head_ref, char *key, char *val);
+
+//removes node from list env
+void	delete_node(t_env **head);
 
 #endif
