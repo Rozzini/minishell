@@ -6,7 +6,7 @@
 #    By: mraspors <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/07/22 20:44:42 by mraspors         ###   ########.fr        #
+#    Updated: 2022/07/22 20:54:11 by mraspors         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ LIBFT		=	cd libft && make
 
 LIB			=	libft/libft.a
 
-SRC	= minishell.c
+SRC	=  ./src/parsing/ft_check_quotes.c\
+		minishell.c
 
 OBJS	= $(SRC:.c=.o)
 
@@ -30,6 +31,7 @@ HEADER	= philo.h
 all:	$(NAME)
 
 $(NAME): $(OBJS)
+	$(LIBFT)
 	$(GCC) $(FLAGS) $(OBJS) $(LIB) -o $(NAME) -lreadline
 
 clean:

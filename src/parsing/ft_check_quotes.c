@@ -6,11 +6,11 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:46:21 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/22 20:46:49 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/22 20:55:34 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.c"
+#include "../../minishell.h"
 
 //helper function for Chek_q()
 //changes value of quote flag to oposite
