@@ -1,4 +1,5 @@
 ./libft/libft.a
 minishell
 .vscode
+.DS_Store
 *.o
