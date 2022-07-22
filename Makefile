@@ -6,7 +6,7 @@
 #    By: mraspors <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/07/22 18:26:23 by mraspors         ###   ########.fr        #
+#    Updated: 2022/07/22 20:44:42 by mraspors         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,18 +21,16 @@ SRC	= minishell.c
 
 OBJS	= $(SRC:.c=.o)
 
-GCC	= gcc -g3
+GCC	= gcc
 
 FLAGS	= -Wall -Wextra -Werror
-
-INCLUDE	= -lpthread
 
 HEADER	= philo.h
 
 all:	$(NAME)
 
 $(NAME): $(OBJS)
-	$(GCC) -pthread $(FLAGS) $(OBJS) $(LIB) -o $(NAME) 
+	$(GCC) $(FLAGS) $(OBJS) $(LIB) -o $(NAME) -lreadline
 
 clean:
 	rm -f $(OBJS)

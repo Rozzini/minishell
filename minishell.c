@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/22 18:29:16 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/22 20:39:50 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct	s_token
-{
-	char            *cmdl;
-    	char            **args;
-	char		*path;
-	char		*file_red;
-	struct s_token	*prev;
-	struct s_token	*next;
-}				t_token;
-
-typedef struct	s_env
-{
-	char		*key;
-	char		*val;
-	struct	s_env	*next;
-}				t_env;
 
 //helper function for Chek_q()
 //changes value of quote flag to oposite
