@@ -6,16 +6,11 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/22 20:46:27 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/22 20:48:50 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-
-
+#include "minishell.h"
 
 int main(int argc, char **argv, char **env)
 {
@@ -24,8 +19,5 @@ int main(int argc, char **argv, char **env)
 	if (check_q(argv[1]) == 1)
 		return (0);
 	printf("input: %s\n", argv[1]);
-	find_env(argv[1]);
-	//const char* s = getenv("PATH");
-	//printf("PATH :%s\n",(s!=NULL)? s : "getenv returned NULL");
     return (0);
 }
