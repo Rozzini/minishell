@@ -49,7 +49,7 @@ void    init_env_list(t_env **env_list, char **env);
 
 //---------SECTION FOR TEMP FUNCTIONS---------------//
 
-//prints deplicated env variables
+//prints duplicated env variables
 void	print_env(t_env **head);
 
 #endif
