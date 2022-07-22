@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/22 20:48:50 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/22 22:18:24 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 int main(int argc, char **argv, char **env)
 {
-	if (argc == 1)
-		return (0);
-	if (check_q(argv[1]) == 1)
-		return (0);
-	printf("input: %s\n", argv[1]);
+	t_env *env_list;
+
+	env_list = NULL;
+	init_env_list(&env_list, env);
     return (0);
 }

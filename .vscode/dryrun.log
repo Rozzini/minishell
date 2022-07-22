@@ -1,0 +1,9 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory `/Users/mraspors/Desktop/Cursus/minishell'
+ 
+cc    -c -o src/list_env/ft_env_list.o src/list_env/ft_env_list.c
+cc    -c -o minishell.o minishell.c
+cd libft && make
+gcc -Wall -Wextra -Werror ./src/parsing/ft_check_quotes.o ./src/list_env/list_operations.o ./src/list_env/ft_env_list.o minishell.o libft/libft.a -o minishell -lreadline
+make: Leaving directory `/Users/mraspors/Desktop/Cursus/minishell'
+ 

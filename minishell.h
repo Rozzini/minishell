@@ -15,6 +15,7 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "./libft/libft.h"
 
 typedef struct	s_token
 {
@@ -41,5 +42,14 @@ void	push(t_env **head_ref, char *key, char *val);
 
 //removes node from list env
 void	delete_node(t_env **head);
+
+//duplicates env variables into list t_env
+void    init_env_list(t_env **env_list, char **env);
+
+
+//---------SECTION FOR TEMP FUNCTIONS---------------//
+
+//prints deplicated env variables
+void	print_env(t_env **head);
 
 #endif

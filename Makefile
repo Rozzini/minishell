@@ -6,7 +6,7 @@
 #    By: mraspors <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/07/22 21:07:29 by mraspors         ###   ########.fr        #
+#    Updated: 2022/07/22 22:00:42 by mraspors         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ LIBFT		=	cd libft && make
 LIB			=	libft/libft.a
 
 SRC	=   ./src/parsing/ft_check_quotes.c\
-		./src/list_env/list_operations.c\
+		./src/list_env/list_operations.c ./src/list_env/ft_env_list.c\
 		minishell.c
 
 OBJS	= $(SRC:.c=.o)
