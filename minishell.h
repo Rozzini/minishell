@@ -21,6 +21,7 @@ typedef struct	s_tokens
 {
 	char		*cmdl;
     char		**args;
+	int			arg_c;
 	int			pipe_c;
 }				t_tokens;
 
@@ -33,11 +34,11 @@ typedef struct	s_env
 
 //====================BUILTINS=====================//
 
-void	ft_echo(char **av);
+void	ft_echo(t_tokens *tokens);
 
-void	ft_pwd(int ac, char **av);
+void	ft_pwd(t_tokens *tokens);
 
-void	ft_cd(int ac, char **av);
+void	ft_cd(t_tokens *tokens);
 
 void    ft_env(t_env **env_list);
 
@@ -48,6 +49,7 @@ void    ft_env(t_env **env_list);
 int	    check_q(char *s);
 
 //adds new node to list of env
+//returns 1 if quote is not closed
 void	push(t_env **head_ref, char *key, char *val);
 
 //removes node from list env

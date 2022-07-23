@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 14:26:18 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 14:40:51 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,10 @@ int main(int argc, char **argv, char **env)
 	while (1)
 	{
 		tokens->cmdl = readline(make_prompt());
-		tokens->args = ft_split(tokens->cmdl, ' ');
-		ft_echo(tokens->args);
+		if (basic_parsing(tokens) == 0)
+		{
+			ft_echo(tokens);
+		}
 	}
     return (0);
 }
