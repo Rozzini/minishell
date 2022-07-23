@@ -6,14 +6,14 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:22:55 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 14:23:02 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 15:50:02 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 char	*ft_strstr(char *str, char *to_find)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	if (to_find[0] == '\0')

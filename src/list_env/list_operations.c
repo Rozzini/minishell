@@ -6,12 +6,11 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 21:01:04 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 15:32:32 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 15:48:56 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
 
 //add new node to list
 void	push(t_env **head_ref, char *key, char *val)
@@ -32,7 +31,7 @@ void	delete_node(t_env **head)
 
 	temp = *head;
 	*head = (*head)->next;
-    free(temp->key);
-    free(temp->val);
+	free(temp->key);
+	free(temp->val);
 	free(temp);
 }

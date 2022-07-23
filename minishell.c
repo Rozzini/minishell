@@ -6,25 +6,25 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 15:45:06 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 15:54:05 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //function to create minishell prompt string
-char	*make_prompt()
+char	*make_prompt(void)
 {
 	char	*s;
 	char	*mini;
 
 	s = getcwd(NULL, 0);
 	mini = ft_strstr(s, "/minishell");
-	mini = ft_strcat(mini, "$ "); 
+	mini = ft_strcat(mini, "$ ");
 	return (mini);
 }
 
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
 	t_env		*env_list;
 	t_tokens	*tokens;
@@ -40,5 +40,5 @@ int main(int argc, char **argv, char **env)
 			try_execute(tokens, &env_list);
 		}
 	}
-    return (0);
+	return (0);
 }

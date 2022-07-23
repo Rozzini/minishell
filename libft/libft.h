@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/23 19:16:10 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 14:52:44 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 15:50:21 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ char		*get_next_line(int fd);
 char		*ft_read(int fd, char *buf, int *loc);
 char		*create_result(char *buf, int loc);
 char		*fill_buf(char *buf, int loc);
-int		ft_strlen_gnl(char *s);
-int		ft_strchr_gnl(char *str, int *i, int *give_loc);
+int			ft_strlen_gnl(char *s);
+int			ft_strchr_gnl(char *str, int *i, int *give_loc);
 char		*ft_strjoin_gnl(char *s1, char *s2);
 
 #endif
