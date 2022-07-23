@@ -20,17 +20,17 @@
 typedef struct	s_tokens
 {
 	char		*cmdl;
-    char		**args;
+	char		**args;
 	int			arg_c;
 	int			pipe_c;
 }				t_tokens;
 
 typedef struct	s_env
 {
-	char		*key;
-	char		*val;
+	char			*key;
+	char			*val;
 	struct	s_env	*next;
-}				t_env;
+}					t_env;
 
 
 //====================BUILTINS=====================//
@@ -56,6 +56,10 @@ void    init_env_list(t_env **env_list, char **env);
 
 //prints duplicated env variables
 void	print_env(t_env **head);
+
+//Returns node with provided key
+//if there is no such key returns NULL
+t_env	*find_node_by_key(t_env *lst, char *key);
 
 //=================================================//
 

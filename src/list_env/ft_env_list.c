@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:38:30 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 15:33:06 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 15:42:53 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,22 @@ void	print_env(t_env **head)
 		printf("%s=%s\n", temp->key, temp->val);
 		temp = temp->next;
 	}
+}
+
+//Returns node with provided key
+//if there is no such key returns NULL
+t_env	*find_node_by_key(t_env *lst, char *key)
+{
+	t_env	*node;
+
+	if (lst == NULL)
+		return (NULL);
+	node = lst;
+	while (node->next != NULL)
+    {
+        if (ft_strcmp(node->key, key) == 0)
+            return (node);
+        node = node->next;
+    }
+	return (NULL);
 }
