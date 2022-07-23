@@ -6,45 +6,50 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 18:05:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 20:25:05 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 20:42:47 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	do_export_extra(t_tokens *tokens, t_env **env_list, char *equal, int i)
+void	export_cat_value(char *args, t_env **env_list, char *equal, char *val)
 {
-	t_env	*temp;
 	char	*key;
-	char	*val;
+	t_env	*temp;
 
-	val = ft_strchr(tokens->args[i], '+');
-	if (val == NULL)
+	key = ft_substr(args, 0,
+			ft_strlen(args) - ft_strlen(val));
+	temp = find_node_by_key(*env_list, key);
+	if (temp == NULL)
+		push(env_list, key, &equal[1]);
+	else
 	{
-		key = ft_substr(tokens->args[i], 0,
-				ft_strlen(tokens->args[i]) - ft_strlen(equal));
-		temp = find_node_by_key(*env_list, key);
-		if (temp == NULL)
-			push(env_list, key, &equal[1]);
+		if (temp->val != NULL)
+			ft_strcat(temp->val, &equal[1]);
 		else
 			temp->val = &equal[1];
 	}
+}
+
+void	export_add_value(char *args, t_env **env_list, char *equal)
+{
+	char	*key;
+	t_env	*temp;
+
+	key = ft_substr(args, 0,
+			ft_strlen(args) - ft_strlen(equal));
+	temp = find_node_by_key(*env_list, key);
+	if (temp == NULL)
+		push(env_list, key, &equal[1]);
 	else
-	{
-		key = ft_substr(tokens->args[i], 0,
-				ft_strlen(tokens->args[i]) - ft_strlen(val));
-		temp = find_node_by_key(*env_list, key);
-		if (temp == NULL)
-			push(env_list, key, &equal[1]);
-		else
-			ft_strcat(temp->val, &equal[1]);
-	}	
+		temp->val = &equal[1];
 }
 
 void	do_export(t_tokens *tokens, t_env **env_list)
 {
 	t_env	*temp;
 	char	*equal;
+	char	*val;
 	int		i;
 
 	i = 1;
@@ -58,7 +63,13 @@ void	do_export(t_tokens *tokens, t_env **env_list)
 				push(env_list, tokens->args[i], NULL);
 		}
 		else
-			do_export_extra(tokens, env_list, equal, i);
+		{
+			val = ft_strchr(tokens->args[i], '+');
+			if (val == NULL)
+				export_add_value(tokens->args[i], env_list, equal);
+			else
+				export_cat_value(tokens->args[i], env_list, equal, val);
+		}
 		i++;
 	}
 }
