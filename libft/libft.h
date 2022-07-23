@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/23 19:16:10 by mraspors          #+#    #+#             */
-/*   Updated: 2022/03/23 18:52:33 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 14:23:31 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ size_t		ft_strlen(const char *s);
 size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize);
 size_t		ft_strlcat(char *dst, const char *src, size_t dstsize);
 
+char		*ft_strstr(char *str, char *to_find);
+char		*ft_strcat(char *dest, char *src);
 char		*ft_strdup(const char *string);
 char		*ft_strchr(const char *s, int c);
 char		*ft_strrchr(const char *s, int c);

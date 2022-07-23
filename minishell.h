@@ -17,15 +17,12 @@
 # include <readline/history.h>
 # include "./libft/libft.h"
 
-typedef struct	s_token
+typedef struct	s_tokens
 {
-	char            *cmdl;
-    	char            **args;
-	char		*path;
-	char		*file_red;
-	struct s_token	*prev;
-	struct s_token	*next;
-}				t_token;
+	char		*cmdl;
+    char		**args;
+	int			pipe_c;
+}				t_tokens;
 
 typedef struct	s_env
 {
@@ -65,5 +62,6 @@ void	print_env(t_env **head);
 
 //---------SECTION FOR TEMP FUNCTIONS---------------//
 
+int     basic_parsing(t_tokens *tokens);
 
 #endif

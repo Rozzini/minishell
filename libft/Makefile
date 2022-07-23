@@ -6,7 +6,7 @@
 #    By: mraspors <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/13 22:56:17 by mraspors          #+#    #+#              #
-#    Updated: 2022/03/20 19:05:05 by mraspors         ###   ########.fr        #
+#    Updated: 2022/07/23 14:23:41 by mraspors         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ SRCS =	ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c\
 		ft_strtrim.c ft_itoa.c ft_strmapi.c ft_striteri.c ft_split.c\
 		ft_printf.c ft_print_char.c ft_print_hex.c ft_print_number.c\
 		ft_print_pointer.c ft_print_string.c ft_print_uint.c\
-		get_next_line.c get_next_line_utils.c\
+		get_next_line.c get_next_line_utils.c ft_strcat.c ft_strstr.c\
 
 BONUS = ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c\
 		ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c\
