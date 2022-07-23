@@ -1,18 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins2.c                                        :+:      :+:    :+:   */
+/*   start_execution.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/22 22:22:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/22 23:00:08 by mraspors         ###   ########.fr       */
+/*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
+/*   Updated: 2022/07/23 15:23:43 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void    ft_env(t_env **env_list)
+int     try_builtins(t_tokens *tokens, t_env **env)
 {
-    print_env(env_list);
+    if (ft_echo(tokens) == 0 ||
+        ft_pwd(tokens) == 0 ||
+        ft_cd(tokens) == 0 ||
+        ft_env(tokens, env) == 0)
+        return (0);
+    return (1);
+}
+
+void    try_execute(t_tokens *tokens, t_env **env)
+{
+    if (try_builtins(tokens, env) == 0)
+        return ;
+    printf("FORK \n");
 }

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/23 19:16:10 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 14:23:31 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 14:52:44 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int			ft_tolower(int c);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 int			ft_atoi(const char *str);
 int			ft_lstsize(t_list *lst);
+int			ft_strcmp(char *s1, char *s2);
 
 size_t		ft_strlen(const char *s);
 size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize);

@@ -32,21 +32,52 @@ typedef struct	s_env
 	struct	s_env	*next;
 }				t_env;
 
+
 //====================BUILTINS=====================//
 
-void	ft_echo(t_tokens *tokens);
+//for now returns 0 if successfully executed
+//returns 1 if not executed
+int		ft_echo(t_tokens *tokens);
 
-void	ft_pwd(t_tokens *tokens);
+int		ft_pwd(t_tokens *tokens);
 
-void	ft_cd(t_tokens *tokens);
+int		ft_cd(t_tokens *tokens);
 
-void    ft_env(t_env **env_list);
+int		ft_env(t_tokens *tokens, t_env **env_list);
 
 //=================================================//
 
 
+
+//====================EXECUTION=====================//
+
+//launches execution routine
+void    try_execute(t_tokens *tokens, t_env **env);
+
+//tries to execute builtins
+//if one of them executed successfully returns 0;
+//else returns 1;
+int     try_builtins(t_tokens *tokens, t_env **env);
+
+//==================================================//
+
+
+
+//=====================PARSING======================//
+
 //returns 1 if string have opened quote
+//returns 0 if everything fine
 int	    check_q(char *s);
+
+//temp function
+//just splits arguments and count them
+int     basic_parsing(t_tokens *tokens);
+
+//==================================================//
+
+
+
+//====================ALL_LIST======================//
 
 //adds new node to list of env
 //returns 1 if quote is not closed
@@ -61,9 +92,7 @@ void    init_env_list(t_env **env_list, char **env);
 //prints duplicated env variables
 void	print_env(t_env **head);
 
+//==================================================//
 
-//---------SECTION FOR TEMP FUNCTIONS---------------//
-
-int     basic_parsing(t_tokens *tokens);
 
 #endif
