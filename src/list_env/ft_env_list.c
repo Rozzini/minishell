@@ -6,13 +6,13 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:38:30 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/22 22:10:28 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 15:33:06 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-
+//duplicates env variables into list t_env
 void    init_env_list(t_env **env_list, char **env)
 {
     char    **env_split;
@@ -28,4 +28,17 @@ void    init_env_list(t_env **env_list, char **env)
             push(env_list, env_split[0], env_split[1]);
         i++;
     }
+}
+
+//prints list of env varibales
+void	print_env(t_env **head)
+{
+	t_env *temp;
+
+	temp = *head;
+	while (temp->next != NULL)
+	{
+		printf("%s=%s\n", temp->key, temp->val);
+		temp = temp->next;
+	}
 }

@@ -6,12 +6,13 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 15:21:05 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 15:35:15 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+//function to create minishell prompt string
 char	*make_prompt()
 {
 	char	*s;

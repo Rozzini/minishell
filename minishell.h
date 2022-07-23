@@ -49,6 +49,18 @@ int		ft_env(t_tokens *tokens, t_env **env_list);
 
 
 
+//====================ENV_LIST=====================//
+
+//duplicates env variables into list t_env
+void    init_env_list(t_env **env_list, char **env);
+
+//prints duplicated env variables
+void	print_env(t_env **head);
+
+//=================================================//
+
+
+
 //====================EXECUTION=====================//
 
 //launches execution routine
@@ -85,12 +97,6 @@ void	push(t_env **head_ref, char *key, char *val);
 
 //removes node from list env
 void	delete_node(t_env **head);
-
-//duplicates env variables into list t_env
-void    init_env_list(t_env **env_list, char **env);
-
-//prints duplicated env variables
-void	print_env(t_env **head);
 
 //==================================================//
 

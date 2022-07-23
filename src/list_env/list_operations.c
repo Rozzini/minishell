@@ -6,12 +6,14 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 21:01:04 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/22 22:26:40 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 15:32:32 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+
+//add new node to list
 void	push(t_env **head_ref, char *key, char *val)
 {
 	t_env	*new_node;
@@ -23,6 +25,7 @@ void	push(t_env **head_ref, char *key, char *val)
 	(*head_ref) = new_node;
 }
 
+//free node memory and remove it
 void	delete_node(t_env **head)
 {
 	t_env	*temp;
@@ -32,16 +35,4 @@ void	delete_node(t_env **head)
     free(temp->key);
     free(temp->val);
 	free(temp);
-}
-
-void	print_env(t_env **head)
-{
-	t_env *temp;
-
-	temp = *head;
-	while (temp->next != NULL)
-	{
-		printf("%s=%s\n", temp->key, temp->val);
-		temp = temp->next;
-	}
 }

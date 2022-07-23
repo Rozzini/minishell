@@ -6,12 +6,16 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 13:57:31 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 14:40:32 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 15:31:58 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+
+//checks for opened quotes first if everything fine
+//splits string and saves each argument and
+//also amount of arguments to tokens structure
 int     basic_parsing(t_tokens *tokens)
 {
     if (check_q(tokens->cmdl) == 1)
