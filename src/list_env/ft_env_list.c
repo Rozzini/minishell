@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:38:30 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 15:52:57 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 16:55:08 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,27 @@ void	print_env(t_env **head)
 	t_env	*temp;
 
 	temp = *head;
-	while (temp->next != NULL)
+	while (temp != NULL)
 	{
-		printf("%s=%s\n", temp->key, temp->val);
+		if (temp->val != NULL)
+			printf("%s=%s\n", temp->key, temp->val);
+		temp = temp->next;
+	}
+}
+
+//prints env for export builtin
+void	print_env_export(t_env **head)
+{
+	t_env	*temp;
+
+	temp = *head;
+	while (temp != NULL)
+	{
+		printf("declare -x ");
+		if (temp->val != NULL)
+			printf("%s=\"%s\"\n", temp->key, temp->val);
+		else
+			printf("%s\n", temp->key);
 		temp = temp->next;
 	}
 }

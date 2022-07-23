@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 13:57:31 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 15:53:36 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 20:28:38 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 //also amount of arguments to tokens structure
 int	basic_parsing(t_tokens *tokens)
 {
+	if (tokens->cmdl[0] == '\0')
+		return (1);
 	if (check_q(tokens->cmdl) == 1)
 		return (1);
 	tokens->arg_c = 0;

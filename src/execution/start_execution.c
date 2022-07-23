@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 15:51:59 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 16:56:27 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ int	try_builtins(t_tokens *tokens, t_env **env)
 	if (ft_echo(tokens) == 0
 		|| ft_pwd(tokens) == 0
 		|| ft_cd(tokens) == 0
-		|| ft_env(tokens, env) == 0)
+		|| ft_env(tokens, env) == 0
+		|| ft_export(tokens, env) == 0)
 		return (0);
 	return (1);
 }
@@ -33,5 +34,5 @@ void	try_execute(t_tokens *tokens, t_env **env)
 {
 	if (try_builtins(tokens, env) == 0)
 		return ;
-	ft_printf("FORK\n");
+	printf("FORK\n");
 }

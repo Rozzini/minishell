@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 15:53:49 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/23 16:50:39 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int		ft_cd(t_tokens *tokens);
 
 int		ft_env(t_tokens *tokens, t_env **env_list);
 
+int		ft_export(t_tokens *tokens, t_env **env_list);
+
 //=================================================//
 
 //====================ENV_LIST=====================//
@@ -64,6 +66,9 @@ void	init_env_list(t_env **env_list, char **env);
 
 //prints duplicated env variables
 void	print_env(t_env **head);
+
+//prints env for export builtin
+void	print_env_export(t_env **head);
 
 //Returns node with provided key
 //if there is no such key returns NULL
