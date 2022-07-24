@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/24 22:03:00 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/24 22:25:06 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void	try_execute(t_tokens *tokens, t_env **env);
 //else returns 1;
 int		try_builtins(t_tokens *tokens, t_env **env);
 
+//executes non builtins
 int		ft_execs(t_tokens *tokens, char **env);
 
 //==================================================//
