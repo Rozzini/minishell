@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/24 21:28:40 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/24 22:03:00 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int		ft_echo(t_tokens *tokens);
 
 int		ft_pwd(t_tokens *tokens);
 
-int		ft_cd(t_tokens *tokens);
+int		ft_cd(t_tokens *tokens, t_env **env_list);
 
 int		ft_env(t_tokens *tokens, t_env **env_list);
 
@@ -82,6 +82,7 @@ t_env	*find_node_by_key(t_env *lst, char *key);
 //needs to delete node if it not head
 t_env	*find_node_by_key_del(t_env *lst, char *key);
 
+//return double char array of  env
 char	**env_list_to_string(t_env *env);
 
 //=================================================//

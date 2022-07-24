@@ -6,7 +6,7 @@
 #    By: mraspors <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/07/24 20:02:13 by mraspors         ###   ########.fr        #
+#    Updated: 2022/07/24 22:15:33 by mraspors         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ LIB			=	libft/libft.a
 
 SRC	=   ./src/execution/builtins1.c ./src/execution/builtins2.c\
 		./src/execution/start_execution.c ./src/execution/ft_export.c\
-		./src/list_env/list_operations.c ./src/list_env/ft_env_list.c\
+		./src/list_env/list_operations.c ./src/list_env/ft_env_list_1.c\
 		./src/list_env/ft_env_list_2.c\
 		./src/parsing/ft_check_quotes.c ./src/parsing/temp_name.c\
 		minishell.c

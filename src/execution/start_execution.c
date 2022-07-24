@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/24 21:29:06 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/24 22:06:49 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	try_builtins(t_tokens *tokens, t_env **env)
 	ft_exit(tokens, env);
 	if (ft_echo(tokens) == 0
 		|| ft_pwd(tokens) == 0
-		|| ft_cd(tokens) == 0
+		|| ft_cd(tokens, env) == 0
 		|| ft_env(tokens, env) == 0
 		|| ft_export(tokens, env) == 0
 		|| ft_unset(tokens, env) == 0)
@@ -30,17 +30,16 @@ int	try_builtins(t_tokens *tokens, t_env **env)
 
 int	ft_execs(t_tokens *tokens, char **env)
 {
-	char cmd[] = "/usr/bin/";
-	char *str = ft_strjoin(cmd, tokens->args[0]);
+	char	cmd[] = "/usr/bin/";
+	char	*str = ft_strjoin(cmd, tokens->args[0]);
+	char	*arg_vec[] = {tokens->args[0], tokens->args[1], NULL};
 
-	char *argVec[] = {tokens->args[0], tokens->args[1], NULL};
-	if (execve(str, argVec, env) == -1)
+	if (execve(str, arg_vec, env) == -1)
 	{
 		free (str);
 		str = ft_strjoin("/bin/", tokens->args[0]);
-		if (execve(str, argVec, env) == -1)
-			printf("mininshell: %s: command not found either\n", tokens->args[0]);
-		printf("mininshell: %s: command not found\n", tokens->args[0]);
+		if (execve(str, arg_vec, env) == -1)
+			printf("mininshell: %s: command not found\n", tokens->args[0]);
 	}
 	return (0);
 }
@@ -52,13 +51,13 @@ int	ft_execs(t_tokens *tokens, char **env)
 void	try_execute(t_tokens *tokens, t_env **env)
 {
 	int		pid;
-	char	*env_ss;
+	char	**env_s;
 
 	if (try_builtins(tokens, env) == 0)
 		return ;
-	env_ss = env_list_to_string(*env);
+	env_s = env_list_to_string(*env);
 	pid = fork();
 	if (pid == 0)
-		ft_execs(tokens, env_ss);
+		ft_execs(tokens, env_s);
 	wait(0);
 }
