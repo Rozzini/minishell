@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mrizk <mrizk@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 15:54:05 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/24 18:32:39 by mrizk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-//function to create minishell prompt string
-char	*make_prompt(void)
-{
-	char	*s;
-	char	*mini;
-
-	s = getcwd(NULL, 0);
-	mini = ft_strstr(s, "/minishell");
-	mini = ft_strcat(mini, "$ ");
-	return (mini);
-}
 
 int	main(int argc, char **argv, char **env)
 {
@@ -34,10 +22,13 @@ int	main(int argc, char **argv, char **env)
 	init_env_list(&env_list, env);
 	while (1)
 	{
-		tokens->cmdl = readline(make_prompt());
+		tokens->cmdl = readline("minishell$ ");
 		if (basic_parsing(tokens) == 0)
 		{
-			try_execute(tokens, &env_list);
+			int id = fork();
+			if(id == 0)
+				ft_execs(tokens, env);
+		//	try_execute(tokens, &env_list, env);
 		}
 	}
 	return (0);

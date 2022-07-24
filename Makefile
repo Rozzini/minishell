@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mraspors <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: mrizk <mrizk@student.42abudhabi.ae>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/07/23 14:46:05 by mraspors         ###   ########.fr        #
+#    Updated: 2022/07/24 16:47:05 by mrizk            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SRC	=   ./src/execution/builtins1.c ./src/execution/builtins2.c\
 		./src/execution/start_execution.c\
 		./src/list_env/list_operations.c ./src/list_env/ft_env_list.c\
 		./src/parsing/ft_check_quotes.c ./src/parsing/temp_name.c\
-		minishell.c
+		minishell.c executables.c
 
 OBJS	= $(SRC:.c=.o)
 

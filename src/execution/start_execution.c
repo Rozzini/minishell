@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_execution.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mrizk <mrizk@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 15:51:59 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/24 18:31:22 by mrizk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,9 @@ void	try_execute(t_tokens *tokens, t_env **env)
 {
 	if (try_builtins(tokens, env) == 0)
 		return ;
-	ft_printf("FORK\n");
+	// int id = fork();
+	// if(id == 0)
+	// 	ft_execs(tokens, env);
+	else
+		wait(0);
 }

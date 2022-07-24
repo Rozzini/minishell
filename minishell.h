@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mrizk <mrizk@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 15:53:49 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/24 18:32:00 by mrizk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ void	try_execute(t_tokens *tokens, t_env **env);
 //else returns 1;
 int		try_builtins(t_tokens *tokens, t_env **env);
 
+char	*ft_prevdir(char *str);
+
 //==================================================//
 
 //=====================PARSING======================//
@@ -103,5 +105,7 @@ void	push(t_env **head_ref, char *key, char *val);
 void	delete_node(t_env **head);
 
 //==================================================//
+
+int		ft_execs(t_tokens *tokens, char **env);
 
 #endif
