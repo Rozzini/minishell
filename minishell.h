@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 16:50:39 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/24 21:28:40 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,10 @@ int		ft_env(t_tokens *tokens, t_env **env_list);
 
 int		ft_export(t_tokens *tokens, t_env **env_list);
 
+int		ft_unset(t_tokens *tokens, t_env **env_list);
+
+int		ft_exit(t_tokens *tokens, t_env **env_list);
+
 //=================================================//
 
 //====================ENV_LIST=====================//
@@ -74,6 +78,12 @@ void	print_env_export(t_env **head);
 //if there is no such key returns NULL
 t_env	*find_node_by_key(t_env *lst, char *key);
 
+//return node thats points to the node with provided key
+//needs to delete node if it not head
+t_env	*find_node_by_key_del(t_env *lst, char *key);
+
+char	**env_list_to_string(t_env *env);
+
 //=================================================//
 
 //====================EXECUTION=====================//
@@ -84,6 +94,8 @@ void	try_execute(t_tokens *tokens, t_env **env);
 //if one of them executed successfully returns 0;
 //else returns 1;
 int		try_builtins(t_tokens *tokens, t_env **env);
+
+int		ft_execs(t_tokens *tokens, char **env);
 
 //==================================================//
 
@@ -104,9 +116,11 @@ int		basic_parsing(t_tokens *tokens);
 //returns 1 if quote is not closed
 void	push(t_env **head_ref, char *key, char *val);
 
-//removes node from list env
-void	delete_node(t_env **head);
+//removes head node from list env
+void	delete_head(t_env **head);
 
+//removes provided noded
+void	delete_node(t_env *node);
 //==================================================//
 
 #endif

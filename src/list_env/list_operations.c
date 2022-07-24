@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 21:01:04 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 15:48:56 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/24 15:59:00 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,23 @@ void	push(t_env **head_ref, char *key, char *val)
 }
 
 //free node memory and remove it
-void	delete_node(t_env **head)
+// free(temp->key);
+	// free(temp->val);
+void	delete_head(t_env **head)
 {
 	t_env	*temp;
 
 	temp = *head;
 	*head = (*head)->next;
-	free(temp->key);
-	free(temp->val);
+	free(temp);
+}
+
+//removes provided noded
+void	delete_node(t_env *node)
+{
+	t_env	*temp;
+
+	temp = node->next;
+	node->next = temp->next;
 	free(temp);
 }

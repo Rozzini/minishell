@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 16:56:27 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/24 21:29:06 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,32 @@
 //else returns 1;
 int	try_builtins(t_tokens *tokens, t_env **env)
 {
+	ft_exit(tokens, env);
 	if (ft_echo(tokens) == 0
 		|| ft_pwd(tokens) == 0
 		|| ft_cd(tokens) == 0
 		|| ft_env(tokens, env) == 0
-		|| ft_export(tokens, env) == 0)
+		|| ft_export(tokens, env) == 0
+		|| ft_unset(tokens, env) == 0)
 		return (0);
 	return (1);
+}
+
+int	ft_execs(t_tokens *tokens, char **env)
+{
+	char cmd[] = "/usr/bin/";
+	char *str = ft_strjoin(cmd, tokens->args[0]);
+
+	char *argVec[] = {tokens->args[0], tokens->args[1], NULL};
+	if (execve(str, argVec, env) == -1)
+	{
+		free (str);
+		str = ft_strjoin("/bin/", tokens->args[0]);
+		if (execve(str, argVec, env) == -1)
+			printf("mininshell: %s: command not found either\n", tokens->args[0]);
+		printf("mininshell: %s: command not found\n", tokens->args[0]);
+	}
+	return (0);
 }
 
 //function that is called from main
@@ -32,7 +51,14 @@ int	try_builtins(t_tokens *tokens, t_env **env)
 //and call OG function from bash
 void	try_execute(t_tokens *tokens, t_env **env)
 {
+	int		pid;
+	char	*env_ss;
+
 	if (try_builtins(tokens, env) == 0)
 		return ;
-	printf("FORK\n");
+	env_ss = env_list_to_string(*env);
+	pid = fork();
+	if (pid == 0)
+		ft_execs(tokens, env_ss);
+	wait(0);
 }

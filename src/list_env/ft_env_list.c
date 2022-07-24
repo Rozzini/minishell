@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:38:30 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 16:55:08 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/24 16:02:22 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,24 @@ t_env	*find_node_by_key(t_env *lst, char *key)
 	while (node->next != NULL)
 	{
 		if (ft_strcmp(node->key, key) == 0)
+			return (node);
+		node = node->next;
+	}
+	return (NULL);
+}
+
+//return node thats points to the node with provided key
+//needs to delete node if it not head
+t_env	*find_node_by_key_del(t_env *lst, char *key)
+{
+	t_env	*node;
+
+	if (lst == NULL)
+		return (NULL);
+	node = lst;
+	while (node->next != NULL)
+	{
+		if (ft_strcmp(node->next->key, key) == 0)
 			return (node);
 		node = node->next;
 	}
