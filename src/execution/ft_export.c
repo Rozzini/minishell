@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 18:05:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/26 20:52:46 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/26 21:17:39 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,23 @@ void	export_cat_value(char *args, t_env **env_list, char *equal, char *val)
 			ft_strlen(args) - ft_strlen(val));
 	temp = find_node_by_key(*env_list, key);
 	if (temp == NULL)
+	{
 		push(env_list, key, &equal[1]);
+		free(key);
+	}
 	else
 	{
+		free(key);
 		if (temp->val == NULL)
 			temp->val = ft_strdup(&equal[1]);
 		else
-			temp->val = ft_strjoin(temp->val, &equal[1]);
+		{
+			key = ft_strdup(temp->val);
+			free (temp->val);
+			temp->val = ft_strjoin(key, &equal[1]);
+			free(key);
+		}
 	}
-	free(key);
 }
 
 void	export_add_value(char *args, t_env **env_list, char *equal)
@@ -43,7 +51,11 @@ void	export_add_value(char *args, t_env **env_list, char *equal)
 	if (temp == NULL)
 		push(env_list, key, &equal[1]);
 	else
+	{
+		if (temp->val != NULL)
+			free (temp->val);
 		temp->val = ft_strdup(&equal[1]);
+	}
 	free(key);
 }
 
