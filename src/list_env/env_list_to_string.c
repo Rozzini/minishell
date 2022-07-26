@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env_list_2.c                                    :+:      :+:    :+:   */
+/*   env_list_to_string.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 19:44:21 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/24 21:05:29 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/26 04:09:46 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ int	count_env(t_env *env)
 	temp = env;
 	while (temp != NULL)
 	{
-		if (temp->val != NULL)
-			count++;
+		count++;
 		temp = temp->next;
 	}
 	return (count);
@@ -36,8 +35,11 @@ char	*ft_str(char *key, char *val)
 	i = 0;
 	if (val == NULL)
 		return (NULL);
-	str = (char *)malloc(sizeof(char) * (ft_strlen(key) + ft_strlen(val) + 2));
-	while (i < ft_strlen(key) + ft_strlen(val) + 1)
+	if (val == NULL)
+		str = (char *)malloc(sizeof(char) * (ft_strlen(key) + 2));
+	else
+		str = (char *)malloc(sizeof(char) * (ft_strlen(key) + ft_strlen(val) + 2));
+	while (i < ft_strlen(key) + ft_strlen(val))
 	{
 		while (*key != '\0')
 			str[i++] = *(key++);
@@ -61,12 +63,9 @@ char	**env_list_to_string(t_env *env)
 	env_s = (char **)malloc(sizeof(char *) * (count_env(env) + 1));
 	while (temp != NULL)
 	{
-		if (temp->val != NULL)
-		{
-			env_s[i] = ft_str(temp->key, temp->val);
-			temp = temp->next;
-			i++;
-		}
+		env_s[i] = ft_str(temp->key, temp->val);
+		temp = temp->next;
+		i++;
 	}
 	env_s[i] = NULL;
 	return (env_s);

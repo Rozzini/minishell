@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/24 22:06:49 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/25 22:46:25 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	ft_execs(t_tokens *tokens, char **env)
 		str = ft_strjoin("/bin/", tokens->args[0]);
 		if (execve(str, arg_vec, env) == -1)
 			printf("mininshell: %s: command not found\n", tokens->args[0]);
+		free(str);
 	}
 	return (0);
 }
@@ -59,5 +60,6 @@ void	try_execute(t_tokens *tokens, t_env **env)
 	pid = fork();
 	if (pid == 0)
 		ft_execs(tokens, env_s);
+	free_doublptr(env_s);
 	wait(0);
 }

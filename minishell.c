@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/24 21:28:11 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/25 21:02:52 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ int	main(int argc, char **argv, char **env)
 		tokens->cmdl = readline("minishell$ ");
 		if (basic_parsing(tokens) == 0)
 			try_execute(tokens, &env_list);
+		if (tokens->cmdl[0] != '\0')
+		{
+			free(tokens->cmdl);
+			free_doublptr(tokens->args);
+		}
 	}
 	return (0);
 }

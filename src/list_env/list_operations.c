@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 21:01:04 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/24 15:59:00 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/25 19:30:13 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,13 @@
 void	push(t_env **head_ref, char *key, char *val)
 {
 	t_env	*new_node;
+	int		len;
 
 	new_node = (t_env *) malloc(sizeof(t_env));
-	new_node->key = key;
-	new_node->val = val;
+	new_node->key = ft_strdup(key);
+	new_node->val = NULL;
+	if (val != NULL)
+		new_node->val = ft_strdup(val);
 	new_node->next = (*head_ref);
 	(*head_ref) = new_node;
 }
@@ -33,6 +36,9 @@ void	delete_head(t_env **head)
 
 	temp = *head;
 	*head = (*head)->next;
+	free(temp->key);
+	if (temp->val != NULL)
+		free(temp->val);
 	free(temp);
 }
 
@@ -43,5 +49,8 @@ void	delete_node(t_env *node)
 
 	temp = node->next;
 	node->next = temp->next;
+	free(temp->key);
+	if (temp->val != NULL)
+		free(temp->val);
 	free(temp);
 }

@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/21 00:03:18 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/26 04:22:30 by mraspors         ###   ########.fr       */
+/*   Created: 2022/07/25 19:11:48 by mraspors          #+#    #+#             */
+/*   Updated: 2022/07/25 19:18:54 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../minishell.h"
 
-size_t	ft_strlen(const char *s)
+void	free_doublptr(char **s)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	if (s == NULL)
-		return(i);
-	while (s[i] != '\0')
-		i++;
-	return (i);
+		return ;
+	while(s[i] != NULL)
+		free(s[i++]);
+	free(s);
+	s = NULL;
 }

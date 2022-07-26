@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 18:05:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 20:42:47 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/26 20:52:46 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,12 @@ void	export_cat_value(char *args, t_env **env_list, char *equal, char *val)
 		push(env_list, key, &equal[1]);
 	else
 	{
-		if (temp->val != NULL)
-			ft_strcat(temp->val, &equal[1]);
+		if (temp->val == NULL)
+			temp->val = ft_strdup(&equal[1]);
 		else
-			temp->val = &equal[1];
+			temp->val = ft_strjoin(temp->val, &equal[1]);
 	}
+	free(key);
 }
 
 void	export_add_value(char *args, t_env **env_list, char *equal)
@@ -42,7 +43,8 @@ void	export_add_value(char *args, t_env **env_list, char *equal)
 	if (temp == NULL)
 		push(env_list, key, &equal[1]);
 	else
-		temp->val = &equal[1];
+		temp->val = ft_strdup(&equal[1]);
+	free(key);
 }
 
 void	do_export(t_tokens *tokens, t_env **env_list)
