@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/25 19:16:08 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/27 00:15:16 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,11 @@ int		check_q(char *s);
 //temp function
 //just splits arguments and count them
 int		basic_parsing(t_tokens *tokens);
+
+//function for export builtin parsing
+//returns 1 if smthing is wrong
+//returns 0 if all good
+int		parse_export(t_tokens *tokens);
 
 //==================================================//
 

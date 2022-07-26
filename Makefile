@@ -6,7 +6,7 @@
 #    By: mraspors <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/07/25 19:11:37 by mraspors         ###   ########.fr        #
+#    Updated: 2022/07/26 22:56:59 by mraspors         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ SRC	=   ./src/execution/builtins1.c ./src/execution/builtins2.c\
 		./src/list_env/list_operations.c ./src/list_env/ft_env_list_1.c\
 		./src/list_env/env_list_to_string.c\
 		./src/parsing/ft_check_quotes.c ./src/parsing/temp_name.c\
-		./src/parsing/expansion.c\
+		./src/parsing/expansion.c ./src/parsing/builtins_parser.c\
 		./src/helpers/free.c\
 		minishell.c
 

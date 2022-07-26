@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/25 22:46:25 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/27 00:33:37 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,12 @@ int	try_builtins(t_tokens *tokens, t_env **env)
 
 int	ft_execs(t_tokens *tokens, char **env)
 {
-	char	cmd[] = "/usr/bin/";
-	char	*str = ft_strjoin(cmd, tokens->args[0]);
+	char	*cmd;
+	char	*str;
 	char	*arg_vec[] = {tokens->args[0], tokens->args[1], NULL};
 
+	cmd = ft_strdup("/usr/bin/");
+	str = ft_strjoin(cmd, tokens->args[0]);
 	if (execve(str, arg_vec, env) == -1)
 	{
 		free (str);
@@ -41,6 +43,7 @@ int	ft_execs(t_tokens *tokens, char **env)
 		if (execve(str, arg_vec, env) == -1)
 			printf("mininshell: %s: command not found\n", tokens->args[0]);
 		free(str);
+		free(cmd);
 	}
 	return (0);
 }

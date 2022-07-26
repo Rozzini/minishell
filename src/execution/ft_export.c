@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 18:05:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/26 21:17:39 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/27 01:09:37 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,14 @@ int	ft_export(t_tokens *tokens, t_env **env_list)
 		if (tokens->arg_c == 1)
 			print_env_export(env_list);
 		else
+		{
+			if (parse_export(tokens) == 1)
+			{
+				printf("minishell: export:  not a valid identifier\n");
+				return (0);
+			}
 			do_export(tokens, env_list);
+		}
 		return (0);
 	}
 	return (1);
