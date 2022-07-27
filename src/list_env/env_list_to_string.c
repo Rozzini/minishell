@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_list_to_string.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mrizk <mrizk@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 19:44:21 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/26 04:09:46 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/27 16:27:47 by mrizk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ int	count_env(t_env *env)
 
 char	*ft_str(char *key, char *val)
 {
-	char	*str;
-	int		i;
+	char			*str;
+	unsigned long	i;
 
 	i = 0;
 	if (val == NULL)
@@ -56,7 +56,6 @@ char	**env_list_to_string(t_env *env)
 	char	**env_s;
 	t_env	*temp;
 	int		i;
-	char	*s;
 
 	i = 0;
 	temp = env;

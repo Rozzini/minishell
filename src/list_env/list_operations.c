@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_operations.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mrizk <mrizk@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 21:01:04 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/26 20:57:06 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/27 16:27:34 by mrizk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 void	push(t_env **head_ref, char *key, char *val)
 {
 	t_env	*new_node;
-	int		len;
 
 	new_node = (t_env *) malloc(sizeof(t_env));
 	new_node->key = ft_strdup(key);

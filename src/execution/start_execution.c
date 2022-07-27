@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_execution.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mrizk <mrizk@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/27 00:33:37 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/27 19:27:22 by mrizk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	try_builtins(t_tokens *tokens, t_env **env)
 	return (1);
 }
 
-int	ft_execs(t_tokens *tokens, char **env)
+int	ft_execs(t_tokens *tokens, char **env_s)
 {
 	char	*cmd;
 	char	*str;
@@ -36,11 +36,11 @@ int	ft_execs(t_tokens *tokens, char **env)
 
 	cmd = ft_strdup("/usr/bin/");
 	str = ft_strjoin(cmd, tokens->args[0]);
-	if (execve(str, arg_vec, env) == -1)
+	if (execve(str, arg_vec, env_s) == -1)
 	{
 		free (str);
 		str = ft_strjoin("/bin/", tokens->args[0]);
-		if (execve(str, arg_vec, env) == -1)
+		if (execve(str, arg_vec, env_s) == -1)
 			printf("mininshell: %s: command not found\n", tokens->args[0]);
 		free(str);
 		free(cmd);

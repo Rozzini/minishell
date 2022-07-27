@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mrizk <mrizk@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/27 00:15:16 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/27 19:29:22 by mrizk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	try_execute(t_tokens *tokens, t_env **env);
 int		try_builtins(t_tokens *tokens, t_env **env);
 
 //executes non builtins
-int		ft_execs(t_tokens *tokens, char **env);
+int		ft_execs(t_tokens *tokens, char **env_s);
 
 //==================================================//
 
@@ -135,5 +135,7 @@ void	delete_node(t_env *node);
 void	free_doublptr(char **s);
 
 //==================================================//
+
+int	check_minishell_exec(t_tokens	*tokens, t_env **env);
 
 #endif
