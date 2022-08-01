@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 00:03:18 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/26 04:22:30 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/31 03:54:24 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ size_t	ft_strlen(const char *s)
 
 	i = 0;
 	if (s == NULL)
-		return(i);
+		return (i);
 	while (s[i] != '\0')
 		i++;
 	return (i);

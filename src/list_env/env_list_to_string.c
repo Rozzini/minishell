@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_list_to_string.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrizk <mrizk@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 19:44:21 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/27 16:27:47 by mrizk            ###   ########.fr       */
+/*   Updated: 2022/07/28 23:36:26 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ char	*ft_str(char *key, char *val)
 	if (val == NULL)
 		str = (char *)malloc(sizeof(char) * (ft_strlen(key) + 2));
 	else
-		str = (char *)malloc(sizeof(char) * (ft_strlen(key) + ft_strlen(val) + 2));
+		str = (char *)malloc(sizeof(char)
+				* (ft_strlen(key) + ft_strlen(val) + 2));
 	while (i < ft_strlen(key) + ft_strlen(val))
 	{
 		while (*key != '\0')
@@ -59,7 +60,7 @@ char	**env_list_to_string(t_env *env)
 
 	i = 0;
 	temp = env;
-	env_s = (char **)malloc(sizeof(char *) * (count_env(env) + 1));
+	env_s = malloc(sizeof(char *) * (count_env(env) + 1));
 	while (temp != NULL)
 	{
 		env_s[i] = ft_str(temp->key, temp->val);

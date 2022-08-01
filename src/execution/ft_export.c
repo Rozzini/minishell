@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 18:05:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/27 01:09:37 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/31 23:39:04 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,42 @@ void	do_export(t_tokens *tokens, t_env **env_list)
 		i++;
 	}
 }
+
+// void	export_split(char *s, char **e_tokens)
+// {
+// 	char	*p;
+
+// 	if (s == NULL)
+// 	{
+// 		e_tokens[0] = NULL;
+// 		return ;
+// 	}
+// 	p = ft_strchr(s, '=');
+// 	if (p == NULL)
+// 	{
+// 		e_tokens[0] = ft_strdup(s);
+// 		e_tokens[1] = NULL;
+// 	}
+// 	else
+// 	{
+// 		e_tokens[0] = ft_substr(s, 0, ft_strlen(s) - ft_strlen(p));
+// 		e_tokens[1] = ft_strdup(p);
+// 	}
+// }
+
+// void	do_export(t_tokens *tokens, t_env **env_list)
+// {
+// 	char	**e_tokens;
+// 	int		i;
+
+// 	i = 1;
+// 	count_nodes(env_list);
+// 	e_tokens = malloc(sizeof(char *) * 2);
+// 	while (i < tokens->arg_c)
+// 	{
+// 		export_split(tokens->args[i], e_tokens);
+// 	}
+// }
 
 int	ft_export(t_tokens *tokens, t_env **env_list)
 {

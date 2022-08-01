@@ -3,33 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   temp_name.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrizk <mrizk@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 13:57:31 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/27 19:32:09 by mrizk            ###   ########.fr       */
+/*   Updated: 2022/07/28 22:49:06 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-//checks for opened quotes first if everything fine
-//splits string and saves each argument and
-//also amount of arguments to tokens structure
-int	basic_parsing(t_tokens *tokens)
-{
-	if (tokens->cmdl[0] == '\0')
-		return (1);
-	add_history(tokens->cmdl);
-	if (check_q(tokens->cmdl) == 1)
-		return (1);
-	tokens->arg_c = 0;
-	tokens->args = ft_split(tokens->cmdl, ' ');
-	if (tokens->args == NULL)
-		return (1);
-	while (tokens->args[tokens->arg_c] != NULL)
-		tokens->arg_c++;
-	return (0);
-}
 
 int	check_minishell_exec(t_tokens *tokens, t_env **env)
 {
@@ -57,7 +38,7 @@ int	check_minishell_exec(t_tokens *tokens, t_env **env)
 		pid = fork();
 		if (pid == 0)
 		{
-			if (execve(str_cut, NULL, env_s) == -1)
+			if (execve(str_cut, env_s, env_s) == -1)
 				free(str_cut);
 		}
 		wait(0);

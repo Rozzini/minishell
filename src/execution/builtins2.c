@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 22:22:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/25 19:33:12 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/28 22:46:56 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,11 @@ int	ft_unset(t_tokens *tokens, t_env **env_list)
 
 int	ft_exit(t_tokens *tokens, t_env **env_list)
 {
-	t_env	*temp;
-
-	temp = *env_list;
 	if (ft_strcmp("exit", tokens->args[0]) == 0)
 	{
 		free_doublptr(tokens->args);
 		free(tokens);
-		while (temp != NULL)
-		{
-			delete_head(env_list);
-			temp = *env_list;
-		}
+		free_list(env_list);
 		exit(0);
 	}
 	return (1);

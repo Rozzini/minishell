@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_operations.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrizk <mrizk@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 21:01:04 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/27 16:27:34 by mrizk            ###   ########.fr       */
+/*   Updated: 2022/07/28 00:40:59 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,19 @@ void	delete_node(t_env *node)
 	if (temp->val != NULL)
 		free(temp->val);
 	free(temp);
+}
+
+int	count_nodes(t_env **head)
+{
+	t_env	*temp;
+	int		count;
+
+	temp = *head;
+	count = 0;
+	while (temp != NULL)
+	{
+		count++;
+		temp = temp->next;
+	}
+	return (count);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrizk <mrizk@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/27 19:29:22 by mrizk            ###   ########.fr       */
+/*   Updated: 2022/07/31 23:36:36 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <unistd.h>
 # include <sys/ioctl.h>
 # include <sys/types.h>
+# include <sys/wait.h>
 # include <sys/stat.h>
 # include <dirent.h>
 # include <signal.h>
@@ -89,7 +90,7 @@ char	**env_list_to_string(t_env *env);
 
 //====================EXECUTION=====================//
 //launches execution routine
-void	try_execute(t_tokens *tokens, t_env **env);
+void	try_execute(t_tokens *tokens, t_env **env, char **env_og);
 
 //tries to execute builtins
 //if one of them executed successfully returns 0;
@@ -108,12 +109,14 @@ int		check_q(char *s);
 
 //temp function
 //just splits arguments and count them
-int		basic_parsing(t_tokens *tokens);
+int		start_parsing(t_tokens *tokens, t_env **env);
 
 //function for export builtin parsing
 //returns 1 if smthing is wrong
 //returns 0 if all good
 int		parse_export(t_tokens *tokens);
+
+void	get_tokens(char *s, t_tokens *tokens);
 
 //==================================================//
 
@@ -128,14 +131,20 @@ void	delete_head(t_env **head);
 
 //removes provided noded
 void	delete_node(t_env *node);
+
+//return nodes count
+int		count_nodes(t_env **head);
+
 //==================================================//
 
 //======================FREE========================//
 
 void	free_doublptr(char **s);
 
+void	free_list(t_env **list);
+
 //==================================================//
 
-int	check_minishell_exec(t_tokens	*tokens, t_env **env);
+int		check_minishell_exec(t_tokens	*tokens, t_env **env);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_execution.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrizk <mrizk@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/27 19:27:22 by mrizk            ###   ########.fr       */
+/*   Updated: 2022/07/31 23:35:21 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	ft_execs(t_tokens *tokens, char **env_s)
 			printf("mininshell: %s: command not found\n", tokens->args[0]);
 		free(str);
 		free(cmd);
+		exit (127);
 	}
 	return (0);
 }
@@ -52,17 +53,14 @@ int	ft_execs(t_tokens *tokens, char **env_s)
 //tryes to run builtins first
 //if not succeed need to make fork 
 //and call OG function from bash
-void	try_execute(t_tokens *tokens, t_env **env)
+void	try_execute(t_tokens *tokens, t_env **env, char **env_og)
 {
 	int		pid;
-	char	**env_s;
 
 	if (try_builtins(tokens, env) == 0)
 		return ;
-	env_s = env_list_to_string(*env);
 	pid = fork();
 	if (pid == 0)
-		ft_execs(tokens, env_s);
-	free_doublptr(env_s);
+		ft_execs(tokens, env_og);
 	wait(0);
 }

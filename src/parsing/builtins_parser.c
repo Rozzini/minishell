@@ -6,14 +6,12 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 22:55:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/27 03:00:43 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/31 23:28:48 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-//# & ignore
-//* exports everything
 int	parse_export_helper(char *s)
 {
 	char	c;
@@ -23,7 +21,7 @@ int	parse_export_helper(char *s)
 	while (c <= 126)
 	{
 		if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122)
-		 || c == '=' || c == '+')
+		 || c == '=' || c == '+' || c == '"' || c =='\'')
 			c++;
 		else if (c >= 48 && c <= 57)
 		{
@@ -45,12 +43,14 @@ int	parse_export_helper(char *s)
 int	parse_export(t_tokens *tokens)
 {
 	int	i;
+	int	len;
 
 	i = 1;
 	while (i < tokens->arg_c)
 	{
 		if (tokens->args[i][0] == '=' || tokens->args[i][0] == '+')
 			return (1);
+		len = ft_strlen(tokens->args[i]);
 		if (parse_export_helper(tokens->args[i]) == 1)
 			return (1);
 		i++;
