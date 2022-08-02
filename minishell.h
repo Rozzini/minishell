@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/31 23:36:36 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/08/02 08:37:14 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,14 @@ int		start_parsing(t_tokens *tokens, t_env **env);
 //returns 0 if all good
 int		parse_export(t_tokens *tokens);
 
-void	get_tokens(char *s, t_tokens *tokens);
+//generates list of separate tokens
+void	get_tokens(char *s, t_tokens *tokens, t_env **env);
+
+//return 1 if char is separator
+//return 0 if not
+int		is_separator(char c);
+
+void	check_expansion(t_tokens *tokens, t_env **env);
 
 //==================================================//
 

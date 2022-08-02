@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:46:21 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/29 21:35:44 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/08/02 03:55:29 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ char	*check_q_iter(char *s, int *q, char quote)
 	{
 		*q = check_q_change_val(*q);
 		s++;
+		if (*s == quote)
+				*q = check_q_change_val(*q);
 		while (*s != quote && *s != '\0')
 		{
 			s++;
