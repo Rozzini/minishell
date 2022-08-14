@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 22:13:41 by mraspors          #+#    #+#             */
-/*   Updated: 2022/08/02 10:20:37 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/08/11 01:26:51 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,176 +14,57 @@
 
 int	is_separator(char c)
 {
-	if (c == ' ' || c == 9 || c == 11 || c == '\n')
+	if (c == 32 || c == 9 || c == 11 || c == '\n')
 		return (1);
 	return (0);
 }
 
-char	*get_tokens_q_iter(char *s, char quote)
+char	*tokens_q_iter(char *s)
 {
+	char	q;
+
+	q = *s;
 	s++;
-	if (*s == quote)
+	if (*s == q)
 		return (s);
-	while (*s != quote && *s != '\0')
+	while (*s != q && *s != '\0')
 		s++;
 	return (s);
 }
 
-int	check_expansion_name(char *start, char *end, t_env **env)
-{
-	char	*name;
-	t_env	*temp;
-
-	name = ft_substr(start, 1, ft_strlen(start) - ft_strlen(end));
-	temp = find_node_by_key(*env, name);
-	free(name);
-	if (temp == NULL)
-		return (1);
-	return (0);
-}
-
-char	*iterate_expansion(char	*string)
+void	save_tokens(char *string, t_tokens *tokens)
 {
 	char	*s;
-
-	s = string;
-	while (is_separator(*s) == 0 && *s != '\0')
-		s++;
-	return (s);
-}
-
-void	put_tokens(char *s, t_tokens *toks, t_env **env)
-{
-	char	c;
-	char	*exp_start;
-	char	*exp_end;
-	char	*name;
-	t_env	*temp;
-	char	tok[10000];
+	char	*c;
 	int		i;
-	int		j;
-	int		k;
 
-	k = 0;
-	j = 0;
 	i = 0;
-	toks->args = malloc(sizeof(char *) * toks->arg_c + 1);
+	s = string;
+	tokens->args = malloc(sizeof(char *) * tokens->arg_c + 1);
 	while (*s != '\0')
 	{
-		j = 0;
 		if (is_separator(*s) == 0)
 		{
+			c = s;
 			while (is_separator(*s) == 0 && *s != '\0')
 			{
-				if (*s == '$')
-				{
-					exp_start = s;
-					exp_end = iterate_expansion(exp_start);
-					if (check_expansion_name(exp_start, exp_end, env) == 0)
-					{
-						k = 0;
-						name = ft_substr(exp_start, 1,
-								ft_strlen(exp_start) - ft_strlen(exp_end));
-						temp = find_node_by_key(*env, name);
-						free(name);
-						while (temp->val[k] != '\0')
-						{
-							tok[j] = temp->val[k];
-							j++;
-							k++;
-						}
-					}
-					s = exp_end;
-				}
 				if (*s == 34 || *s == 39)
-				{
-					c = *s;
-					s++;
-					while (*s != c && *s != '\0')
-					{
-						if (*s == '$' && c == 34)
-						{
-							exp_start = s;
-							exp_end = iterate_expansion(exp_start);
-							if (check_expansion_name(exp_start, exp_end, env) == 0)
-							{
-								k = 0;
-								name = ft_substr(exp_start, 1,
-										ft_strlen(exp_start) - ft_strlen(exp_end));
-								temp = find_node_by_key(*env, name);
-								free(name);
-								while (temp->val[k] != '\0')
-								{
-									tok[j] = temp->val[k];
-									j++;
-									k++;
-								}
-							}
-							s = exp_end;
-						}
-						tok[j] = *s;
-						j++;
-						s++;
-					}
-				}
-				else
-				{
-					tok[j] = *s;
-					j++;
-					s++;
-				}
-			}
-			tok[j] = '\0';
-			toks->args[i] = ft_strdup(tok);
-			i++;
-		}
-		else if (*s == 34 || *s == 39)
-		{
-			c = *s;
-			s++;
-			while (*s != c && *s != '\0')
-			{
-				if (*s == '$' && c == 34)
-				{
-					exp_start = s;
-					exp_end = iterate_expansion(exp_start);
-					if (check_expansion_name(exp_start, exp_end, env) == 0)
-					{
-						k = 0;
-						name = ft_substr(exp_start, 1,
-								ft_strlen(exp_start) - ft_strlen(exp_end));
-						temp = find_node_by_key(*env, name);
-						free(name);
-						while (temp->val[k] != '\0')
-						{
-							tok[j] = temp->val[k];
-							j++;
-							k++;
-						}
-					}
-					s = exp_end;
-				}
-				tok[j] = *s;
-				j++;
+					s = tokens_q_iter(s);
 				s++;
 			}
-			tok[j] = '\0';
-			toks->args[i] = ft_strdup(tok);
+			tokens->args[i] = ft_substr(c, 0, ft_strlen(c) - ft_strlen(s));
 			i++;
 		}
-		if (*s == '\0')
-			break ;
 		s++;
 	}
-	toks->args[i] = NULL;
+	tokens->args[i] = NULL;
 }
 
-void	get_tokens(char *string, t_tokens *tokens, t_env **env)
+void	count_tokens(char *string, t_tokens *tokens)
 {
 	char	*s;
 
 	s = string;
-	tokens->arg_c = 0;
 	while (*s != '\0')
 	{
 		if (is_separator(*s) == 0)
@@ -191,22 +72,13 @@ void	get_tokens(char *string, t_tokens *tokens, t_env **env)
 			while (is_separator(*s) == 0 && *s != '\0')
 			{
 				if (*s == 34 || *s == 39)
-					s = get_tokens_q_iter(s, *s);
+					s = tokens_q_iter(s);
 				s++;
 			}
 			tokens->arg_c++;
 		}
-		else if (*s == 34 || *s == 39)
-		{
-			s = get_tokens_q_iter(s, *s);
-			s++;
-			tokens->arg_c++;
-		}
-		if (*s == '\0')
-			break ;
 		s++;
 	}
-	put_tokens(string, tokens, env);
 }
 
 //checks for opened quotes first if everything fine
@@ -219,9 +91,17 @@ int	start_parsing(t_tokens *tokens, t_env **env)
 	add_history(tokens->cmdl);
 	if (check_q(tokens->cmdl) == 1)
 		return (1);
-	get_tokens(tokens->cmdl, tokens, env);
+	tokens->arg_c = 0;
+	count_tokens(tokens->cmdl, tokens);
+	save_tokens(tokens->cmdl, tokens);
+	quotes_exp_check(tokens, env);
+	// int i = 0;
+	// while (tokens->args[i] != NULL)
+	// {
+	// 	printf("%s\n", tokens->args[i]);
+	// 	i++;
+	// }
 	if (tokens->args == NULL)
 		return (1);
-	//check_expansion(tokens, env);
 	return (0);
 }

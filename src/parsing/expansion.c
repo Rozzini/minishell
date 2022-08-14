@@ -6,89 +6,159 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 22:14:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/08/02 08:53:11 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/08/14 16:08:07 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-//checks if there is such key name in env list
-//return 1 if there is no such key, 0 if found smthing
-// int	check_expansion_name(char *start, char *end, t_env **env)
-// {
-// 	char	*name;
-// 	t_env	*temp;
+int	count_expansion_pointers(t_parsing *prs)
+{
+	int	i;
 
-// 	name = ft_substr(start, 1, ft_strlen(start) - ft_strlen(end));
-// 	temp = find_node_by_key(*env, name);
-// 	free(name);
-// 	if (temp == NULL)
-// 		return (1);
-// 	return (0);
-// }
+	i = 0;
+	while (prs->expansions_p[i] != -1)
+		i++;
+	return (i);
+}
 
-// char	*do_expansion(char *s, char *start, char *end, t_env **env)
-// {
-// 	char	*result;
-// 	char	*name;
-// 	t_env	*temp;
+char	*copy_expansion_name(char *s, t_parsing *prs, int i)
+{
+	char	*start;
 
-// 	result = NULL;
-// 	name = ft_substr(start, 1, ft_strlen(start) - ft_strlen(end));
-// 	temp = find_node_by_key(*env, name);
-// 	free(name);
-// 	if (s != start)
-// 		result = ft_substr(s, 0, ft_strlen(s) - ft_strlen(start));
-// 	if (s != start)
-// 		ft_strjoin(result, temp->val);
-// 	else
-// 		result = ft_strdup(temp->val);
-// 	ft_strjoin(result, end);
-// 	return (result);
-// }
+	s++;
+	start = s;
+	while (is_separator(*s) == 0 && *s != '\0' && *s != 34)
+		s++;
+	prs->exp_name[i] = ft_substr(start, 0, ft_strlen(start) - ft_strlen(s));
+	return (s);
+}
 
-//char	*remove_expansion(char *s, char *start, char *end)
-// char	*remove_expansion(void)
-// {
-// 	return (NULL);
-// }
+t_env	*check_expansion_name(char *name, t_env **env)
+{
+	t_env	*temp;
 
-// char	*iterate_expansion(char	*string)
-// {
-// 	char	*s;
+	temp = find_node_by_key(*env, name);
+	if (temp == NULL)
+		return (NULL);
+	return (temp);
+}
 
-// 	s = string;
-// 	while (is_separator(*s) == 0 && *s != '\0')
-// 		s++;
-// 	return (s);
-// }
+void	do_extension(t_parsing	*prs, t_env **env)
+{
+	int		i;
+	int		pointer;
+	char	*s;
+	t_env	*temp;
 
-// char	*try_expansion(char *string, char *exp_p_start, t_env **env)
-// {
-// 	char	*p;
-// 	char	*s;
-// 	char	*exp_p_end;
+	i = count_expansion_pointers(prs) - 1;
+	while (i >= 0)
+	{
+		temp = check_expansion_name(prs->exp_name[i], env);
+		if (temp != NULL)
+		{
+			pointer = prs->expansions_p[i];
+			s = ft_substr(prs->token, 0,
+					ft_strlen(prs->token) - ft_strlen(&(prs->token[pointer])));
+			s = ft_strjoin(s, temp->val);
+			pointer = prs->expansions_p[i] + 1;
+			s = ft_strjoin(s, &(prs->token[pointer]));
+			free(prs->token);
+			prs->token = s;
+		}
+		else
+		{
+			pointer = prs->expansions_p[i];
+			s = ft_substr(prs->token, 0,
+					ft_strlen(prs->token) - ft_strlen(&(prs->token[pointer])));
+			pointer = prs->expansions_p[i] + 1;
+			s = ft_strjoin(s, &(prs->token[pointer]));
+			free(prs->token);
+			prs->token = s;
+		}
+		i--;
+	}
+}
 
-// 	p = string;
-// 	s = string;
-// 	exp_p_end = iterate_expansion(exp_p_start);
-// 	if (check_expansion_name(p, exp_p_end, env) == 0)
-// 		return (do_expansion(p, exp_p_start, exp_p_end, env));
-// 	else
-// 		return (remove_expansion());
-// }
+void	remove_quotes_if_quotes(char *string, t_parsing *prs, int *i)
+{
+	char	c;
 
-// void	check_expansion(t_tokens *tokens, t_env **env)
-// {
-// 	int		i;
-// 	char	*exp_p;
+	c = *string;
+	string++;
+	while (*string != c && *string != '\0')
+	{
+		if (*string == '$' && c == 34)
+		{
+			prs->token[prs->i] = *string;
+			prs->expansions_p[*i] = prs->i;
+			prs->i++;
+			string = copy_expansion_name(string, prs, *i);
+			*i = *i + 1;
+			if (*string == '\0')
+				break ;
+		}
+		else
+		{
+			prs->token[prs->i] = *string;
+			prs->i++;
+			string++;
+		}
+	}
+}
 
-// 	i = 0;
-// 	while (tokens->args[i] != NULL)
-// 	{
-// 		exp_p = ft_strchr(tokens->args[i], '$');
-// 		if (exp_p != NULL)
-// 			tokens->args[i] = try_expansion(tokens->args[i], exp_p, env);
-// 		i++;
-// 	}
-// }
+void	remove_quotes(char	*string, t_parsing	*prs)
+{
+	int		i;
+
+	i = 0;
+	while (*string != '\0')
+	{
+		if (*string == 34 || *string == 39)
+		{
+			remove_quotes_if_quotes(string, prs, &i);
+			string = tokens_q_iter(string);
+			string++;
+			if (*string == '\0')
+				break ;
+		}
+		else if (*string == '$')
+		{
+			prs->token[prs->i] = *string;
+			prs->expansions_p[i] = prs->i;
+			prs->i++;
+			string = copy_expansion_name(string, prs, i);
+			i++;
+			if (*string == '\0')
+				break ;
+		}
+		else
+		{
+			prs->token[prs->i] = *string;
+			prs->i++;
+			string++;
+		}
+	}
+	prs->token[prs->i] = '\0';
+	prs->expansions_p[i] = -1;
+}
+
+void	quotes_exp_check(t_tokens *tokens, t_env **env)
+{
+	t_parsing	*prs;
+	int			i;
+
+	count_nodes(env);
+	i = 0;
+	while (tokens->args[i] != NULL)
+	{
+		prs = malloc(sizeof(t_parsing));
+		prs->i = 0;
+		prs->token = malloc(sizeof(char) * (ft_strlen(tokens->args[i]) + 1));
+		remove_quotes(tokens->args[i], prs);
+		do_extension(prs, env);
+		free(tokens->args[i]);
+		tokens->args[i] = prs->token;
+		i++;
+	}
+}

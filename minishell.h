@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/08/02 08:37:14 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/08/14 13:23:59 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,18 @@ typedef struct s_env
 	char			*val;
 	struct s_env	*next;
 }					t_env;
+
+//structure for parsing
+//token - holds current token
+//expanions_p - array of pointers to
+//				expansion that should be done
+typedef struct s_parsing
+{
+	char	*token;
+	char	*exp_name[1000];
+	int		expansions_p[1000];
+	int		i;
+}			t_parsing;
 
 //====================BUILTINS=====================//
 
@@ -116,14 +128,22 @@ int		start_parsing(t_tokens *tokens, t_env **env);
 //returns 0 if all good
 int		parse_export(t_tokens *tokens);
 
+char	*tokens_q_iter(char *s);
+
 //generates list of separate tokens
-void	get_tokens(char *s, t_tokens *tokens, t_env **env);
+void	count_tokens(char *s, t_tokens *tokens);
 
 //return 1 if char is separator
 //return 0 if not
 int		is_separator(char c);
 
-void	check_expansion(t_tokens *tokens, t_env **env);
+//checks if there is such env
+//returns 0 if it finds env
+//returns 1 if didnt
+t_env	*check_expansion_name(char *name, t_env **env);
+
+//removes quotes and does expansion
+void	quotes_exp_check(t_tokens *tokens, t_env **env);
 
 //==================================================//
 
