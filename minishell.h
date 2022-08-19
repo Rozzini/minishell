@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/08/14 13:23:59 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/08/19 16:55:29 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,13 +137,23 @@ void	count_tokens(char *s, t_tokens *tokens);
 //return 0 if not
 int		is_separator(char c);
 
+//removes quotes and does expansion
+void	quotes_exp_check(t_tokens *tokens, t_env **env);
+
+//==================================================//
+
+//====================EXPANSION=====================//
+
 //checks if there is such env
 //returns 0 if it finds env
 //returns 1 if didnt
 t_env	*check_expansion_name(char *name, t_env **env);
 
-//removes quotes and does expansion
-void	quotes_exp_check(t_tokens *tokens, t_env **env);
+//return string which contains expansion name
+char	*copy_expansion_name(char *s, t_parsing *prs, int i);
+
+//replaces expansion name in OG string with expansion value
+void	do_expansion(t_parsing	*prs, t_env **env);
 
 //==================================================//
 

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 22:13:41 by mraspors          #+#    #+#             */
-/*   Updated: 2022/08/11 01:26:51 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/08/17 19:39:41 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,12 +95,6 @@ int	start_parsing(t_tokens *tokens, t_env **env)
 	count_tokens(tokens->cmdl, tokens);
 	save_tokens(tokens->cmdl, tokens);
 	quotes_exp_check(tokens, env);
-	// int i = 0;
-	// while (tokens->args[i] != NULL)
-	// {
-	// 	printf("%s\n", tokens->args[i]);
-	// 	i++;
-	// }
 	if (tokens->args == NULL)
 		return (1);
 	return (0);
