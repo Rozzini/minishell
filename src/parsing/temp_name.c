@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 13:57:31 by mraspors          #+#    #+#             */
-/*   Updated: 2022/08/19 16:56:45 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/08/29 00:01:45 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,7 @@
 // }
 int	check_minishell_exec(t_tokens *tokens, t_env **env)
 {
-	reutrn (0);
+	tokens->arg_c = 0;
+	count_nodes(env);
+	return (0);
 }

@@ -6,12 +6,12 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:46:21 by mraspors          #+#    #+#             */
-/*   Updated: 2022/08/02 03:55:29 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/09/01 02:29:57 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-//printf("AAA\n");
+
 //helper function for Chek_q()
 //changes value of quote flag to oposite
 int	check_q_change_val(int q)

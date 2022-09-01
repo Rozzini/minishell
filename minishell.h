@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/08/19 16:55:29 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/09/01 04:45:36 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,23 @@
 # include <readline/history.h>
 # include "./libft/libft.h"
 
+# define NONE 0
+# define PIPE 1
+# define REDIR 2
+
 typedef struct s_tokens
 {
 	char		*cmdl;
 	char		**args;
 	int			arg_c;
-	int			pipe_c;
 }				t_tokens;
+
+typedef struct s_cmd
+{
+	char			**args;
+	int				type;
+	struct s_cmd	*next;
+}					t_cmd;
 
 typedef struct s_env
 {
@@ -121,7 +131,7 @@ int		check_q(char *s);
 
 //temp function
 //just splits arguments and count them
-int		start_parsing(t_tokens *tokens, t_env **env);
+int		start_parsing(t_tokens *tokens, t_env **env, t_cmd *cmd);
 
 //function for export builtin parsing
 //returns 1 if smthing is wrong
@@ -131,7 +141,7 @@ int		parse_export(t_tokens *tokens);
 char	*tokens_q_iter(char *s);
 
 //generates list of separate tokens
-void	count_tokens(char *s, t_tokens *tokens);
+void	count_tokens(char *string, t_tokens *tokens);
 
 //return 1 if char is separator
 //return 0 if not
