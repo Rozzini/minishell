@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/09/01 04:45:36 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/09/06 21:57:34 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,9 @@ int		check_q(char *s);
 
 //temp function
 //just splits arguments and count them
-int		start_parsing(t_tokens *tokens, t_env **env, t_cmd *cmd);
+int		start_parsing(t_tokens *tokens, t_env **env, t_cmd **cmd);
 
+int		start_pipes_parsing(t_tokens *tokens, t_cmd **cmd);
 //function for export builtin parsing
 //returns 1 if smthing is wrong
 //returns 0 if all good
