@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/09/06 21:57:34 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/09/12 09:44:36 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@
 
 # define NONE 0
 # define PIPE 1
-# define REDIR 2
+# define REDR 2
+# define REDRR 3
+# define REDL 4
+# define REDLL 5
 
 typedef struct s_tokens
 {
@@ -45,6 +48,7 @@ typedef struct s_cmd
 {
 	char			**args;
 	int				type;
+	int				arg_c;
 	struct s_cmd	*next;
 }					t_cmd;
 
@@ -71,19 +75,19 @@ typedef struct s_parsing
 
 //for now returns 0 if successfully executed
 //returns 1 if not executed
-int		ft_echo(t_tokens *tokens);
+int		ft_echo(t_cmd *cmd);
 
-int		ft_pwd(t_tokens *tokens);
+int		ft_pwd(t_cmd *cmd);
 
-int		ft_cd(t_tokens *tokens, t_env **env_list);
+int		ft_cd(t_cmd *cmd, t_env **env_list);
 
-int		ft_env(t_tokens *tokens, t_env **env_list);
+int		ft_env(t_cmd *cmd, t_env **env_list);
 
-int		ft_export(t_tokens *tokens, t_env **env_list);
+int		ft_export(t_cmd *cmd, t_env **env_list);
 
-int		ft_unset(t_tokens *tokens, t_env **env_list);
+int		ft_unset(t_cmd *cmd, t_env **env_list);
 
-int		ft_exit(t_tokens *tokens, t_env **env_list);
+int		ft_exit(t_cmd *cmd, t_env **env_list);
 
 //=================================================//
 
@@ -112,15 +116,15 @@ char	**env_list_to_string(t_env *env);
 
 //====================EXECUTION=====================//
 //launches execution routine
-void	try_execute(t_tokens *tokens, t_env **env, char **env_og);
+void	try_execute(t_cmd **commands, t_env **env);
 
 //tries to execute builtins
 //if one of them executed successfully returns 0;
 //else returns 1;
-int		try_builtins(t_tokens *tokens, t_env **env);
+int     try_builtins(t_cmd **commands, t_env **env);
 
 //executes non builtins
-int		ft_execs(t_tokens *tokens, char **env_s);
+int		ft_execs(t_cmd **cmd, char **env_s, char **path);
 
 //==================================================//
 
@@ -137,7 +141,7 @@ int		start_pipes_parsing(t_tokens *tokens, t_cmd **cmd);
 //function for export builtin parsing
 //returns 1 if smthing is wrong
 //returns 0 if all good
-int		parse_export(t_tokens *tokens);
+int		parse_export(t_cmd *cmd);
 
 char	*tokens_q_iter(char *s);
 
