@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/09/12 09:43:23 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/06 05:02:22 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,58 +15,88 @@
 //tries to execute builtins
 //if one of them executed successfully returns 0;
 //else returns 1;
-int	try_builtins(t_cmd **commands, t_env **env)
+int	try_builtins(t_cmd *cmd, t_env **env)
 {
-	t_cmd	*temp;
-
-	temp = *commands;
-	ft_exit(temp, env);
-	if (ft_echo(temp) == 0
-		|| ft_pwd(temp) == 0
-		|| ft_cd(temp, env) == 0
-		|| ft_env(temp, env) == 0
-		|| ft_export(temp, env) == 0
-		|| ft_unset(temp, env) == 0)
+	ft_exit(cmd, env);
+	if (ft_echo(cmd) == 0
+		|| ft_pwd(cmd) == 0
+		|| ft_cd(cmd, env) == 0
+		|| ft_env(cmd, env) == 0
+		|| ft_export(cmd, env) == 0
+		|| ft_unset(cmd, env) == 0)
 		return (0);
 	return (1);
 }
 
-int	ft_execs(t_cmd **cmd, char **env_s, char **path)
+int	ft_execs(t_cmd *cmd, t_env **env, char **path)
 {
 	int		i;
 	char	*str;
-	t_cmd	*temp;
+    char    **env_s;
 
-	temp = *cmd;
 	i = 0;
+    env_s = env_list_to_string(*env);
+    if (try_builtins(cmd, env) == 0)
+        return (0);
 	while (path[i] != NULL)
 	{
 		str = ft_strjoin(path[i], "/");
-		str = ft_strjoin(str, temp->args[0]);
-		if (execve(str, temp->args, env_s) != -1)
+		str = ft_strjoin(str, cmd->args[0]);
+		if (execve(str, cmd->args, env_s) != -1)
 			return 0;
 		i++;
 	}
-	printf("mininshell: %s: command not found\n", temp->args[0]);
+	printf("mininshell: %s: command not found\n", cmd->args[0]);
 	return (0);
+}
+
+
+void exec_pipes(t_cmd *cmd, t_env **env, char **path)
+{
+    int     in_out[2];
+    pid_t   pid;
+
+	if (cmd->next != NULL)
+	{
+		if (pipe(in_out) != 0)
+			return ;
+		if ((pid = fork()) < 0)
+			return ;
+		if (pid == 0)
+        {
+			dup2(in_out[1], 1);
+    		close(in_out[0]);
+    		close(in_out[1]);
+			exec_pipes(cmd->next, env, path);
+		}
+		dup2(in_out[0], 0);
+    	close(in_out[0]);
+    	close(in_out[1]);
+	}
+	ft_execs(cmd, env, path);
 }
 
 //function that is called from main
 //tryes to run builtins first
-//if not succeed need to make fork 
+//if not succeed need to make fork 0--
 //and call OG function from bash
-void	try_execute(t_cmd **commands, t_env **env)
+void	try_execute(t_cmd **commands, t_env **env, char **path)
 {
 	int		pid;
-	t_env	*temp;
-	char	**path;
+    t_cmd	*cmd;
 
-	temp = find_node_by_key(*env, "PATH");
-	path = ft_split(temp->val, ':');
-	// if (try_builtins(commands, env) == 0)
-	// 	return ;
-	pid = fork();
-	if (pid == 0)
-		ft_execs(commands, env_list_to_string(*env), path);
+ 	cmd = *commands;
+	if (cmd->next != NULL)
+	{
+		pid = fork();
+		if (pid == 0)
+			ft_execs(cmd, env, path);
+    }
+    else
+	{
+		pid = fork();
+		if (pid == 0)
+			exec_pipes(cmd, env, path);
+	}
 	wait(0);
 }

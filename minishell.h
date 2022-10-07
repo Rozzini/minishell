@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/09/12 09:44:36 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/07 08:50:39 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,27 +30,32 @@
 # include <readline/history.h>
 # include "./libft/libft.h"
 
-# define NONE 0
-# define PIPE 1
-# define REDR 2
-# define REDRR 3
-# define REDL 4
-# define REDLL 5
+# define PIPE 0
+# define REDR 1
+# define REDRR 2
+# define REDL 3
+# define HEREDOC 4
+# define NONE 5
+
+typedef struct s_cmd
+{
+	char			**args;
+	char			**input;
+	char			**ouput;
+	int				arg_c;
+	int				type;
+	struct s_cmd	*next;
+}					t_cmd;
 
 typedef struct s_tokens
 {
 	char		*cmdl;
 	char		**args;
 	int			arg_c;
+	int			start;
+	int			end;
+	t_cmd		*last;
 }				t_tokens;
-
-typedef struct s_cmd
-{
-	char			**args;
-	int				type;
-	int				arg_c;
-	struct s_cmd	*next;
-}					t_cmd;
 
 typedef struct s_env
 {
@@ -116,15 +121,15 @@ char	**env_list_to_string(t_env *env);
 
 //====================EXECUTION=====================//
 //launches execution routine
-void	try_execute(t_cmd **commands, t_env **env);
+void	try_execute(t_cmd **commands, t_env **env, char **path);
 
 //tries to execute builtins
 //if one of them executed successfully returns 0;
 //else returns 1;
-int     try_builtins(t_cmd **commands, t_env **env);
+int     try_builtins(t_cmd *cmd, t_env **env);
 
 //executes non builtins
-int		ft_execs(t_cmd **cmd, char **env_s, char **path);
+int		ft_execs(t_cmd *cmd, t_env **env, char **path);
 
 //==================================================//
 

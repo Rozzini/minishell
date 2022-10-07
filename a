@@ -1,0 +1,13 @@
+Makefile
+README.md
+a
+b
+c
+funcs.txt
+libft
+minishell
+minishell.c
+minishell.dSYM
+minishell.h
+minishell.o
+src

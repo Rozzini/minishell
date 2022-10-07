@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 22:22:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/09/12 09:42:06 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/09/26 01:05:31 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,11 @@ int	ft_exit(t_cmd *cmd, t_env **env_list)
 	if (ft_strcmp("exit", cmd->args[0]) == 0)
 	{
 		free_doublptr(cmd->args);
-		//free(cmd);
+		free(cmd);
 		free_list(env_list);
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
+		close(STDERR_FILENO);
 		exit(0);
 	}
 	return (1);
