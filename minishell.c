@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/07 02:21:30 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/09 08:11:46 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@ void	free_cmd(t_cmd **head)
 			i++;
 		}
 		free (temp->args);
+		if (temp->input != NULL)
+			free (temp->input);
+		if (temp->output != NULL)
+			free (temp->output);
 		*head = (*head)->next;
 		temp = *head;
 	}
@@ -54,7 +58,7 @@ int	main(int argc, char **argv, char **env)
 		tokens->cmdl = readline("minishell$ ");
 		if (start_parsing(tokens, &env_list, &cmd) == 0)
 		{
-			// try_execute(&cmd, &env_list, path);
+			try_execute(&cmd, &env_list, path);
 			free(tokens->cmdl);
 			free_cmd(&cmd);
 			free_doublptr(tokens->args);
