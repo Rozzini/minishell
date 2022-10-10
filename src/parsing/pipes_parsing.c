@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 02:48:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/09 08:09:59 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/10 04:11:49 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 void	p_tokens(t_tokens *tokens)
 {
 	int i = 0;
-	printf("\ntokens output\n");
+	printf("\n===================================\n");
+	printf("tokens output\n");
 	while(tokens->args[i] != NULL)
 	{
 		printf("[%s]  ", tokens->args[i]);
@@ -41,9 +42,9 @@ void	p_cmd(t_cmd *cmd)
 		}
 		printf("\n");
 		printf("input: %s\noutput: %s\ntype: %d\n", temp->input, temp->output, temp->type);
-		printf("\n");
 		temp = temp->next;
 	}
+	printf("===================================\n");
 }
 
 t_cmd	*find_last(t_cmd **head)
@@ -61,7 +62,7 @@ t_cmd	*find_last(t_cmd **head)
 //add new node to list
 void	push_cmd(t_cmd **head_ref, t_tokens *tokens)
 {
-	//t_cmd	*last;
+	t_cmd	*last;
 	t_cmd	*new_node;
 	int		i;
 
@@ -76,18 +77,18 @@ void	push_cmd(t_cmd **head_ref, t_tokens *tokens)
 	}
 	new_node->args[i] = NULL;
 	new_node->arg_c = i;
-	new_node->next = *head_ref;
+	new_node->next = NULL;
 	new_node->output = NULL;
 	new_node->input = NULL;
 	new_node->type = 0;
-	*head_ref = new_node;
-	tokens->last = new_node;
-	//last = find_last(head_ref);
-	// if (*head_ref == NULL)
-	// 	*head_ref = new_node;
-	// else
-	// last->next = new_node;
-	// last = *head_ref;
+	//*head_ref = new_node;
+	//tokens->last = new_node;
+	last = find_last(head_ref);
+	if (*head_ref == NULL)
+		*head_ref = new_node;
+	else
+	last->next = new_node;
+	last = *head_ref;
 }
 
 void	cmd_add_redirection(t_tokens *tokens, t_cmd *cmd, int type)
