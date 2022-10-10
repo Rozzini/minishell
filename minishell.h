@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/09 07:51:27 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/10 22:24:22 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ typedef struct s_cmd
 	char			*input;
 	char			*output;
 	int				arg_c;
-	int				type;
+	int				in_type;
+	int				out_type;
 	struct s_cmd	*next;
 }					t_cmd;
 

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 02:48:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/10 04:11:49 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/10 22:26:02 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	p_cmd(t_cmd *cmd)
 			i++;
 		}
 		printf("\n");
-		printf("input: %s\noutput: %s\ntype: %d\n", temp->input, temp->output, temp->type);
+		printf("input: %s\noutput: %s\nin type: %d\nout type: %d\n", temp->input, temp->output, temp->in_type, temp->out_type);
 		temp = temp->next;
 	}
 	printf("===================================\n");
@@ -80,9 +80,8 @@ void	push_cmd(t_cmd **head_ref, t_tokens *tokens)
 	new_node->next = NULL;
 	new_node->output = NULL;
 	new_node->input = NULL;
-	new_node->type = 0;
-	//*head_ref = new_node;
-	//tokens->last = new_node;
+	new_node->in_type = 0;
+	new_node->out_type = 0;
 	last = find_last(head_ref);
 	if (*head_ref == NULL)
 		*head_ref = new_node;
@@ -101,14 +100,15 @@ void	cmd_add_redirection(t_tokens *tokens, t_cmd *cmd, int type)
 		if (cmd->output != NULL)
 			free (cmd->output);
 		cmd->output = arg;
+		cmd->out_type = type;
 	}
 	else
 	{
 		if (cmd->input != NULL)
 			free (cmd->input);
 		cmd->input = arg;
+		cmd->in_type = type;
 	}
-	cmd->type = type;
 }
 
 int		check_type(char *s)
