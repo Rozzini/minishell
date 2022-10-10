@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env_list.c                                      :+:      :+:    :+:   */
+/*   ft_env_list_1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:38:30 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 15:52:57 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/30 21:52:14 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	init_env_list(t_env **env_list, char **env)
 		else
 			push(env_list, env_split[0], env_split[1]);
 		i++;
+		free_doublptr(env_split);
 	}
 }
 
@@ -36,9 +37,32 @@ void	print_env(t_env **head)
 	t_env	*temp;
 
 	temp = *head;
-	while (temp->next != NULL)
+	while (temp != NULL)
 	{
-		printf("%s=%s\n", temp->key, temp->val);
+		if (temp->val != NULL)
+			printf("%s=%s\n", temp->key, temp->val);
+		temp = temp->next;
+	}
+}
+
+//prints env for export builtin
+void	print_env_export(t_env **head)
+{
+	t_env	*temp;
+
+	temp = *head;
+	while (temp != NULL)
+	{
+		printf("declare -x ");
+		if (temp->val != NULL)
+		{
+			if (ft_strchr(temp->val, 34) == NULL)
+				printf("%s=\"%s\"\n", temp->key, temp->val);
+			else
+				printf("%s=%s\n", temp->key, temp->val);
+		}
+		else
+			printf("%s\n", temp->key);
 		temp = temp->next;
 	}
 }
@@ -55,6 +79,24 @@ t_env	*find_node_by_key(t_env *lst, char *key)
 	while (node->next != NULL)
 	{
 		if (ft_strcmp(node->key, key) == 0)
+			return (node);
+		node = node->next;
+	}
+	return (NULL);
+}
+
+//return node thats points to the node with provided key
+//needs to delete node if it not head
+t_env	*find_node_by_key_del(t_env *lst, char *key)
+{
+	t_env	*node;
+
+	if (lst == NULL)
+		return (NULL);
+	node = lst;
+	while (node->next != NULL)
+	{
+		if (ft_strcmp(node->next->key, key) == 0)
 			return (node);
 		node = node->next;
 	}

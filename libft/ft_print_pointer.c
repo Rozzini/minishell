@@ -6,13 +6,13 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 21:08:43 by mraspors          #+#    #+#             */
-/*   Updated: 2022/03/20 18:48:16 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/07/25 18:08:12 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_pointer_helper(uintptr_t num)
+int	ft_pointer_helper(intptr_t num)
 {
 	int		length;
 	int		reminder;

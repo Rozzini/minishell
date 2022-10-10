@@ -3,47 +3,58 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mrizk <mrizk@student.42abudhabi.ae>        +#+  +:+       +#+         #
+#    By: mraspors <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/07/24 16:47:05 by mrizk            ###   ########.fr        #
+#    Updated: 2022/09/01 02:48:59 by mraspors         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 NAME = minishell
 
-LIBFT		=	cd libft && make
+MAKE = make
 
-LIB			=	libft/libft.a
+CC = gcc
+
+CFLAG = -Wall -Werror -Wextra -g
+
+LIBFTDIR = ./libft
+
+LIBFT_A = ./libft/libft.a
 
 SRC	=   ./src/execution/builtins1.c ./src/execution/builtins2.c\
-		./src/execution/start_execution.c\
-		./src/list_env/list_operations.c ./src/list_env/ft_env_list.c\
-		./src/parsing/ft_check_quotes.c ./src/parsing/temp_name.c\
-		minishell.c executables.c
+	./src/execution/start_execution.c ./src/execution/ft_export.c\
+	./src/list_env/list_operations.c ./src/list_env/ft_env_list_1.c\
+	./src/list_env/env_list_to_string.c ./src/parsing/ft_check_quotes.c\
+	./src/parsing/temp_name.c ./src/parsing/expansion.c ./src/parsing/basic_parsing.c\
+	./src/parsing/builtins_parser.c ./src/parsing/start_parsing.c\
+	./src/helpers/free.c ./src/parsing/pipes_parsing.c\
+	minishell.c
 
-OBJS	= $(SRC:.c=.o)
+HEADER	= minishell.h
 
-GCC	= gcc
+OBJ	= $(SRC:.c=.o)
 
-FLAGS	= -Wall -Wextra -Werror
+RM = rm -f
 
-HEADER	= philo.h
+all: $(NAME)
 
-all:	$(NAME)
+.c.o: $(HEADER)
+		$(CC) $(CFLAG) -c $< -o $(<:.c=.o) 
 
-$(NAME): $(OBJS)
-	$(LIBFT)
-	$(GCC) $(FLAGS) $(OBJS) $(LIB) -o $(NAME) -lreadline
+$(NAME): $(OBJ)
+	$(MAKE) -C $(LIBFTDIR)
+	$(CC) $(CFLAG) $(SRC) $(LIBFT_A) -o $(NAME) -lreadline && clear
 
 clean:
-	rm -f $(OBJS)
+	$(MAKE) -C $(LIBFTDIR) clean
+	$(RM) $(OBJ) && clear
 
 fclean: clean
-	rm -f $(NAME)
+	$(MAKE) -C $(LIBFTDIR) fclean
+	$(RM) $(NAME) && clear
 
 re: fclean all
 
-%.o: %.c $(HEADER)
-	$(GCC) $(FLAGS) -c $<  -o $(<:.c=.o)
+.PHONY: all clean fclean re
