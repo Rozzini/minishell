@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/10 22:24:22 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/14 15:37:03 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,9 @@ typedef struct s_parsing
 {
 	char	*token;
 	char	*exp_name[1000];
-	int		expansions_p[1000];
+	int		exp_skip[1000];
 	int		i;
+	int		iter;
 }			t_parsing;
 
 //====================BUILTINS=====================//
@@ -171,7 +172,7 @@ void	quotes_exp_check(t_tokens *tokens, t_env **env);
 t_env	*check_expansion_name(char *name, t_env **env);
 
 //return string which contains expansion name
-char	*copy_expansion_name(char *s, t_parsing *prs, int i);
+int		copy_expansion_name(char *s, t_parsing *prs, int i);
 
 //replaces expansion name in OG string with expansion value
 void	do_expansion(t_parsing	*prs, t_env **env);

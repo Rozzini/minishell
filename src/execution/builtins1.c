@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:31:15 by mrizk             #+#    #+#             */
-/*   Updated: 2022/10/11 06:35:42 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/11 06:38:49 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,10 @@ int	ft_cd(t_cmd *cmd, t_env **env_list)
 			return (0);
 		}
 		if (chdir(cmd->args[1]) == -1)
+		{
+			printf("cd: no such file or directory: %s\n", cmd->args[1]);
 			return (0);
+		}
 		temp = find_node_by_key(*env_list, "PWD");
 		old_temp = find_node_by_key(*env_list, "OLDPWD");
 		free(old_temp->val);

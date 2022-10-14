@@ -6,13 +6,13 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 16:35:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/08/19 16:36:43 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/14 15:43:14 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	remove_quotes(char *string, t_parsing *prs, int *i)
+void	remove_quotes(char *string, t_parsing *prs)
 {
 	char	c;
 
@@ -20,33 +20,10 @@ void	remove_quotes(char *string, t_parsing *prs, int *i)
 	string++;
 	while (*string != c && *string != '\0')
 	{
-		if (*string == '$' && c == 34)
-		{
-			prs->token[prs->i] = *string;
-			prs->expansions_p[*i] = prs->i;
-			prs->i++;
-			string = copy_expansion_name(string, prs, *i);
-			*i = *i + 1;
-			if (*string == '\0')
-				break ;
-		}
-		else
-		{
 			prs->token[prs->i] = *string;
 			prs->i++;
 			string++;
-		}
 	}
-}
-
-char	*check_quotes_if_ext(char	*string, t_parsing	*prs, int *i)
-{
-	prs->token[prs->i] = *string;
-	prs->expansions_p[*i] = prs->i;
-	prs->i++;
-	string = copy_expansion_name(string, prs, *i);
-	*i = *i + 1;
-	return (string);
 }
 
 void	check_quotes(char	*string, t_parsing	*prs)
@@ -58,14 +35,12 @@ void	check_quotes(char	*string, t_parsing	*prs)
 	{
 		if (*string == 34 || *string == 39)
 		{
-			remove_quotes(string, prs, &i);
+			remove_quotes(string, prs);
 			string = tokens_q_iter(string);
 			string++;
 			if (*string == '\0')
 				break ;
 		}
-		else if (*string == '$')
-			string = check_quotes_if_ext(string, prs, &i);
 		else
 		{
 			prs->token[prs->i] = *string;
@@ -74,7 +49,35 @@ void	check_quotes(char	*string, t_parsing	*prs)
 		}
 	}
 	prs->token[prs->i] = '\0';
-	prs->expansions_p[i] = -1;
+}
+
+void	count_possible_expansion(t_parsing *parsing)
+void	save_exp_data(char *string, t_parsing *parsing)
+{
+	int		i;
+	char	c;
+
+	i = 0;
+	while(string[i] != '\0')
+	{
+		if (string[i] == 34 || string[i] == 39)
+		{
+			c = string[i];
+			i++;
+			while (string[i] != c)
+			{
+				if (string[i] == '$' && c == 34)
+					i = copy_expansion_name(string, parsing, i);
+				else
+				i++;
+			}
+			i++;
+		}
+		else if (string[i] == '$')
+			i = copy_expansion_name(string, parsing, i);
+		else
+			i++;
+	}	
 }
 
 void	quotes_exp_check(t_tokens *tokens, t_env **env)
@@ -82,15 +85,17 @@ void	quotes_exp_check(t_tokens *tokens, t_env **env)
 	t_parsing	*prs;
 	int			i;
 
-	count_nodes(env);
 	i = 0;
+	prs = malloc(sizeof(t_parsing));
 	while (tokens->args[i] != NULL)
 	{
-		prs = malloc(sizeof(t_parsing));
+		prs->iter = 0;
 		prs->i = 0;
-		prs->token = malloc(sizeof(char) * (ft_strlen(tokens->args[i]) + 1));
-		check_quotes(tokens->args[i], prs);
+		prs->token = ft_strdup(tokens->args[i]);
+		save_exp_data(tokens->args[i], prs);
+		prs->exp_name[prs->iter] = NULL;
 		do_expansion(prs, env);
+		check_quotes(tokens->args[i], prs);
 		free(tokens->args[i]);
 		tokens->args[i] = prs->token;
 		i++;

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 22:14:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/08/19 16:36:40 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/14 15:42:28 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,33 @@ int	count_expansion_pointers(t_parsing *prs)
 	int	i;
 
 	i = 0;
-	while (prs->expansions_p[i] != -1)
+	while (prs->exp_name[i] != NULL)
 		i++;
 	return (i);
 }
 
-char	*copy_expansion_name(char *s, t_parsing *prs, int i)
+void	add_exp_skip(t_parsing *parsing, int i)
 {
-	char	*start;
+	static int	i;
 
-	s++;
-	start = s;
-	while (is_separator(*s) == 0 && *s != '\0' && *s != 34)
-		s++;
-	prs->exp_name[i] = ft_substr(start, 0, ft_strlen(start) - ft_strlen(s));
-	return (s);
+	parsing
+	i++;
+}
+
+int		copy_expansion_name(char *s, t_parsing *prs, int i)
+{
+	int			start;
+
+	i++;
+	start = i;
+	if (ft_isdigit(s[i]) == 0)
+	{
+		while (is_separator(s[i]) == 0 && ft_isalnum(s[i]) == 1 && s[i] != '\0')
+			i++;
+	}
+	prs->exp_name[prs->iter] = ft_substr(&s[start], 0, ft_strlen(&s[start]) - ft_strlen(&s[i]));
+	prs->iter++;
+	return (i);
 }
 
 t_env	*check_expansion_name(char *name, t_env **env)
@@ -47,23 +59,27 @@ t_env	*check_expansion_name(char *name, t_env **env)
 void	do_expansion(t_parsing	*prs, t_env **env)
 {
 	int		i;
-	int		pointer;
+	int		c;
 	char	*s;
 	t_env	*temp;
 
-	i = count_expansion_pointers(prs) - 1;
-	while (i >= 0)
+	i = 0;
+	c = 0;
+	while (prs->exp_name[c] != NULL)
 	{
-		temp = check_expansion_name(prs->exp_name[i], env);
-		pointer = prs->expansions_p[i];
-		s = ft_substr(prs->token, 0,
-				ft_strlen(prs->token) - ft_strlen(&(prs->token[pointer])));
-		if (temp != NULL)
-			s = ft_strjoin(s, temp->val);
-		pointer = prs->expansions_p[i] + 1;
-		s = ft_strjoin(s, &(prs->token[pointer]));
-		free(prs->token);
-		prs->token = s;
-		i--;
+		printf("i: %d c: %c\n", i, prs->token[i]);
+		if (prs->token[i] == '$')
+		{
+			temp = check_expansion_name(prs->exp_name[c], env);
+			s = ft_substr(prs->token, 0,
+				ft_strlen(prs->token) - ft_strlen(&(prs->token[i])));
+			if (temp != NULL)
+		 		s = ft_strjoin(s, temp->val);
+			s = ft_strjoin(s, &(prs->token[i + 1 + ft_strlen(prs->exp_name[c])]));
+			free(prs->token);
+			prs->token = s;
+			c++;
+		}
+		i++;
 	}
 }

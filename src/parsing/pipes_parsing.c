@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 02:48:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/10 22:26:02 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/13 06:15:19 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ void	p_cmd(t_cmd *cmd)
 			i++;
 		}
 		printf("\n");
-		printf("input: %s\noutput: %s\nin type: %d\nout type: %d\n", temp->input, temp->output, temp->in_type, temp->out_type);
+		printf("input: %s\noutput: %s\nin type: %d\nout type: %d\nargc: %d\n", 
+		temp->input, temp->output, temp->in_type, temp->out_type, temp->arg_c);
 		temp = temp->next;
 	}
 	printf("===================================\n");
@@ -191,9 +192,9 @@ void	make_commands(t_tokens *tokens, t_cmd **cmd)
 
 int	start_pipes_parsing(t_tokens *tokens, t_cmd **cmd)
 {
-	p_tokens(tokens);
+	//p_tokens(tokens);
 	make_commands(tokens, cmd);
-	printf("\n\n");
-	p_cmd(*cmd);
+	//printf("\n\n");
+	//p_cmd(*cmd);
 	return (0);
 }
