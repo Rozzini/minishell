@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 16:35:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/14 15:43:14 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/15 18:12:08 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	check_quotes(char	*string, t_parsing	*prs)
 	prs->token[prs->i] = '\0';
 }
 
-void	count_possible_expansion(t_parsing *parsing)
 void	save_exp_data(char *string, t_parsing *parsing)
 {
 	int		i;
@@ -89,13 +88,14 @@ void	quotes_exp_check(t_tokens *tokens, t_env **env)
 	prs = malloc(sizeof(t_parsing));
 	while (tokens->args[i] != NULL)
 	{
+		prs->og_token = ft_strdup(tokens->args[i]);
 		prs->iter = 0;
 		prs->i = 0;
 		prs->token = ft_strdup(tokens->args[i]);
 		save_exp_data(tokens->args[i], prs);
 		prs->exp_name[prs->iter] = NULL;
-		do_expansion(prs, env);
 		check_quotes(tokens->args[i], prs);
+		do_expansion(prs, env);
 		free(tokens->args[i]);
 		tokens->args[i] = prs->token;
 		i++;

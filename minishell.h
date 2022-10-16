@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/14 15:37:03 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/15 18:13:44 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct s_env
 //				expansion that should be done
 typedef struct s_parsing
 {
+	char	*og_token;
 	char	*token;
 	char	*exp_name[1000];
 	int		exp_skip[1000];
