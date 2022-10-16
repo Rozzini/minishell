@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 02:48:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/10 22:26:02 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/13 02:03:16 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	p_cmd(t_cmd *cmd)
 			i++;
 		}
 		printf("\n");
-		printf("input: %s\noutput: %s\nin type: %d\nout type: %d\n", temp->input, temp->output, temp->in_type, temp->out_type);
+		printf("input: %s\noutput: %s\nin type: %d\nout type: %d\nnext:\n", temp->input, temp->output, temp->in_type, temp->out_type);
 		temp = temp->next;
 	}
 	printf("===================================\n");
@@ -116,16 +116,16 @@ int		check_type(char *s)
 	if (s == NULL)
 		return (-1);
 	if (ft_strcmp(s, "|") == 0)
-		return (0);
+		return (PIPE);
 	if (ft_strcmp(s, ">") == 0)
-		return (1);
+		return (REDR);
 	if (ft_strcmp(s, ">>") == 0)
-		return (2);
+		return (REDRR);
 	if (ft_strcmp(s, "<") == 0)
-		return (3);
+		return (REDL);
 	if (ft_strcmp(s, "<<") == 0)
-		return (4);
-	return (5);
+		return (HEREDOC);
+	return (NONE);
 }
 
 //will save first command to cmd
@@ -191,7 +191,7 @@ void	make_commands(t_tokens *tokens, t_cmd **cmd)
 
 int	start_pipes_parsing(t_tokens *tokens, t_cmd **cmd)
 {
-	p_tokens(tokens);
+	//p_tokens(tokens);
 	make_commands(tokens, cmd);
 	printf("\n\n");
 	p_cmd(*cmd);

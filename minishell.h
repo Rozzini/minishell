@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/10 22:24:22 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/16 17:22:21 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <curses.h>
+# include <fcntl.h>
 # include <term.h>
 # include <termios.h>
 # include <unistd.h>
@@ -36,6 +37,11 @@
 # define REDL 3
 # define HEREDOC 4
 # define NONE 5
+
+struct command
+{
+  const char **argv;
+};
 
 typedef struct s_cmd
 {
@@ -204,5 +210,9 @@ void	free_list(t_env **list);
 //==================================================//
 
 int		check_minishell_exec(t_tokens	*tokens, t_env **env);
+void	p_cmd(t_cmd *cmd);
+//void	prep_redrr(t_cmd *cmd, char *out_file);
+int		ft_pipe(t_cmd *cmd, t_env **env, char **path);
+void	exec_pipes(t_cmd *cmd, t_env **env, char **path, int n_pipes);
 
 #endif
