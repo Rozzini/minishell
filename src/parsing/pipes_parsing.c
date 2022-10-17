@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 02:48:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/16 19:44:10 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/17 20:26:18 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,13 @@ void	push_cmd(t_cmd **head_ref, t_tokens *tokens)
 	new_node->input = NULL;
 	new_node->in_type = 0;
 	new_node->out_type = 0;
+	tokens->last = new_node;
 	last = find_last(head_ref);
 	if (*head_ref == NULL)
 		*head_ref = new_node;
 	else
 	last->next = new_node;
-	last = *head_ref;
+	//last = *head_ref;
 }
 
 void	cmd_add_redirection(t_tokens *tokens, t_cmd *cmd, int type)
