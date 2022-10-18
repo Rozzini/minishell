@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/06 05:02:22 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/18 20:36:50 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,48 +32,22 @@ int	ft_execs(t_cmd *cmd, t_env **env, char **path)
 {
 	int		i;
 	char	*str;
-    char    **env_s;
+	char	**env_s;
 
 	i = 0;
-    env_s = env_list_to_string(*env);
-    if (try_builtins(cmd, env) == 0)
-        return (0);
+	env_s = env_list_to_string(*env);
+	if (try_builtins(cmd, env) == 0)
+		return (0);
 	while (path[i] != NULL)
 	{
 		str = ft_strjoin(path[i], "/");
 		str = ft_strjoin(str, cmd->args[0]);
 		if (execve(str, cmd->args, env_s) != -1)
-			return 0;
+			return (0);
 		i++;
 	}
 	printf("mininshell: %s: command not found\n", cmd->args[0]);
 	return (0);
-}
-
-
-void exec_pipes(t_cmd *cmd, t_env **env, char **path)
-{
-    int     in_out[2];
-    pid_t   pid;
-
-	if (cmd->next != NULL)
-	{
-		if (pipe(in_out) != 0)
-			return ;
-		if ((pid = fork()) < 0)
-			return ;
-		if (pid == 0)
-        {
-			dup2(in_out[1], 1);
-    		close(in_out[0]);
-    		close(in_out[1]);
-			exec_pipes(cmd->next, env, path);
-		}
-		dup2(in_out[0], 0);
-    	close(in_out[0]);
-    	close(in_out[1]);
-	}
-	ft_execs(cmd, env, path);
 }
 
 //function that is called from main
@@ -83,16 +57,16 @@ void exec_pipes(t_cmd *cmd, t_env **env, char **path)
 void	try_execute(t_cmd **commands, t_env **env, char **path)
 {
 	int		pid;
-    t_cmd	*cmd;
+	t_cmd	*cmd;
 
- 	cmd = *commands;
-	if (cmd->next != NULL)
+	cmd = *commands;
+	if (cmd->next == NULL)
 	{
 		pid = fork();
 		if (pid == 0)
 			ft_execs(cmd, env, path);
-    }
-    else
+	}
+	else
 	{
 		pid = fork();
 		if (pid == 0)

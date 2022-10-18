@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/15 18:13:44 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/18 20:44:30 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,9 @@ typedef struct s_parsing
 	int		exp_skip[1000];
 	int		i;
 	int		iter;
+	int		j;
+	int		c;
+	char	*s;
 }			t_parsing;
 
 //====================BUILTINS=====================//
@@ -129,10 +132,18 @@ void	try_execute(t_cmd **commands, t_env **env, char **path);
 //tries to execute builtins
 //if one of them executed successfully returns 0;
 //else returns 1;
-int     try_builtins(t_cmd *cmd, t_env **env);
+int		try_builtins(t_cmd *cmd, t_env **env);
 
 //executes non builtins
 int		ft_execs(t_cmd *cmd, t_env **env, char **path);
+
+//==================================================//
+
+//======================PIPES=======================//
+
+void	exec_pipes(t_cmd *cmd, t_env **env, char **path);
+
+int		make_baby_pipe(int *fd, t_cmd *cmd, char **path, t_env **env);
 
 //==================================================//
 
@@ -165,6 +176,20 @@ void	quotes_exp_check(t_tokens *tokens, t_env **env);
 
 //==================================================//
 
+//=================PARSING_HELPERS==================//
+
+int		is_separator(char c);
+
+int		is_special(char *s);
+
+int		check_type(char *s);
+
+void	p_tokens(t_tokens *tokens);
+
+void	p_cmd(t_cmd *cmd);
+
+//==================================================//
+
 //====================EXPANSION=====================//
 
 //checks if there is such env
@@ -194,6 +219,9 @@ void	delete_node(t_env *node);
 
 //return nodes count
 int		count_nodes(t_env **head);
+
+//returns last element of list
+t_cmd	*find_last(t_cmd **head);
 
 //==================================================//
 

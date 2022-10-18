@@ -6,60 +6,11 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 02:48:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/17 20:26:18 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/18 20:18:01 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-void	p_tokens(t_tokens *tokens)
-{
-	int i = 0;
-	printf("\n===================================\n");
-	printf("tokens output\n");
-	while(tokens->args[i] != NULL)
-	{
-		printf("[%s]  ", tokens->args[i]);
-		i++;
-	}
-	printf("\ntoken_count: %d\n", tokens->arg_c);
-	printf("===================================\n");
-}
-
-void	p_cmd(t_cmd *cmd)
-{
-	t_cmd *temp;
-	int i = 0;
-	
-	temp = cmd;
-	printf("===========cmd struct output=============\n");
-	while(temp != NULL)
-	{
-		i = 0;
-		while(temp->args[i] != NULL)
-		{
-			printf("[%s] ", temp->args[i]);
-			i++;
-		}
-		printf("\n");
-		printf("input: %s\noutput: %s\nin type: %d\nout type: %d\nargc: %d\n\n", 
-		temp->input, temp->output, temp->in_type, temp->out_type, temp->arg_c);
-		temp = temp->next;
-	}
-	printf("===================================\n");
-}
-
-t_cmd	*find_last(t_cmd **head)
-{
-	t_cmd	*temp;
-
-	temp = *head;
-	if (*head == NULL)
-		return (NULL);
-	while (temp->next != NULL)
-		temp = temp->next;
-	return (temp);
-}
 
 //add new node to list
 void	push_cmd(t_cmd **head_ref, t_tokens *tokens)
@@ -73,8 +24,7 @@ void	push_cmd(t_cmd **head_ref, t_tokens *tokens)
 	new_node->args = malloc(sizeof(char *) * (tokens->end - tokens->start + 1));
 	while (tokens->start < tokens->end)
 	{
-		new_node->args[i] = ft_strdup(tokens->args[tokens->start]);
-		i++;
+		new_node->args[i++] = ft_strdup(tokens->args[tokens->start]);
 		tokens->start++;
 	}
 	new_node->args[i] = NULL;
@@ -90,7 +40,6 @@ void	push_cmd(t_cmd **head_ref, t_tokens *tokens)
 		*head_ref = new_node;
 	else
 	last->next = new_node;
-	//last = *head_ref;
 }
 
 void	cmd_add_redirection(t_tokens *tokens, t_cmd *cmd, int type)
@@ -114,23 +63,6 @@ void	cmd_add_redirection(t_tokens *tokens, t_cmd *cmd, int type)
 	}
 }
 
-int		check_type(char *s)
-{
-	if (s == NULL)
-		return (-1);
-	if (ft_strcmp(s, "|") == 0)
-		return (0);
-	if (ft_strcmp(s, ">") == 0)
-		return (1);
-	if (ft_strcmp(s, ">>") == 0)
-		return (2);
-	if (ft_strcmp(s, "<") == 0)
-		return (3);
-	if (ft_strcmp(s, "<<") == 0)
-		return (4);
-	return (5);
-}
-
 //will save first command to cmd
 //returns 1 if there is smthing left in tokens->args
 //return 0 if there is only 1 command
@@ -142,7 +74,7 @@ int	save_first_cmd(t_tokens *tokens, t_cmd **cmd)
 	tokens->start = 0;
 	while (tokens->args[i] != NULL)
 	{
-		if(check_type(tokens->args[i]) != 5)
+		if (check_type(tokens->args[i]) != 5)
 		{
 			tokens->end = i;
 			push_cmd(cmd, tokens);
@@ -162,39 +94,28 @@ void	make_commands(t_tokens *tokens, t_cmd **cmd)
 	int	i;
 	int	type;
 
-	if(save_first_cmd(tokens, cmd) == 0)
-		return ;
 	i = tokens->start;
 	while (tokens->args[i] != NULL)
 	{
 		type = check_type(tokens->args[i]);
+		i++;
+		tokens->start++;
+		while (check_type(tokens->args[i]) == 5)
+			i++;
+		tokens->end = i;
 		if (type == 0)
-		{
-			i++;
-			tokens->start++;
-			while (check_type(tokens->args[i]) == 5)
-				i++;
-			tokens->end = i;
 			push_cmd(cmd, tokens);
-			tokens->start = i;
-		}
-		else if (type >= 1 && type <= 4)
-		{
-			i++;
-			tokens->start++;
-			while (check_type(tokens->args[i]) == 5)
-				i++;
-			tokens->end = i;
+		else
 			cmd_add_redirection(tokens, tokens->last, type);
-			tokens->start = i;
-		}
+		tokens->start = i;
 	}
 }
-
 
 int	start_pipes_parsing(t_tokens *tokens, t_cmd **cmd)
 {
 	p_tokens(tokens);
+	if (save_first_cmd(tokens, cmd) == 0)
+		return (0);
 	make_commands(tokens, cmd);
 	printf("\n\n");
 	p_cmd(*cmd);

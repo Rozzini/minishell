@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 21:01:04 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/28 00:40:59 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/18 20:18:28 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,16 @@ int	count_nodes(t_env **head)
 		temp = temp->next;
 	}
 	return (count);
+}
+
+t_cmd	*find_last(t_cmd **head)
+{
+	t_cmd	*temp;
+
+	temp = *head;
+	if (*head == NULL)
+		return (NULL);
+	while (temp->next != NULL)
+		temp = temp->next;
+	return (temp);
 }

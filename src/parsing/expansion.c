@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 22:14:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/16 19:42:13 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/18 20:50:16 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	count_expansion_pointers(t_parsing *prs)
 	return (i);
 }
 
-int		copy_expansion_name(char *s, t_parsing *prs, int i)
+int	copy_expansion_name(char *s, t_parsing *prs, int i)
 {
 	int			start;
 
@@ -35,7 +35,8 @@ int		copy_expansion_name(char *s, t_parsing *prs, int i)
 	}
 	else
 		i++;
-	prs->exp_name[prs->iter] = ft_substr(&s[start], 0, ft_strlen(&s[start]) - ft_strlen(&s[i]));
+	prs->exp_name[prs->iter] = ft_substr(&s[start], 0,
+			ft_strlen(&s[start]) - ft_strlen(&s[i]));
 	prs->iter++;
 	return (i);
 }
@@ -50,49 +51,49 @@ t_env	*check_expansion_name(char *name, t_env **env)
 	return (temp);
 }
 
+void	do_expansion_helper(int *i, t_parsing *prs, t_env **env)
+{
+	t_env	*temp;
+
+	temp = check_expansion_name(prs->exp_name[prs->c], env);
+	prs->s = ft_substr(prs->token, 0,
+			ft_strlen(prs->token) - ft_strlen(&(prs->token[*i])));
+	if (temp != NULL)
+		prs->s = ft_strjoin(prs->s, temp->val);
+	prs->s = ft_strjoin(prs->s, &(prs->token[*i + 1
+				+ ft_strlen(prs->exp_name[prs->c])]));
+	free(prs->token);
+	prs->token = prs->s;
+	if (temp != NULL)
+		*i += ft_strlen(temp->val) - 1;
+	prs->j += ft_strlen(prs->exp_name[prs->c]);
+	prs->c++;
+}
+
 void	do_expansion(t_parsing	*prs, t_env **env)
 {
 	int		i;
-	int		j;
-	int		c;
-	char	*s;
-	t_env	*temp;
 
 	i = 0;
-	c = 0;
-	j = 0;
-	if (prs->og_token[j] == 34)
-		j++;
-	while (prs->exp_name[c] != NULL)
+	prs->c = 0;
+	prs->j = 0;
+	while (prs->exp_name[prs->c] != NULL)
 	{
-		if (prs->og_token[j] == 34)
-			j++;
-		if (prs->og_token[j] == 39)
+		if (prs->og_token[prs->j] == 34)
+			prs->j++;
+		if (prs->og_token[prs->j] == 39)
 		{
-			j++;
-			while (prs->og_token[j] != 39)
+			prs->j++;
+			while (prs->og_token[prs->j] != 39)
 			{
 				i++;
-				j++;
+				prs->j++;
 			}
-			j++;
+			prs->j++;
 		}
 		if (prs->token[i] == '$')
-		{
-			temp = check_expansion_name(prs->exp_name[c], env);
-			s = ft_substr(prs->token, 0,
-				ft_strlen(prs->token) - ft_strlen(&(prs->token[i])));
-			if (temp != NULL)
-		 		s = ft_strjoin(s, temp->val);
-			s = ft_strjoin(s, &(prs->token[i + 1 + ft_strlen(prs->exp_name[c])]));
-			free(prs->token);
-			prs->token = s;
-			if (temp != NULL)
-				i += ft_strlen(temp->val) - 1;
-			j += ft_strlen(prs->exp_name[c]);
-			c++;
-		}
+			do_expansion_helper(&i, prs, env);
 		i++;
-		j++;
+		prs->j++;
 	}
 }

@@ -6,13 +6,8 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 01:22:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/09/21 01:28:49 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/18 20:07:55 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-void    redirection(t_cmd *cmd, char **path)
-{
-    
-}

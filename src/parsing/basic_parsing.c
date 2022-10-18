@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 16:35:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/15 18:12:08 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/18 20:03:49 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	save_exp_data(char *string, t_parsing *parsing)
 	char	c;
 
 	i = 0;
-	while(string[i] != '\0')
+	while (string[i] != '\0')
 	{
 		if (string[i] == 34 || string[i] == 39)
 		{
