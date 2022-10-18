@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/18 20:44:30 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/18 20:57:49 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <fcntl.h>
 # include "./libft/libft.h"
 
 # define PIPE 0
@@ -139,11 +140,15 @@ int		ft_execs(t_cmd *cmd, t_env **env, char **path);
 
 //==================================================//
 
-//======================PIPES=======================//
+//================PIPES_REDIRECTIONS================//
 
 void	exec_pipes(t_cmd *cmd, t_env **env, char **path);
 
 int		make_baby_pipe(int *fd, t_cmd *cmd, char **path, t_env **env);
+
+void	exec_redir(t_cmd *cmd, t_env **env, char **path);
+
+int		make_baby_redir(t_cmd *cmd, t_env **env, char **path);
 
 //==================================================//
 
