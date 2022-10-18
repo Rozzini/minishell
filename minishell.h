@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/16 17:22:21 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/17 12:20:05 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,8 @@ int		is_separator(char c);
 //removes quotes and does expansion
 void	quotes_exp_check(t_tokens *tokens, t_env **env);
 
+void	exec_pipes(t_cmd *cmd, t_env **env, char **path, int n_cmd);
+
 //==================================================//
 
 //====================EXPANSION=====================//
@@ -207,12 +209,13 @@ void	free_doublptr(char **s);
 
 void	free_list(t_env **list);
 
-//==================================================//
+//=======================UTILS=======================//
 
 int		check_minishell_exec(t_tokens	*tokens, t_env **env);
+
 void	p_cmd(t_cmd *cmd);
-//void	prep_redrr(t_cmd *cmd, char *out_file);
-int		ft_pipe(t_cmd *cmd, t_env **env, char **path);
-void	exec_pipes(t_cmd *cmd, t_env **env, char **path, int n_pipes);
+
+//returns number of cmds/list size
+int		n_cmds(t_cmd *head);
 
 #endif
