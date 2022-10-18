@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 01:22:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/17 21:05:00 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/18 10:47:37 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	make_baby(t_cmd *cmd, char **path, t_env **env)
 		close(fd);
 		return (ft_execs(cmd, env, path));
 	}
+	return (pid);
 }
 
 void    exec_redir(t_cmd *cmd, char **path, t_env **env)
