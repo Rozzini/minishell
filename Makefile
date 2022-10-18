@@ -6,7 +6,7 @@
 #    By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/10/17 12:21:38 by alalmazr         ###   ########.fr        #
+#    Updated: 2022/10/18 19:49:35 by alalmazr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ LIBFT_A = ./libft/libft.a
 
 SRC	=   ./src/execution/builtins1.c ./src/execution/builtins2.c\
 	./src/execution/start_execution.c ./src/execution/ft_export.c\
-	./src/pipes/pipes.c \
+	./src/pipes/pipes.c ./src/redirection/redirection.c\
 	./src/list_env/list_operations.c ./src/list_env/ft_env_list_1.c\
 	./src/list_env/env_list_to_string.c ./src/parsing/ft_check_quotes.c\
 	./src/parsing/temp_name.c ./src/parsing/expansion.c ./src/parsing/basic_parsing.c\

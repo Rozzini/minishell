@@ -6,13 +6,13 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 09:42:36 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/10/17 16:20:54 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/18 19:56:38 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int make_baby(int fd_in, int fd_out, t_cmd *cmd, char **path, t_env **env)
+int make_baby_pipe(int fd_in, int fd_out, t_cmd *cmd, char **path, t_env **env)
 {
 	pid_t pid;
 
@@ -54,7 +54,7 @@ void exec_pipes(t_cmd *cmd, t_env **env, char **path, int n_cmd)
 		printf("	cmd i (%d): %s\n", i, curr_cmd->args[0]);
 		// f[1]->write end of the pipe
 		// carry `prev` from the prev iteration.
-		pid = make_baby(prev_fd, fd[1], curr_cmd, path, env);
+		pid = make_baby_pipe(prev_fd, fd[1], curr_cmd, path, env);
 		if (pid == -1)
 		{
 			printf("fork error");
@@ -75,48 +75,3 @@ void exec_pipes(t_cmd *cmd, t_env **env, char **path, int n_cmd)
 	ft_execs(curr_cmd, env, path);
 	return;
 }
-
-//my main process will create a pipe for child proccesses to communicate
-//it will also fork and wait for them
-//pipe() -> fork() for each process u want
-// void exec_pipes(t_cmd *cmd, t_env **env, char **path)
-// {
-// 	int in_out[2];
-// 	pid_t pid;
-
-// 	printf("exec pipes:\n");
-// 	// if (!cmd->next)
-// 	// {
-// 	// 	printf("!cmd->next:\n");
-// 	// 	// if (cmd->out_type == REDR)
-// 	// 	// 	exec_redr(cmd, env, path);
-// 	// 	if (cmd->out_type == REDRR)
-// 	// 		fd = prep_redrr(cmd, cmd->output);
-// 	// 	// if (cmd->in_type == REDL)
-// 	// 	// 	exec_redrr(cmd, env, path);
-// 	// 	// if (cmd->in_type == HEREDOC)
-// 	// 	// 	exec_heredoc(cmd, env, path);
-// 	// }
-// 	if (cmd->next != NULL)
-// 	{
-// 		if (pipe(in_out) != 0)
-// 			return ;
-// 		if ((pid = fork()) < 0)
-// 			return ;
-// 		if (pid == 0)
-//         {
-// 			dup2(in_out[1], STDOUT_FILENO);
-//     		close(in_out[0]);
-//     		close(in_out[1]);
-// 			exec_pipes(cmd->next, env, path);
-// 		}
-// 		dup2(in_out[0], STDIN_FILENO);
-//     	close(in_out[0]);
-//     	close(in_out[1]);
-// 	}
-// 	else
-// 	{
-// 	printf("b4 ft_execs :)\n");
-// 	ft_execs(cmd, env, path);
-// 	}
-//}

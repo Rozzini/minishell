@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/17 12:20:05 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/18 19:48:44 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,10 @@ int     try_builtins(t_cmd *cmd, t_env **env);
 //executes non builtins
 int		ft_execs(t_cmd *cmd, t_env **env, char **path);
 
+void    exec_redir(t_cmd *cmd,  t_env **env, char **path);
+
+void	exec_pipes(t_cmd *cmd, t_env **env, char **path, int n_cmd);
+
 //==================================================//
 
 //=====================PARSING======================//
@@ -166,8 +170,6 @@ int		is_separator(char c);
 
 //removes quotes and does expansion
 void	quotes_exp_check(t_tokens *tokens, t_env **env);
-
-void	exec_pipes(t_cmd *cmd, t_env **env, char **path, int n_cmd);
 
 //==================================================//
 

@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/17 12:17:48 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/18 19:46:54 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,12 @@ void try_execute(t_cmd **commands, t_env **env, char **path)
 	{
 		pid = fork();
 		if (pid == 0)
-			ft_execs(cmd, env, path);
+		{
+			if (cmd->input != NULL || cmd->output != NULL)
+				exec_redir(cmd, env, path);
+			else
+				ft_execs(cmd, env, path);
+		}
 	}
 	else
 	{
