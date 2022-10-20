@@ -6,29 +6,33 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/18 20:51:25 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/20 11:56:05 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../../minishell.h"
 
-// tries to execute builtins
-// if one of them executed successfully returns 0;
-// else returns 1;
-int try_builtins(t_cmd *cmd, t_env **env)
+//tries to execute builtins
+//if one of them executed successfully returns 0;
+//else returns 1;
+int	try_builtins(t_cmd *cmd, t_env **env)
 {
 	ft_exit(cmd, env);
-	if (ft_echo(cmd) == 0 || ft_pwd(cmd) == 0 || ft_cd(cmd, env) == 0 || ft_env(cmd, env) == 0 || ft_export(cmd, env) == 0 || ft_unset(cmd, env) == 0)
+	if (ft_echo(cmd) == 0
+		|| ft_pwd(cmd) == 0
+		|| ft_cd(cmd, env) == 0
+		|| ft_env(cmd, env) == 0
+		|| ft_export(cmd, env) == 0
+		|| ft_unset(cmd, env) == 0)
 		return (0);
 	return (1);
 }
 
-int ft_execs(t_cmd *cmd, t_env **env, char **path)
+int	ft_execs(t_cmd *cmd, t_env **env, char **path)
 {
-	int i;
-	char *str;
-	char **env_s;
+	int		i;
+	char	*str;
+	char	**env_s;
 
 	i = 0;
 	env_s = env_list_to_string(*env);
@@ -46,18 +50,16 @@ int ft_execs(t_cmd *cmd, t_env **env, char **path)
 	return (0);
 }
 
-// function that is called from main
-// tryes to run builtins first
-// if not succeed need to make fork 0--
-// and call OG function from bash
-void try_execute(t_cmd **commands, t_env **env, char **path)
+//function that is called from main
+//tryes to run builtins first
+//if not succeed need to make fork 0--
+//and call OG function from bash
+void	try_execute(t_cmd **commands, t_env **env, char **path)
 {
-	int pid;
-	t_cmd *cmd;
-	int n_cmd;
+	int		pid;
+	t_cmd	*cmd;
 
 	cmd = *commands;
-	n_cmd = n_cmds(cmd);
 	if (cmd->next == NULL)
 	{
 		pid = fork();
@@ -73,7 +75,7 @@ void try_execute(t_cmd **commands, t_env **env, char **path)
 	{
 		pid = fork();
 		if (pid == 0)
-			exec_pipes(cmd, env, path, n_cmd);
+			exec_pipes(cmd, env, path);
 	}
 	wait(0);
 }
