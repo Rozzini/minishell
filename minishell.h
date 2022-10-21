@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/21 14:16:15 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/21 19:51:58 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,13 @@ typedef struct s_rdr
 	struct s_rdr	*next;
 }					t_rdr;
 
-//main stracture where command stored
+//main stracture where commands r stored
 typedef struct s_cmd
 {
 	char			**args;
-	char			*input;
-	char			*output;
 	int				arg_c;
-	int				in_type;
-	int				out_type;
-	char			**in_args;
-	char			**out_args;
+	t_rdr			*input;
+	t_rdr			*output;
 	struct s_cmd	*next;
 }					t_cmd;
 
@@ -82,15 +78,14 @@ typedef struct s_tokens
 //structure for parsing
 typedef struct s_parsing
 {
-	char	*og_token;
+	char	*s;
 	char	*token;
+	char	*og_token;
 	char	*exp_name[1000];
-	int		exp_skip[1000];
 	int		i;
-	int		iter;
 	int		j;
 	int		c;
-	char	*s;
+	int		iter;
 }			t_parsing;
 
 //====================BUILTINS=====================//
@@ -244,7 +239,11 @@ t_cmd	*find_last(t_cmd **head);
 
 void	free_doublptr(char **s);
 
+void	free_cmd(t_cmd **head);
+
 void	free_list(t_env **list);
+
+void	free_parsing(t_parsing *prs);
 
 //==================================================//
 

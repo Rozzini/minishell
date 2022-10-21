@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:14:23 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/20 22:49:29 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/21 18:50:02 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,32 +63,35 @@ void	p_tokens(t_tokens *tokens)
 	printf("===================================\n");
 }
 
-void	p_in_out_args(char **in, char **out)
+void	p_inout(t_rdr *rdr)
 {
-	int	i;
+	int		i;
+	t_rdr	*temp;
 
-	i = 0;
-	printf("IN_ARGS: ");
-	if (in == NULL)
-		printf("NULL");
-	else
+	temp = rdr;
+	if (temp == NULL)
 	{
-		while (in[i] != NULL)
-		{
-			printf("[%s] ", in[i]);
-			i++;
-		}	
+		printf("	NO REDIRECIONS\n\n");
+		return ;
 	}
-	printf("\nOUT_ARGS: ");
-	if (out == NULL)
-		printf("NULL");
-	else
+	while (temp != NULL)
 	{
-		while (out[i] != NULL)
+		printf("	FILE: %s\n", temp->file);
+		printf("	TYPE: %d\n", temp->type);
+		i = 0;
+		printf("	RDR ARGS: ");
+		if (temp->args == NULL)
+			printf("NULL");
+		else
 		{
-			printf("[%s] ", out[i]);
-			i++;
-		}	
+			while (temp->args[i] != NULL)
+			{
+				printf("[%s] ", temp->args[i]);
+				i++;
+			}	
+		}
+		printf("\n	------------\n");
+		temp = temp->next;
 	}
 	printf("\n\n");
 }
@@ -104,7 +107,7 @@ void	p_cmd(t_cmd *cmd)
 	while (temp != NULL)
 	{
 		i = 0;
-		printf("args: ");
+		printf("\nARGS: ");
 		if (temp->args == NULL)
 			printf("NULL");
 		else
@@ -116,11 +119,14 @@ void	p_cmd(t_cmd *cmd)
 			}	
 		}
 		printf("\n");
-		printf("INPUT: %s\nOUPUT: %s\nIN TYPE: %d\nOUT TYPE: %d\nARGC: %d\n",
-			temp->input, temp->output,
-			temp->in_type, temp->out_type, temp->arg_c);
-		p_in_out_args(temp->in_args, temp->out_args);
+		printf("ARGC: %d\n\n", temp->arg_c);
+		printf("	INPUT REDIRECTIONS\n--------------------------------\n");
+		p_inout(temp->input);
+		printf("	OUTPUT REDIRECTIONS\n--------------------------------\n");
+		p_inout(temp->output);
 		temp = temp->next;
+		if (temp != NULL)
+			printf("\n=====================================\n");
 	}
-	printf("===================================\n");
+	printf("===================================\n\n");
 }

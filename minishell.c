@@ -6,32 +6,11 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/21 13:23:28 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/21 18:53:58 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	free_cmd(t_cmd **head)
-{
-	t_cmd	*temp;
-	int		i;
-
-	temp = *head;
-	while (temp != NULL)
-	{
-		i = 0;
-		free_doublptr(temp->args);
-		if (temp->input != NULL)
-			free (temp->input);
-		if (temp->output != NULL)
-			free (temp->output);
-		*head = (*head)->next;
-		temp = *head;
-	}
-	free(temp);
-	*head = NULL;
-}
 
 int	main(int argc, char **argv, char **env)
 {
@@ -53,7 +32,7 @@ int	main(int argc, char **argv, char **env)
 		tokens->cmdl = readline("minishell$ ");
 		if (start_parsing(tokens, &env_list, &cmd) == 0)
 		{
-			try_execute(&cmd, &env_list, path);
+			//try_execute(&cmd, &env_list, path);
 			free(tokens->cmdl);
 			free_cmd(&cmd);
 			free_doublptr(tokens->args);
