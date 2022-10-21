@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/18 20:36:50 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/20 22:07:48 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@ int	ft_execs(t_cmd *cmd, t_env **env, char **path)
 	env_s = env_list_to_string(*env);
 	if (try_builtins(cmd, env) == 0)
 		return (0);
+	if (cmd->args == NULL)
+	{
+		printf("empty command\n");
+		return(0);
+	}
 	while (path[i] != NULL)
 	{
 		str = ft_strjoin(path[i], "/");

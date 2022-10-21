@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:14:23 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/18 20:17:22 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/20 22:49:29 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,36 @@ void	p_tokens(t_tokens *tokens)
 	printf("===================================\n");
 }
 
+void	p_in_out_args(char **in, char **out)
+{
+	int	i;
+
+	i = 0;
+	printf("IN_ARGS: ");
+	if (in == NULL)
+		printf("NULL");
+	else
+	{
+		while (in[i] != NULL)
+		{
+			printf("[%s] ", in[i]);
+			i++;
+		}	
+	}
+	printf("\nOUT_ARGS: ");
+	if (out == NULL)
+		printf("NULL");
+	else
+	{
+		while (out[i] != NULL)
+		{
+			printf("[%s] ", out[i]);
+			i++;
+		}	
+	}
+	printf("\n\n");
+}
+
 void	p_cmd(t_cmd *cmd)
 {
 	t_cmd	*temp;
@@ -74,15 +104,22 @@ void	p_cmd(t_cmd *cmd)
 	while (temp != NULL)
 	{
 		i = 0;
-		while (temp->args[i] != NULL)
+		printf("args: ");
+		if (temp->args == NULL)
+			printf("NULL");
+		else
 		{
-			printf("[%s] ", temp->args[i]);
-			i++;
+			while (temp->args[i] != NULL)
+			{
+				printf("[%s] ", temp->args[i]);
+				i++;
+			}	
 		}
 		printf("\n");
-		printf("input: %s\noutput: %s\nin type: %d\nout type: %d\nargc: %d\n\n",
+		printf("INPUT: %s\nOUPUT: %s\nIN TYPE: %d\nOUT TYPE: %d\nARGC: %d\n",
 			temp->input, temp->output,
 			temp->in_type, temp->out_type, temp->arg_c);
+		p_in_out_args(temp->in_args, temp->out_args);
 		temp = temp->next;
 	}
 	printf("===================================\n");

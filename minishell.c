@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/10 22:18:09 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/21 13:23:28 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,7 @@ void	free_cmd(t_cmd **head)
 	while (temp != NULL)
 	{
 		i = 0;
-		while (temp->args[i] != NULL)
-		{
-			free(temp->args[i]);
-			i++;
-		}
-		free (temp->args);
+		free_doublptr(temp->args);
 		if (temp->input != NULL)
 			free (temp->input);
 		if (temp->output != NULL)

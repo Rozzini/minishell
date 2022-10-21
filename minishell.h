@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/18 20:57:49 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/21 14:16:15 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,15 @@
 # define HEREDOC 4
 # define NONE 5
 
+typedef struct s_rdr
+{
+	char			*file;
+	char			**args;
+	int				type;
+	struct s_rdr	*next;
+}					t_rdr;
+
+//main stracture where command stored
 typedef struct s_cmd
 {
 	char			**args;
@@ -46,9 +55,20 @@ typedef struct s_cmd
 	int				arg_c;
 	int				in_type;
 	int				out_type;
+	char			**in_args;
+	char			**out_args;
 	struct s_cmd	*next;
 }					t_cmd;
 
+//structure for environment
+typedef struct s_env
+{
+	char			*key;
+	char			*val;
+	struct s_env	*next;
+}					t_env;
+
+//structure for parsing
 typedef struct s_tokens
 {
 	char		*cmdl;
@@ -59,17 +79,7 @@ typedef struct s_tokens
 	t_cmd		*last;
 }				t_tokens;
 
-typedef struct s_env
-{
-	char			*key;
-	char			*val;
-	struct s_env	*next;
-}					t_env;
-
 //structure for parsing
-//token - holds current token
-//expanions_p - array of pointers to
-//				expansion that should be done
 typedef struct s_parsing
 {
 	char	*og_token;
