@@ -1,0 +1,17 @@
+Makefile
+README.md
+dog
+ex.txt
+f1
+f2
+funcs.txt
+libft
+ls
+minishell
+minishell.c
+minishell.dSYM
+minishell.h
+minishell.o
+notes.txt
+poop.txt
+src
