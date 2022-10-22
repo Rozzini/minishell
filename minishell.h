@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/18 19:48:44 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/22 16:36:01 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <stdlib.h>
 # include <string.h>
 # include <curses.h>
-# include <fcntl.h>
 # include <term.h>
 # include <termios.h>
 # include <unistd.h>
@@ -29,6 +28,7 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <fcntl.h>
 # include "./libft/libft.h"
 
 # define PIPE 0
@@ -38,22 +38,33 @@
 # define HEREDOC 4
 # define NONE 5
 
-struct command
+typedef struct s_rdr
 {
-  const char **argv;
-};
+	char			*file;
+	char			**args;
+	int				type;
+	struct s_rdr	*next;
+}					t_rdr;
 
+//main stracture where commands r stored
 typedef struct s_cmd
 {
 	char			**args;
-	char			*input;
-	char			*output;
 	int				arg_c;
-	int				in_type;
-	int				out_type;
+	t_rdr			*input;
+	t_rdr			*output;
 	struct s_cmd	*next;
 }					t_cmd;
 
+//structure for environment
+typedef struct s_env
+{
+	char			*key;
+	char			*val;
+	struct s_env	*next;
+}					t_env;
+
+//structure for parsing
 typedef struct s_tokens
 {
 	char		*cmdl;
@@ -64,23 +75,17 @@ typedef struct s_tokens
 	t_cmd		*last;
 }				t_tokens;
 
-typedef struct s_env
-{
-	char			*key;
-	char			*val;
-	struct s_env	*next;
-}					t_env;
-
 //structure for parsing
-//token - holds current token
-//expanions_p - array of pointers to
-//				expansion that should be done
 typedef struct s_parsing
 {
+	char	*s;
 	char	*token;
+	char	*og_token;
 	char	*exp_name[1000];
-	int		expansions_p[1000];
 	int		i;
+	int		j;
+	int		c;
+	int		iter;
 }			t_parsing;
 
 //====================BUILTINS=====================//
@@ -133,14 +138,22 @@ void	try_execute(t_cmd **commands, t_env **env, char **path);
 //tries to execute builtins
 //if one of them executed successfully returns 0;
 //else returns 1;
-int     try_builtins(t_cmd *cmd, t_env **env);
+int		try_builtins(t_cmd *cmd, t_env **env);
 
 //executes non builtins
 int		ft_execs(t_cmd *cmd, t_env **env, char **path);
 
-void    exec_redir(t_cmd *cmd,  t_env **env, char **path);
+//==================================================//
 
-void	exec_pipes(t_cmd *cmd, t_env **env, char **path, int n_cmd);
+//================PIPES_REDIRECTIONS================//
+
+void	exec_pipes(t_cmd *cmd, t_env **env, char **path);
+
+int		make_baby_pipe(int *fd, t_cmd *cmd, char **path, t_env **env);
+
+int	exec_redir(t_cmd *cmd, t_env **env, char **path);
+
+int		make_baby_redir(t_cmd *cmd, t_env **env, char **path);
 
 //==================================================//
 
@@ -173,6 +186,20 @@ void	quotes_exp_check(t_tokens *tokens, t_env **env);
 
 //==================================================//
 
+//=================PARSING_HELPERS==================//
+
+int		is_separator(char c);
+
+int		is_special(char *s);
+
+int		check_type(char *s);
+
+void	p_tokens(t_tokens *tokens);
+
+void	p_cmd(t_cmd *cmd);
+
+//==================================================//
+
 //====================EXPANSION=====================//
 
 //checks if there is such env
@@ -181,7 +208,7 @@ void	quotes_exp_check(t_tokens *tokens, t_env **env);
 t_env	*check_expansion_name(char *name, t_env **env);
 
 //return string which contains expansion name
-char	*copy_expansion_name(char *s, t_parsing *prs, int i);
+int		copy_expansion_name(char *s, t_parsing *prs, int i);
 
 //replaces expansion name in OG string with expansion value
 void	do_expansion(t_parsing	*prs, t_env **env);
@@ -203,21 +230,23 @@ void	delete_node(t_env *node);
 //return nodes count
 int		count_nodes(t_env **head);
 
+//returns last element of list
+t_cmd	*find_last(t_cmd **head);
+
 //==================================================//
 
 //======================FREE========================//
 
 void	free_doublptr(char **s);
 
+void	free_cmd(t_cmd **head);
+
 void	free_list(t_env **list);
 
-//=======================UTILS=======================//
+void	free_parsing(t_parsing *prs);
+
+//==================================================//
 
 int		check_minishell_exec(t_tokens	*tokens, t_env **env);
-
-void	p_cmd(t_cmd *cmd);
-
-//returns number of cmds/list size
-int		n_cmds(t_cmd *head);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 22:55:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/09/12 09:44:17 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/11 06:50:05 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,12 @@ int	parse_export_helper(char *s)
 int	parse_export(t_cmd *cmd)
 {
 	int	i;
-	int	len;
 
 	i = 1;
 	while (i < cmd->arg_c)
 	{
-		if (cmd->args[i][0] == '=' || cmd->args[i][0] == '+')
+		if (ft_isalnum(cmd->args[i][0]) != 0 || cmd->args[i][0] == '=' || cmd->args[i][0] == '+')
 			return (1);
-		len = ft_strlen(cmd->args[i]);
 		if (parse_export_helper(cmd->args[i]) == 1)
 			return (1);
 		i++;

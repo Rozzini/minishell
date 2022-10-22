@@ -6,37 +6,11 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/11 20:01:22 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/22 16:36:41 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	free_cmd(t_cmd **head)
-{
-	t_cmd	*temp;
-	int		i;
-
-	temp = *head;
-	while (temp != NULL)
-	{
-		i = 0;
-		while (temp->args[i] != NULL)
-		{
-			free(temp->args[i]);
-			i++;
-		}
-		free (temp->args);
-		if (temp->input != NULL)
-			free (temp->input);
-		if (temp->output != NULL)
-			free (temp->output);
-		*head = (*head)->next;
-		temp = *head;
-	}
-	free(temp);
-	*head = NULL;
-}
 
 int	main(int argc, char **argv, char **env)
 {

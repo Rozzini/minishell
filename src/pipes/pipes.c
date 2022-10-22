@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/20 11:55:47 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/22 16:45:51 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ int make_baby_pipe(int *prev_new_fd, t_cmd *cmd, char **path, t_env **env)
 			dup2(prev_new_fd[1], STDOUT_FILENO);
 			close(prev_new_fd[1]);
 		}
+		if (cmd->input || cmd->output)
+			return (exec_redir(cmd, env, path));
+		else
 		return (ft_execs(cmd, env, path));
 	}
 	return (pid);
@@ -74,7 +77,11 @@ void exec_pipes(t_cmd *cmd, t_env **env, char **path)
 	//and output to the original STDOUT
 	if (prev_new_fd[0] != 0)
 		dup2(prev_new_fd[0], 0);
-	ft_execs(curr_cmd, env, path);
-	return;
+	close(prev_new_fd[0]);
+	if (curr_cmd->output || curr_cmd->input) //APPLY AFTER FILE LIST
+		exec_redir(curr_cmd, env, path);
+	else
+		ft_execs(curr_cmd, env, path);
+	return ;
 }
 

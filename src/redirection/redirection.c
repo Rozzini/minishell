@@ -6,62 +6,90 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 01:22:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/20 11:55:39 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/22 16:55:33 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int exec_redr(int fd, t_cmd *cmd, t_env **env, char **path)
+//gotta read from file
+int open_files_input(t_cmd *cmd)
 {
-	fd = open(cmd->output, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	// instead of opening once
-	// will have linked list of files to pass into a function to open and close
-	// each file accordingly ---> open_files(linked_list_output, ...);
-	//  ls a > b > c > ...
-	if (!dup2(fd, STDOUT_FILENO))
-		return (1);
-	close(fd);
-	return (ft_execs(cmd, env, path));
+	int fd;
+	t_rdr *file;
+
+	file = cmd->output;
+	while (file->next != NULL)
+	{
+		if (file->type == REDL)
+			fd = (open(cmd->output->file, O_RDONLY));
+		// else if (file->type == HEREDOC)
+		// 	fd = (open(file->file));
+		file = file->next;
+		close(fd);
+	}
+	if (file->type == REDL)
+		return (open(cmd->output->file, O_RDONLY));
+	// else if (file->type == HEREDOC)
+	// 	return (open(file->file));
+	return (0);
+	if (cmd->input->type == REDL)
+		return (open(cmd->output->file, O_RDONLY));
+	return (STDIN_FILENO);
 }
 
-int exec_redrr(int fd, t_cmd *cmd, t_env **env, char **path)
+int open_file_out(t_cmd *cmd)
 {
-	fd = open(cmd->output, O_WRONLY | O_APPEND | O_CREAT, 0777);
-	if (!dup2(fd, STDOUT_FILENO))
-		return (1);
-	close(fd);
-	if (ft_execs(cmd, env, path))
-		return (1);
+	if (cmd->output->type == REDR)
+		return (open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0666));
+	if (cmd->output->type == REDRR)
+		return (open(cmd->output->file, O_WRONLY | O_APPEND | O_CREAT, 0666));
+	return (STDOUT_FILENO);
+}
+/*
+t_file
+{
+	char *file
+	int type
+	t_file *next
+}
+*/
+
+int open_files_output(t_cmd *cmd)
+{
+	int fd;
+	t_rdr *file;
+
+	file = cmd->output;
+	while (file->next != NULL)
+	{
+		if (file->type == REDR)
+			fd = (open(file->file, O_WRONLY | O_CREAT | O_TRUNC, 0666));
+		else if (file->type == REDRR)
+			fd = (open(file->file, O_WRONLY | O_APPEND | O_CREAT, 0666));
+		file = file->next;
+		close(fd);
+	}
+	if (file->type == REDR)
+		return (open(file->file, O_WRONLY | O_CREAT | O_TRUNC, 0666));
+	else if (file->type == REDRR)
+		return (open(file->file, O_WRONLY | O_APPEND | O_CREAT, 0666));
 	return (0);
 }
 
-int exec_inputs(t_cmd *cmd, t_env **env, char **path)
+int redirect(t_cmd *cmd, t_env **env, char **path)
 {
+	pid_t pid;
 	int fd_in;
+	int fd_out;
+	int pipe_fd[2];
 
-	if (cmd->in_type == REDL)
-	{
-		fd_in = open(cmd->input, O_RDONLY);
-		if (!dup2(fd_in, STDIN_FILENO))
-			return (1);
-		close(fd_in);
-		ft_execs(cmd, env, path);
-	}
-	if (cmd->in_type == HEREDOC)
-	{
-		// exec_heredoc(cmd, env, path);
-	}
-	return (0);
-}
-
-int make_baby_redir(t_cmd *cmd, t_env **env, char **path)
-{
-	pid_t	pid;
-	int		fd;
-
-	printf("cmd in_type: %d		out_type: %d\n", cmd->in_type, cmd->out_type);
-	fd = 0;
+	if (pipe(pipe_fd) == -1)
+		return (1);
+	// if (fd < 0)
+	// 	return (1);
+	fd_in = STDIN_FILENO;
+	fd_out = STDOUT_FILENO;
 	pid = fork();
 	if (pid < 0)
 	{
@@ -70,38 +98,46 @@ int make_baby_redir(t_cmd *cmd, t_env **env, char **path)
 	}
 	else if (pid == 0)
 	{
-		printf("in child redir\n");
-		if (cmd->out_type == REDR)
-			exec_redr(fd, cmd, env, path);
-		// if (cmd->out_type == REDRR)
-		// 	return (exec_redrr(cmd, env, path));
-		// if (cmd->out_type == REDL || cmd->out_type == HEREDOC)
-		// 	exec_inputs(cmd, env, path);
+		// fd_in = open_file_r(cmd);
+		if (cmd->output->file)
+		{
+			fd_out = open_files_output(cmd);
+			dup2(fd_out, STDOUT_FILENO);
+			close(fd_out);
+			return (ft_execs(cmd, env, path));
+		}
+		if (cmd->input->file)
+		{
+			fd_in = open_file_in(cmd);//WIP
+			dup2(fd_in, STDIN_FILENO);
+			close(fd_in);
+			return(ft_execs(cmd, env, path));
+		}
 	}
-    else {
-		close(fd);
-        wait(0);
-    }
+	else
+	{
+		close(fd_out);
+		close(fd_in);
+		wait(0);
+	}
 	return (0);
 }
 
-void exec_redir(t_cmd *cmd, t_env **env, char **path)
+int exec_redir(t_cmd *cmd, t_env **env, char **path)
 {
-	// int		fd[2];
 	// int		fd_in;
 	// int		fd_out;
 	// pid_t	pid;
-	t_cmd *curr_cmd;
 
-	curr_cmd = cmd;
 	// while (curr_cmd != NULL)
 	// {
-	printf("currcmd: %s\n", curr_cmd->args[0]);
-	if (make_baby_redir(curr_cmd, env, path) == -1)
+	printf("currcmd: %s\n", cmd->args[0]);
+	if (redirect(cmd, env, path) == -1)
 	{
 		printf("redir fork/dup error\n");
-		return;
+		return (1);
 	}
 	// 	curr_cmd = curr_cmd->next;
 	// }
+	return (0);
 }
