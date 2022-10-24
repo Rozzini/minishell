@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 16:35:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/21 19:55:50 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/24 05:34:07 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,14 @@ void	save_exp_data(char *string, t_parsing *parsing)
 			i++;
 			while (string[i] != c)
 			{
-				if (string[i] == '$' && c == 34)
+				if (string[i] == '$' && c == 34 && string[i + 1] != c && string[i + 1] > 32)
 					i = copy_expansion_name(string, parsing, i);
 				else
 				i++;
 			}
 			i++;
 		}
-		else if (string[i] == '$')
+		else if (string[i] == '$' && string[i + 1] != '\0')
 			i = copy_expansion_name(string, parsing, i);
 		else
 			i++;

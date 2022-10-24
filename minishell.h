@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/21 19:51:58 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/23 20:42:19 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ typedef struct s_parsing
 	char	*token;
 	char	*og_token;
 	char	*exp_name[1000];
+	int		sq;
+	int		dq;
 	int		i;
 	int		j;
 	int		c;

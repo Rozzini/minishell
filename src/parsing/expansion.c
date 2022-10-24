@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 22:14:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/21 20:12:39 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/24 05:45:40 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,23 @@ int	copy_expansion_name(char *s, t_parsing *prs, int i)
 	{
 		while (is_separator(s[i]) == 0 && ft_isalnum(s[i]) == 1 && s[i] != '\0')
 			i++;
-	}
-	if (i != start)
 		prs->exp_name[prs->iter] = ft_substr(&s[start], 0,
 				ft_strlen(&s[start]) - ft_strlen(&s[i]));
-	else
+	}
+	else if (s[i] == 34 || s[i] == 32)
 		prs->exp_name[prs->iter] = NULL;
+	else
+	{
+		i++;
+		prs->exp_name[prs->iter] = ft_substr(&s[start], 0,
+				ft_strlen(&s[start]) - ft_strlen(&s[i]));
+		i--;
+	}
+	// if (i != start)
+	// 	prs->exp_name[prs->iter] = ft_substr(&s[start], 0,
+	// 			ft_strlen(&s[start]) - ft_strlen(&s[i]));
+	// else
+	// 	prs->exp_name[prs->iter] = NULL;
 	printf("EXPANSION NAME: %s\n", prs->exp_name[prs->iter]);
 	prs->iter++;
 	return (i);
@@ -55,58 +66,78 @@ t_env	*check_expansion_name(char *name, t_env **env)
 	return (temp);
 }
 
-void	do_expansion_helper(int *i, t_parsing *prs, t_env **env)
+int	do_expansion_helper(int i, t_parsing *prs, t_env **env)
 {
 	t_env	*temp;
 
-	if (prs->s != NULL)
-		free (prs->s);
 	temp = check_expansion_name(prs->exp_name[prs->c], env);
 	prs->s = ft_substr(prs->token, 0,
-			ft_strlen(prs->token) - ft_strlen(&(prs->token[*i])));
-	printf("s: %s\n", prs->s);
+			ft_strlen(prs->token) - ft_strlen(&(prs->token[i])));
 	if (temp != NULL)
 		prs->s = ft_strjoin(prs->s, temp->val);
-	printf("s: %s\n", prs->s);
-	prs->s = ft_strjoin(prs->s, &(prs->token[*i + 1
+	prs->s = ft_strjoin(prs->s, &(prs->token[i + 1
 				+ ft_strlen(prs->exp_name[prs->c])]));
-	printf("s: %s\n", prs->s);
 	free(prs->token);
 	prs->token = prs->s;
-	if (temp != NULL)
-		*i += ft_strlen(temp->val) - 1;
-	prs->j += ft_strlen(prs->exp_name[prs->c]);
 	prs->c++;
+	return (i);
+}
+
+int		check_if_next_expansion(char *s, t_parsing *prs)
+{
+	while (s[prs->j] != '\0')
+	{
+		if (s[prs->j] == 34 && prs->sq == 0)
+		{
+			if (prs->dq == 0)
+				prs->dq = 1;
+			else
+				prs->dq = 0;
+		}
+		if (s[prs->j] == 39 && prs->dq == 0)
+		{
+			if (prs->sq == 0)
+				prs->sq = 1;
+			else
+				prs->sq = 0;
+		}
+		if (s[prs->j] == '$')
+		{
+			if (prs->sq == 0)
+				return (0);
+			else
+				return (1);
+		}
+		prs->j++;
+	}
+	return (1);
 }
 
 void	do_expansion(t_parsing	*prs, t_env **env)
 {
 	int		i;
+	int		do_exp;
 
 	i = 0;
 	prs->s = NULL;
 	prs->c = 0;
 	prs->j = 0;
-	printf("iter: %d\n", prs->iter);
-	printf("OG: %s\n", prs->og_token);
-	printf("TK: %s\n", prs->token);
+	prs->sq = 0;
+	prs->dq = 0;
 	while (prs->c < prs->iter)
 	{
-		if (prs->og_token[prs->j] == 34)
-			prs->j++;
-		if (prs->og_token[prs->j] == 39)
-		{
-			prs->j++;
-			while (prs->og_token[prs->j] != 39)
-			{
-				i++;
-				prs->j++;
-			}
-			prs->j++;
-		}
-		if (prs->token[i] == '$')
-			do_expansion_helper(&i, prs, env);
-		i++;
+		do_exp = check_if_next_expansion(prs->og_token, prs);
 		prs->j++;
+		printf("exp: %d\n", do_exp);
+		while (prs->token[i] != '$')
+		{
+			if (prs->token[i] == '\0')
+				break;
+			i++;
+		}
+		if (do_exp == 0)
+			do_expansion_helper(i, prs, env);
+		else
+			i++;
 	}
 }
