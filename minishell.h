@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/22 16:36:01 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/24 13:03:07 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,9 +151,15 @@ void	exec_pipes(t_cmd *cmd, t_env **env, char **path);
 
 int		make_baby_pipe(int *fd, t_cmd *cmd, char **path, t_env **env);
 
-int	exec_redir(t_cmd *cmd, t_env **env, char **path);
+int		exec_redir(t_cmd *cmd, t_env **env, char **path);
 
 int		make_baby_redir(t_cmd *cmd, t_env **env, char **path);
+
+void	update_in_args(t_cmd *cmd, t_rdr *file);
+
+void	update_out_args(t_cmd *cmd, t_rdr *file);
+
+int		ft_2d_size(char **arr);
 
 //==================================================//
 

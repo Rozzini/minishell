@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mraspors <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/10/21 17:01:27 by mraspors         ###   ########.fr        #
+#    Updated: 2022/10/24 13:04:00 by alalmazr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ SRC	=   ./src/execution/builtins1.c ./src/execution/builtins2.c\
 	./src/list_env/env_list_to_string.c ./src/parsing/ft_check_quotes.c\
 	./src/parsing/temp_name.c ./src/parsing/expansion.c ./src/parsing/basic_parsing.c\
 	./src/parsing/builtins_parser.c ./src/parsing/start_parsing.c ./src/parsing/parsing_helpers.c\
-	./src/helpers/free.c ./src/parsing/pipes_parsing.c\
+	./src/helpers/free.c ./src/parsing/pipes_parsing.c 	./src/redirection/rdr_utils.c\
 	./src/pipes/pipes.c ./src/redirection/redirection.c minishell.c
 
 HEADER	= minishell.h
