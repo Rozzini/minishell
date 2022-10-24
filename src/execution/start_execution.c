@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/22 19:17:19 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/24 12:29:56 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	ft_execs(t_cmd *cmd, t_env **env, char **path)
 	return (0);
 }
 
+
 //function that is called from main
 //tryes to run builtins first
 //if not succeed need to make fork 0--
@@ -65,6 +66,19 @@ void	try_execute(t_cmd **commands, t_env **env, char **path)
 	t_cmd	*cmd;
 
 	cmd = *commands;
+	// printf("------ARGS\n");
+	// for (int i = 0; cmd->args[i]; i++)
+	// {
+	// 	printf("%s\n", cmd->args[i]);
+    // }
+	// printf("------ARGS\n");
+
+	// printf("------UPDATED ARGS\n");
+	// for (int i = 0; cmd->args[i]; i++)
+	// {
+	// 	printf("%s\n", cmd->args[i]);
+    // }
+	// printf("------UPDATED ARGS\n");
 	if (cmd->next == NULL)
 	{
 		pid = fork();
