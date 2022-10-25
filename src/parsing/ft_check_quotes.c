@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_check_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrizk <mrizk@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:46:21 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/24 13:39:22 by mrizk            ###   ########.fr       */
+/*   Updated: 2022/10/25 20:10:42 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,40 @@ int	check_q_change_val(int q)
 		return (1);
 }
 
+char	*check_q_iter(char *s, int *q, char quote)
+{
+	if (*s == quote)
+	{
+		*q = check_q_change_val(*q);
+		s++;
+		if (*s == quote)
+				*q = check_q_change_val(*q);
+		while (*s != quote && *s != '\0')
+		{
+			s++;
+			if (*s == quote)
+				*q = check_q_change_val(*q);
+		}
+	}
+	return (s);
+}
+
 // " = 34   ' = 39
 //returns 1 if string have opened quote
 int	check_q(char *s)
 {
-	int	i;
-	int	sq;
-	int	dq;
+	int	q;
 
-	i = 0;
-	sq = 0;
-	dq = 0;
-	if (!s)
-		return (1);
-	while (s[i] != '\0')
+	q = 0;
+	while (*s != '\0')
 	{
-		if (s[i] == 39)
-			sq = check_q_change_val(sq);
-		if (s[i] == 34)
-			dq = check_q_change_val(dq);
-		i++;
+		if (*s == 34 || *s == 39)
+			s = check_q_iter(s, &q, *s);
+		if (*s == '\0')
+			break ;
+		s++;
 	}
-	if (sq == 1 || dq == 1)
+	if (q == 1)
 		return (1);
 	return (0);
 }
