@@ -3,29 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 21:52:57 by mraspors          #+#    #+#             */
-/*   Updated: 2021/12/23 15:06:16 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/25 15:02:57 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
-	char	*str;
-	int		s1_l;
-	int		s2_l;
+	char	*joined;
+	size_t	i;
+	size_t	j;
 
-	if (!s1 || !s2)
+	if (!s1 && !s2)
 		return (NULL);
-	s1_l = ft_strlen(s1);
-	s2_l = ft_strlen(s2);
-	str = (char *)malloc(sizeof(char) * (s1_l + s2_l + 1));
-	if (!str)
+	if (!s1 && s2)
+		return (ft_strdup(s2));
+	if (!s2 && s1)
+		return (ft_strdup(s1));
+	joined = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1 * sizeof(char));
+	if (!joined)
 		return (NULL);
-	ft_memcpy(str, s1, s1_l);
-	ft_memcpy(&str[s1_l], s2, s2_l);
-	str[s1_l + s2_l] = '\0';
-	return (str);
+	i = 0;
+	while (s1 && s1[i] != '\0')
+	{
+		joined[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2 && s2[j] != '\0')
+		joined[i++] = s2[j++];
+	joined[i] = '\0';
+	free(s1);
+	return (joined);
 }
