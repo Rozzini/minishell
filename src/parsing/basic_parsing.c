@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 16:35:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/24 05:34:07 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/25 02:18:16 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,6 @@ void	remove_quotes(char *string, t_parsing *prs)
 
 void	check_quotes(char	*string, t_parsing	*prs)
 {
-	int		i;
-
-	i = 0;
 	while (*string != '\0')
 	{
 		if (*string == 34 || *string == 39)
@@ -100,4 +97,7 @@ void	quotes_exp_check(t_tokens *tokens, t_env **env)
 		tokens->args[i] = prs->token;
 		i++;
 	}
+	if (prs->og_token)
+		free(prs->og_token);
+	free(prs);
 }

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/25 19:11:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/21 19:50:57 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/25 02:24:37 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	free_cmd(t_cmd **head)
 			free_rdr(&temp->input);
 		if (temp->output != NULL)
 			free_rdr(&temp->output);
+		//free(temp);
 		*head = (*head)->next;
 		temp = *head;
 	}

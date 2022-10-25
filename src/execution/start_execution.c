@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/20 22:07:48 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/25 02:19:18 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ int	ft_execs(t_cmd *cmd, t_env **env, char **path)
 		i++;
 	}
 	printf("mininshell: %s: command not found\n", cmd->args[0]);
-	return (0);
+	free(str);
+	exit(0);
 }
 
 //function that is called from main
@@ -65,6 +66,7 @@ void	try_execute(t_cmd **commands, t_env **env, char **path)
 	t_cmd	*cmd;
 
 	cmd = *commands;
+	ft_exit(cmd, env);
 	if (cmd->next == NULL)
 	{
 		pid = fork();

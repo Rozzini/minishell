@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 22:14:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/24 05:45:40 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/25 02:18:18 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int	copy_expansion_name(char *s, t_parsing *prs, int i)
 	// 			ft_strlen(&s[start]) - ft_strlen(&s[i]));
 	// else
 	// 	prs->exp_name[prs->iter] = NULL;
-	printf("EXPANSION NAME: %s\n", prs->exp_name[prs->iter]);
 	prs->iter++;
 	return (i);
 }
@@ -128,7 +127,6 @@ void	do_expansion(t_parsing	*prs, t_env **env)
 	{
 		do_exp = check_if_next_expansion(prs->og_token, prs);
 		prs->j++;
-		printf("exp: %d\n", do_exp);
 		while (prs->token[i] != '$')
 		{
 			if (prs->token[i] == '\0')

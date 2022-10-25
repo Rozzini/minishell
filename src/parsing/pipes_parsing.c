@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 02:48:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/21 19:12:48 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/24 22:30:12 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,11 +150,11 @@ void	make_commands(t_tokens *tokens, t_cmd **cmd)
 
 int	start_pipes_parsing(t_tokens *tokens, t_cmd **cmd)
 {
-	p_tokens(tokens);
+	//p_tokens(tokens);
 	if (save_first_cmd(tokens, cmd) == 0)
 		return (0);
 	make_commands(tokens, cmd);
-	printf("\n\n");
-	p_cmd(*cmd);
+	//printf("\n\n");
+	//p_cmd(*cmd);
 	return (0);
 }
