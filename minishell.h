@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/23 20:42:19 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/25 20:08:00 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,8 @@ void	exec_redir(t_cmd *cmd, t_env **env, char **path);
 
 int		make_baby_redir(t_cmd *cmd, t_env **env, char **path);
 
+char	*ft_prevdir(char *str);
+
 //==================================================//
 
 //=====================PARSING======================//
@@ -249,6 +251,7 @@ void	free_parsing(t_parsing *prs);
 
 //==================================================//
 
+int		ft_execs(t_tokens *tokens, char **env);
 int		check_minishell_exec(t_tokens	*tokens, t_env **env);
 
 #endif
