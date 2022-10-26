@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/25 19:11:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/25 02:24:37 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/26 05:16:25 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	free_rdr(t_rdr **rdr)
 void	free_cmd(t_cmd **head)
 {
 	t_cmd	*temp;
+	t_cmd	*del_node;
 
 	temp = *head;
 	while (temp != NULL)
@@ -54,9 +55,9 @@ void	free_cmd(t_cmd **head)
 			free_rdr(&temp->input);
 		if (temp->output != NULL)
 			free_rdr(&temp->output);
-		//free(temp);
-		*head = (*head)->next;
-		temp = *head;
+		del_node = temp;
+		temp = temp->next;
+		free(del_node);
 	}
 	free(temp);
 	*head = NULL;

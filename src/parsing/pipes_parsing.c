@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 02:48:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/24 22:30:12 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/26 05:06:39 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	push_cmd_init_data(t_cmd *new_node, t_tokens *tokens)
 		new_node->args = malloc(sizeof(char *) * (tokens->end - tokens->start + 1));
 		while (tokens->start < tokens->end)
 		{
-		new_node->args[i++] = ft_strdup(tokens->args[tokens->start]);
-		tokens->start++;
+			new_node->args[i++] = ft_strdup(tokens->args[tokens->start]);
+			tokens->start++;
 		}
 		new_node->args[i] = NULL;
 	}

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/25 20:08:52 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/26 05:26:06 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ int	try_builtins(t_cmd *cmd, t_env **env)
 	return (1);
 }
 
-int	ft_execs(t_cmd *cmd, t_env **env, char **path)
+int	ft_execs(t_cmd *cmd, t_env **env)
 {
 	int		i;
 	char	*str;
 	char	**env_s;
+	char	**path;
 
 	i = 0;
-	env_s = env_list_to_string(*env);
 	if (try_builtins(cmd, env) == 0)
 		return (0);
 	if (cmd->args == NULL)
@@ -43,16 +43,21 @@ int	ft_execs(t_cmd *cmd, t_env **env, char **path)
 		printf("empty command\n");
 		return(0);
 	}
+	env_s = env_list_to_string(*env);
+	path = ft_split(find_node_by_key(*env, "PATH")->val, ':');
 	while (path[i] != NULL)
 	{
 		str = ft_strjoin(path[i], "/");
 		str = ft_strjoin(str, cmd->args[0]);
-		if (execve(str, cmd->args, env_s) != -1)
-			return (0);
+		execve(str, cmd->args, env_s);
+		free(str);
 		i++;
 	}
 	printf("mininshell: %s: command not found\n", cmd->args[0]);
-	free(str);
+	free_cmd(&cmd);
+	free_list(env);
+	free_doublptr(env_s);
+	free_doublptr(path);
 	exit(0);
 }
 
@@ -60,7 +65,7 @@ int	ft_execs(t_cmd *cmd, t_env **env, char **path)
 //tryes to run builtins first
 //if not succeed need to make fork 0--
 //and call OG function from bash
-void	try_execute(t_cmd **commands, t_env **env, char **path)
+void	try_execute(t_cmd **commands, t_env **env)
 {
 	int		pid;
 	t_cmd	*cmd;
@@ -71,13 +76,13 @@ void	try_execute(t_cmd **commands, t_env **env, char **path)
 	{
 		pid = fork();
 		if (pid == 0)
-			ft_execs(cmd, env, path);
+			ft_execs(cmd, env);
 	}
 	else
 	{
 		pid = fork();
 		if (pid == 0)
-			exec_pipes(cmd, env, path);
+			exec_pipes(cmd, env);
 	}
 	wait(0);
 }

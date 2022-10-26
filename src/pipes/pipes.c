@@ -6,13 +6,13 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/20 22:05:47 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/26 04:35:45 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	make_baby_pipe(int *fd, t_cmd *cmd, char **path, t_env **env)
+int	make_baby_pipe(int *fd, t_cmd *cmd, t_env **env)
 {
 	pid_t	pid;
 
@@ -29,12 +29,12 @@ int	make_baby_pipe(int *fd, t_cmd *cmd, char **path, t_env **env)
 			dup2(fd[1], STDOUT_FILENO);
 			close(fd[1]);
 		}
-		return (ft_execs(cmd, env, path));
+		return (ft_execs(cmd, env));
 	}
 	return (pid);
 }
 
-void	exec_pipes(t_cmd *cmd, t_env **env, char **path)
+void	exec_pipes(t_cmd *cmd, t_env **env)
 {
 	int		fd[2];
 	int		prev_fd;
@@ -48,7 +48,7 @@ void	exec_pipes(t_cmd *cmd, t_env **env, char **path)
 	while (curr_cmd->next != NULL)
 	{
 		pipe(fd);
-		pid = make_baby_pipe(fd, curr_cmd, path, env);
+		pid = make_baby_pipe(fd, curr_cmd, env);
 		if (pid == -1)
 			return ;
 		close(fd[1]);
@@ -58,5 +58,5 @@ void	exec_pipes(t_cmd *cmd, t_env **env, char **path)
 	}
 	if (prev_fd != 0)
 		dup2(prev_fd, 0);
-	ft_execs(curr_cmd, env, path);
+	ft_execs(curr_cmd, env);
 }

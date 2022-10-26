@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/26 01:57:18 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/26 04:36:33 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ char	**env_list_to_string(t_env *env);
 
 //====================EXECUTION=====================//
 //launches execution routine
-void	try_execute(t_cmd **commands, t_env **env, char **path);
+void	try_execute(t_cmd **commands, t_env **env);
 
 //tries to execute builtins
 //if one of them executed successfully returns 0;
@@ -143,15 +143,15 @@ void	try_execute(t_cmd **commands, t_env **env, char **path);
 int		try_builtins(t_cmd *cmd, t_env **env);
 
 //executes non builtins
-int		ft_execs(t_cmd *cmd, t_env **env, char **path);
+int		ft_execs(t_cmd *cmd, t_env **env);
 
 //==================================================//
 
 //================PIPES_REDIRECTIONS================//
 
-void	exec_pipes(t_cmd *cmd, t_env **env, char **path);
+void	exec_pipes(t_cmd *cmd, t_env **env);
 
-int		make_baby_pipe(int *fd, t_cmd *cmd, char **path, t_env **env);
+int		make_baby_pipe(int *fd, t_cmd *cmd, t_env **env);
 
 void	exec_redir(t_cmd *cmd, t_env **env, char **path);
 
