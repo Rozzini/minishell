@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 01:22:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/25 19:52:27 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/26 18:31:31 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,11 +156,11 @@ void	exec_heredoc(int fd, t_cmd	*cmd, t_env **env, char **path)
 	return ;
 }
 
-void	exec_heredoc(int fd, t_cmd	*cmd, t_env **env, char **path)
-{
-	//use gnl to read lines and dup(stdin, fd)
-	//
-}
+// void	exec_heredoc(int fd, t_cmd	*cmd, t_env **env, char **path)
+// {
+// 	//use gnl to read lines and dup(stdin, fd)
+// 	//
+// }
 
 int redirect(t_cmd *cmd, t_env **env, char **path)
 {

@@ -6,7 +6,11 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/25 19:11:48 by mraspors          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/10/21 19:50:57 by mraspors         ###   ########.fr       */
+=======
+/*   Updated: 2022/10/26 05:16:25 by mraspors         ###   ########.fr       */
+>>>>>>> a38892c213958d44ac70d1e921bae6a554d2c134
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +49,10 @@ void	free_rdr(t_rdr **rdr)
 void	free_cmd(t_cmd **head)
 {
 	t_cmd	*temp;
+<<<<<<< HEAD
+=======
+	t_cmd	*del_node;
+>>>>>>> a38892c213958d44ac70d1e921bae6a554d2c134
 
 	temp = *head;
 	while (temp != NULL)
@@ -54,8 +62,14 @@ void	free_cmd(t_cmd **head)
 			free_rdr(&temp->input);
 		if (temp->output != NULL)
 			free_rdr(&temp->output);
+<<<<<<< HEAD
 		*head = (*head)->next;
 		temp = *head;
+=======
+		del_node = temp;
+		temp = temp->next;
+		free(del_node);
+>>>>>>> a38892c213958d44ac70d1e921bae6a554d2c134
 	}
 	free(temp);
 	*head = NULL;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_parser.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 22:55:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/11 06:50:05 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/26 18:32:33 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,11 @@ int	parse_export(t_cmd *cmd)
 	i = 1;
 	while (i < cmd->arg_c)
 	{
+<<<<<<< HEAD
 		if (ft_isalnum(cmd->args[i][0]) != 0 || cmd->args[i][0] == '=' || cmd->args[i][0] == '+')
+=======
+		if (ft_isalnum(cmd->args[i][0]) != 0 && cmd->args[i][0] == '=' && cmd->args[i][0] == '+')
+>>>>>>> a38892c213958d44ac70d1e921bae6a554d2c134
 			return (1);
 		if (parse_export_helper(cmd->args[i]) == 1)
 			return (1);

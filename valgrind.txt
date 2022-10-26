@@ -1,0 +1,23 @@
+valgrind --leak-check=full --show-leak-kinds=all ./minishell
+
+valgrind --suppressions=rl.supp  --leak-check=full --show-leak-kinds=all ./minishell
+
+
+create file with rl.supp 
+to ignore some errors in valgrind
+ ↓ ↓ ↓ put this inside  ↓ ↓ ↓
+{
+   readline
+   Memcheck:Leak
+   fun:*
+   ...
+   fun:readline
+}
+{
+	add_history
+	Memcheck:Leak
+	fun:*
+	...
+	fun:add_history
+}
+
