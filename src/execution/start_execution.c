@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/26 18:29:11 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/27 15:05:47 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,19 @@ int	ft_execs(t_cmd *cmd, t_env **env, char **path)
 	return (0);
 }
 
+int	open_tmptxt(int fd)
+{
+	fd = open("tmp.txt", O_RDWR | O_CREAT , 0666);
+	if (fd < 0)
+	{
+		perror("open");
+		printf("Bad file\n");
+		return (-1);
+	
+	}
+	return (fd);
+}
+
 
 //function that is called from main
 //tryes to run builtins first
@@ -62,7 +75,7 @@ int	ft_execs(t_cmd *cmd, t_env **env, char **path)
 //and call OG function from bash
 void	try_execute(t_cmd **commands, t_env **env, char **path)
 {
-	int		pid;
+	pid_t	pid;
 	t_cmd	*cmd;
 
 	cmd = *commands;
@@ -79,6 +92,13 @@ void	try_execute(t_cmd **commands, t_env **env, char **path)
 	// 	printf("%s\n", cmd->args[i]);
     // }
 	// printf("------UPDATED ARGS\n");
+	if  (check_heredoc(cmd))
+	{
+		exec_heredog(cmd, env, path);
+		return ;
+		//exit child process then dup2(fd, STDIN);
+		//then unlink() takes filename (automatically deletees after use)
+	}
 	if (cmd->next == NULL)
 	{
 		pid = fork();

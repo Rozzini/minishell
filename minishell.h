@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/26 18:33:44 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/27 15:05:56 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,9 @@ void	update_out_args(t_cmd *cmd, t_rdr *file);
 
 int		ft_2d_size(char **arr);
 
+int		check_heredoc(t_cmd	*cmd);
+
+int		exec_heredog(t_cmd	*cmd, t_env **env, char **path);
 //==================================================//
 
 //=====================PARSING======================//

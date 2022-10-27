@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 22:22:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/26 18:33:02 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/26 18:34:54 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,9 @@ int	ft_exit(t_cmd *cmd, t_env **env_list)
 		free_doublptr(cmd->args);
 		free(cmd);
 		free_list(env_list);
-<<<<<<< HEAD
 		close(STDIN_FILENO);
 		close(STDOUT_FILENO);
 		close(STDERR_FILENO);
-=======
->>>>>>> a38892c213958d44ac70d1e921bae6a554d2c134
 		exit(0);
 	}
 	return (1);
