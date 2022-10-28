@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/27 21:37:33 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/29 02:58:42 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void exec_pipes(t_cmd *cmd, t_env **env)
 	while (curr_cmd->next != NULL)
 	{
 		pipe(fd);
-		printf("	cmd i (%d): %s\n", i, curr_cmd->args[0]);
 		prev_new_fd[1] = fd[1];
 		pid = make_baby_pipe(prev_new_fd, curr_cmd, env);
 		if (pid == -1)

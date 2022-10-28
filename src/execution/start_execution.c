@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/28 22:43:46 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/29 03:07:04 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,27 +76,30 @@ void	try_execute(t_cmd **commands, t_env **env)
 
 	cmd = *commands;
 	ft_exit(cmd, env);
-	if  (check_heredoc(cmd))
-	{
-		exec_heredog(1, cmd);
-		return ;
-	}
-	if (cmd->next == NULL)
-	{
-		pid = fork();
-		if (pid == 0)
-		{
-			if (cmd->input != NULL || cmd->output != NULL)
-				exec_redir(cmd, env);
-			else
-				ft_execs(cmd, env);
-		}
-	}
-	else
-	{
-		pid = fork();
-		if (pid == 0)
-			exec_pipes(cmd, env);
-	}
+	pid = fork();			// ->remove this after testing for leaks
+	if (pid == 0)			// ->remove this after testing for leaks
+		ft_execs(cmd, env);	// ->remove this after testing for leaks
+	// if  (check_heredoc(cmd))
+	// {
+	// 	exec_heredog(1, cmd);
+	// 	return ;
+	// }
+	// if (cmd->next == NULL)
+	// {
+	// 	pid = fork();
+	// 	if (pid == 0)
+	// 	{
+	// 		if (cmd->input != NULL || cmd->output != NULL)
+	// 			exec_redir(cmd, env);
+	// 		else
+	// 			ft_execs(cmd, env);
+	// 	}
+	// }
+	// else
+	// {
+	// 	pid = fork();
+	// 	if (pid == 0)
+	// 		exec_pipes(cmd, env);
+	// }
 	wait(0);
 }

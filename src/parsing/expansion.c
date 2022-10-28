@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 22:14:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/28 22:21:07 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/29 03:15:11 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,17 +63,28 @@ t_env	*check_expansion_name(char *name, t_env **env)
 int	do_expansion_helper(int i, t_parsing *prs, t_env **env)
 {
 	t_env	*temp;
+	char	*temp_s;
 	char	*s;
 
 	temp = check_expansion_name(prs->exp_name[prs->c], env);
-	s = ft_substr(prs->token, 0,
+	temp_s = ft_substr(prs->token, 0,
 			ft_strlen(prs->token) - ft_strlen(&(prs->token[i])));
 	if (temp != NULL)
-		s = ft_strjoin(s, temp->val);
-	s = ft_strjoin(s, &(prs->token[i + 1
+	{
+		s = ft_strjoin(temp_s, temp->val);
+		free(temp_s);
+		temp_s = ft_strdup(s);
+		free(s);
+		s = ft_strjoin(temp_s, &(prs->token[i + 1
 				+ ft_strlen(prs->exp_name[prs->c])]));
+	}
+	else
+	s = ft_strjoin(temp_s, &(prs->token[i + 1
+				+ ft_strlen(prs->exp_name[prs->c])]));
+	free(temp_s);
 	free(prs->token);
-	prs->token = s;
+	prs->token = ft_strdup(s);
+	free(s);
 	prs->c++;
 	return (i);
 }
