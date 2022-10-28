@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 22:14:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/25 02:18:18 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/28 22:21:07 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,6 @@ int	copy_expansion_name(char *s, t_parsing *prs, int i)
 				ft_strlen(&s[start]) - ft_strlen(&s[i]));
 		i--;
 	}
-	// if (i != start)
-	// 	prs->exp_name[prs->iter] = ft_substr(&s[start], 0,
-	// 			ft_strlen(&s[start]) - ft_strlen(&s[i]));
-	// else
-	// 	prs->exp_name[prs->iter] = NULL;
 	prs->iter++;
 	return (i);
 }
@@ -68,16 +63,17 @@ t_env	*check_expansion_name(char *name, t_env **env)
 int	do_expansion_helper(int i, t_parsing *prs, t_env **env)
 {
 	t_env	*temp;
+	char	*s;
 
 	temp = check_expansion_name(prs->exp_name[prs->c], env);
-	prs->s = ft_substr(prs->token, 0,
+	s = ft_substr(prs->token, 0,
 			ft_strlen(prs->token) - ft_strlen(&(prs->token[i])));
 	if (temp != NULL)
-		prs->s = ft_strjoin(prs->s, temp->val);
-	prs->s = ft_strjoin(prs->s, &(prs->token[i + 1
+		s = ft_strjoin(s, temp->val);
+	s = ft_strjoin(s, &(prs->token[i + 1
 				+ ft_strlen(prs->exp_name[prs->c])]));
 	free(prs->token);
-	prs->token = prs->s;
+	prs->token = s;
 	prs->c++;
 	return (i);
 }
@@ -118,7 +114,6 @@ void	do_expansion(t_parsing	*prs, t_env **env)
 	int		do_exp;
 
 	i = 0;
-	prs->s = NULL;
 	prs->c = 0;
 	prs->j = 0;
 	prs->sq = 0;

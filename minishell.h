@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/26 04:36:33 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/28 03:25:11 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,9 @@ typedef struct s_tokens
 //structure for parsing
 typedef struct s_parsing
 {
-	char	*s;
 	char	*token;
 	char	*og_token;
-	char	*exp_name[1000];
+	char	**exp_name;
 	int		sq;
 	int		dq;
 	int		i;
@@ -94,19 +93,19 @@ typedef struct s_parsing
 
 //for now returns 0 if successfully executed
 //returns 1 if not executed
-int		ft_echo(t_cmd *cmd);
+void	ft_echo(t_cmd *cmd);
 
-int		ft_pwd(t_cmd *cmd);
+void	ft_pwd(t_cmd *cmd);
 
-int		ft_cd(t_cmd *cmd, t_env **env_list);
+void	ft_cd(t_cmd *cmd, t_env **env_list);
 
-int		ft_env(t_cmd *cmd, t_env **env_list);
+void	ft_env(t_cmd *cmd, t_env **env_list);
 
-int		ft_export(t_cmd *cmd, t_env **env_list);
+void	ft_export(t_cmd *cmd, t_env **env_list);
 
-int		ft_unset(t_cmd *cmd, t_env **env_list);
+void	ft_unset(t_cmd *cmd, t_env **env_list);
 
-int		ft_exit(t_cmd *cmd, t_env **env_list);
+void	ft_exit(t_cmd *cmd, t_env **env_list);
 
 //=================================================//
 
@@ -140,7 +139,7 @@ void	try_execute(t_cmd **commands, t_env **env);
 //tries to execute builtins
 //if one of them executed successfully returns 0;
 //else returns 1;
-int		try_builtins(t_cmd *cmd, t_env **env);
+void	try_builtins(t_cmd *cmd, t_env **env);
 
 //executes non builtins
 int		ft_execs(t_cmd *cmd, t_env **env);
@@ -153,11 +152,19 @@ void	exec_pipes(t_cmd *cmd, t_env **env);
 
 int		make_baby_pipe(int *fd, t_cmd *cmd, t_env **env);
 
-void	exec_redir(t_cmd *cmd, t_env **env, char **path);
+int		exec_redir(t_cmd *cmd, t_env **env);
 
-int		make_baby_redir(t_cmd *cmd, t_env **env, char **path);
+int		make_baby_redir(t_cmd *cmd, t_env **env);
 
-char	*ft_prevdir(char *str);
+void	update_in_args(t_cmd *cmd, t_rdr *file);
+
+void	update_out_args(t_cmd *cmd, t_rdr *file);
+
+int		array_size(char **arr);
+
+int		check_heredoc(t_cmd	*cmd);
+
+int		exec_heredog(int fd, t_cmd	*cmd);
 
 //==================================================//
 

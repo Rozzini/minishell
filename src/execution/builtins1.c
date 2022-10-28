@@ -6,47 +6,42 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:31:15 by mrizk             #+#    #+#             */
-/*   Updated: 2022/10/25 20:06:19 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/27 20:02:35 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	ft_echo(t_cmd *cmd)
+void	ft_echo(t_cmd *cmd)
 {
 	int	i;
 	int	flag;
 
 	flag = 0;
 	i = 1;
-	if (ft_strcmp("echo", cmd->args[0]) == 0)
+	if (ft_strcmp(cmd->args[1], "-n") == 0)
 	{
-		if (ft_strcmp(cmd->args[1], "-n") == 0)
-		{
-			flag = 1;
-			i = 2;
-		}	
-		while (cmd->args[i] != NULL)
-			printf("%s ", cmd->args[i++]);
-		if (flag == 0)
-			printf("\n");
-		return (0);
-	}
-	return (1);
+		flag = 1;
+		i = 2;
+	}	
+	while (cmd->args[i] != NULL)
+		printf("%s ", cmd->args[i++]);
+	if (flag == 0)
+		printf("\n");
+	//add process termination
+	exit(0);
 }
 
-int	ft_pwd(t_cmd *cmd)
+void	ft_pwd(t_cmd *cmd)
 {
 	char	*s;
 
-	if (ft_strcmp("pwd", cmd->args[0]) == 0)
-	{
-		s = getcwd(NULL, 0);
-		printf("%s\n", s);
-		free(s);
-		return (0);
-	}
-	return (1);
+	s = getcwd(NULL, 0);
+	printf("%s\n", s);
+	free(s);
+	free_cmd(&cmd);
+	//add process termination
+	exit(0);
 }
 
 void	ft_cd_helper(t_env **env_list)
@@ -73,30 +68,27 @@ void	ft_cd_helper(t_env **env_list)
 	temp->val = getcwd(NULL, 0);
 }
 
-int	ft_cd(t_cmd *cmd, t_env **env_list)
+void	ft_cd(t_cmd *cmd, t_env **env_list)
 {
 	t_env	*temp;
 	t_env	*old_temp;
 
-	if (ft_strcmp("cd", cmd->args[0]) == 0)
+	if (cmd->arg_c == 1)
 	{
-		if (cmd->arg_c == 1)
-		{
-			ft_cd_helper(env_list);
-			return (0);
-		}
-		if (chdir(cmd->args[1]) == -1)
-		{
-			printf("cd: no such file or directory: %s\n", cmd->args[1]);
-			return (0);
-		}
-		temp = find_node_by_key(*env_list, "PWD");
-		old_temp = find_node_by_key(*env_list, "OLDPWD");
-		free(old_temp->val);
-		old_temp->val = ft_strdup(temp->val);
-		free(temp->val);
-		temp->val = getcwd(NULL, 0);
-		return (0);
+		ft_cd_helper(env_list);
+		exit(0);
 	}
-	return (1);
+	if (chdir(cmd->args[1]) == -1)
+	{
+		printf("cd: no such file or directory: %s\n", cmd->args[1]);
+		exit(0);
+	}
+	temp = find_node_by_key(*env_list, "PWD");
+	old_temp = find_node_by_key(*env_list, "OLDPWD");
+	free(old_temp->val);
+	old_temp->val = ft_strdup(temp->val);
+	free(temp->val);
+	temp->val = getcwd(NULL, 0);
+	//add process termination
+	exit(0);
 }

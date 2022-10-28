@@ -6,57 +6,72 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/26 04:35:45 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/27 21:37:33 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	make_baby_pipe(int *fd, t_cmd *cmd, t_env **env)
+
+int make_baby_pipe(int *prev_new_fd, t_cmd *cmd, t_env **env)
 {
-	pid_t	pid;
+	pid_t pid;
 
 	pid = fork();
 	if (pid == 0)
 	{
-		if (fd[0] != 0)
+		if (prev_new_fd[0] != 0)
 		{
-			dup2(fd[0], STDIN_FILENO);
-			close(fd[0]);
+			dup2(prev_new_fd[0], STDIN_FILENO);
+			close(prev_new_fd[0]);
 		}
-		if (fd[1] != 1)
+		if (prev_new_fd[1] != 1)
 		{
-			dup2(fd[1], STDOUT_FILENO);
-			close(fd[1]);
+			dup2(prev_new_fd[1], STDOUT_FILENO);
+			close(prev_new_fd[1]);
 		}
+		if (cmd->input || cmd->output)
+			return (exec_redir(cmd, env));
+		else
 		return (ft_execs(cmd, env));
 	}
 	return (pid);
 }
 
-void	exec_pipes(t_cmd *cmd, t_env **env)
+void exec_pipes(t_cmd *cmd, t_env **env)
 {
-	int		fd[2];
-	int		prev_fd;
-	int		i;
-	pid_t	pid;
-	t_cmd	*curr_cmd;
+	int fd[2];
+	int prev_new_fd[2];
+	int i;
+	pid_t pid;
+	t_cmd *curr_cmd;
 
-	prev_fd = 0;
+	prev_new_fd[0] = 0;
 	i = 1;
 	curr_cmd = cmd;
 	while (curr_cmd->next != NULL)
 	{
 		pipe(fd);
-		pid = make_baby_pipe(fd, curr_cmd, env);
+		printf("	cmd i (%d): %s\n", i, curr_cmd->args[0]);
+		prev_new_fd[1] = fd[1];
+		pid = make_baby_pipe(prev_new_fd, curr_cmd, env);
 		if (pid == -1)
+		{
+			printf("fork error");
 			return ;
+		}
 		close(fd[1]);
-		prev_fd = fd[0];
+		prev_new_fd[0] = fd[0];
 		curr_cmd = curr_cmd->next;
 		i++;
 	}
-	if (prev_fd != 0)
-		dup2(prev_fd, 0);
-	ft_execs(curr_cmd, env);
+	if (prev_new_fd[0] != 0)
+		dup2(prev_new_fd[0], 0);
+	close(prev_new_fd[0]);
+	if (curr_cmd->output || curr_cmd->input)
+		exec_redir(curr_cmd, env);
+	else
+		ft_execs(curr_cmd, env);
+	return ;
 }
+

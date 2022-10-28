@@ -6,53 +6,53 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 22:22:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/25 02:06:44 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/27 22:01:57 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	ft_env(t_cmd *cmd, t_env **env_list)
+void	ft_env(t_cmd *cmd, t_env **env_list)
 {
-	if (ft_strcmp("env", cmd->args[0]) == 0)
-	{
-		print_env(env_list);
-		return (0);
-	}
-	return (1);
+	print_env(env_list);
+	//add process termination
+	free_cmd(&cmd);
+	exit(0);
 }
 
-int	ft_unset(t_cmd *cmd, t_env **env_list)
+void	ft_unset(t_cmd *cmd, t_env **env_list)
 {
 	t_env	*temp;
 	int		i;
 
 	i = 1;
-	if (ft_strcmp("unset", cmd->args[0]) == 0)
+	while (i < cmd->arg_c)
 	{
-		while (i < cmd->arg_c)
-		{
-			temp = *env_list;
-			if (ft_strcmp(temp->key, cmd->args[i]) == 0)
-				delete_head(env_list);
-			temp = find_node_by_key_del(*env_list, cmd->args[i]);
-			if (temp != NULL)
-				delete_node(temp);
-			i++;
-		}
-		return (0);
+		temp = *env_list;
+		if (ft_strcmp(temp->key, cmd->args[i]) == 0)
+			delete_head(env_list);
+		temp = find_node_by_key_del(*env_list, cmd->args[i]);
+		if (temp != NULL)
+			delete_node(temp);
+		i++;
 	}
-	return (1);
+	//add process termination
+	exit(0);
 }
 
-int	ft_exit(t_cmd *cmd, t_env **env_list)
+void	ft_exit(t_cmd *cmd, t_env **env_list)
 {
-	if (ft_strcmp("exit", cmd->args[0]) == 0)
+	char	*s;
+
+	s = NULL;
+	if (cmd->args != NULL)
+		s = cmd->args[0];
+	else
+		return ;
+	if (ft_strcmp("exit", s) == 0)
 	{
-		free_doublptr(cmd->args);
-		free(cmd);
+		free_cmd(&cmd);
 		free_list(env_list);
 		exit(0);
 	}
-	return (1);
 }

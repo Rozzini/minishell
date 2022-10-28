@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 18:05:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/09/12 09:43:42 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/27 20:17:38 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,22 +88,19 @@ void	do_export(t_cmd *cmd, t_env **env_list)
 	}
 }
 
-int	ft_export(t_cmd *cmd, t_env **env_list)
+void	ft_export(t_cmd *cmd, t_env **env_list)
 {
-	if (ft_strcmp("export", cmd->args[0]) == 0)
+	if (cmd->arg_c == 1)
+		print_env_export(env_list);
+	else
 	{
-		if (cmd->arg_c == 1)
-			print_env_export(env_list);
-		else
+		if (parse_export(cmd) == 1)
 		{
-			if (parse_export(cmd) == 1)
-			{
-				printf("minishell: export:  not a valid identifier\n");
-				return (0);
-			}
-			do_export(cmd, env_list);
+			printf("minishell: export:  not a valid identifier\n");
+			exit(0);
 		}
-		return (0);
+		do_export(cmd, env_list);
 	}
-	return (1);
+	//add process termination
+	exit(0);
 }
