@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 18:05:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/27 20:17:38 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/28 22:43:23 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ void	ft_export(t_cmd *cmd, t_env **env_list)
 		}
 		do_export(cmd, env_list);
 	}
-	//add process termination
+	free_cmd(&cmd);
+	free_list(env_list);
 	exit(0);
 }

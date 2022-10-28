@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 22:22:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/27 22:01:57 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/28 22:43:19 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 void	ft_env(t_cmd *cmd, t_env **env_list)
 {
 	print_env(env_list);
-	//add process termination
 	free_cmd(&cmd);
+	free_list(env_list);
 	exit(0);
 }
 
@@ -36,7 +36,8 @@ void	ft_unset(t_cmd *cmd, t_env **env_list)
 			delete_node(temp);
 		i++;
 	}
-	//add process termination
+	free_cmd(&cmd);
+	free_list(env_list);
 	exit(0);
 }
 

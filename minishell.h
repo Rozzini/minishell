@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/28 03:25:11 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/28 22:42:12 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,9 @@ typedef struct s_parsing
 
 //for now returns 0 if successfully executed
 //returns 1 if not executed
-void	ft_echo(t_cmd *cmd);
+void	ft_echo(t_cmd *cmd, t_env **env_list);
 
-void	ft_pwd(t_cmd *cmd);
+void	ft_pwd(t_cmd *cmd, t_env **env_list);
 
 void	ft_cd(t_cmd *cmd, t_env **env_list);
 

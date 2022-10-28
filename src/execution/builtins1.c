@@ -6,13 +6,13 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:31:15 by mrizk             #+#    #+#             */
-/*   Updated: 2022/10/27 20:02:35 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/28 22:43:03 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	ft_echo(t_cmd *cmd)
+void	ft_echo(t_cmd *cmd, t_env **env_list)
 {
 	int	i;
 	int	flag;
@@ -28,11 +28,12 @@ void	ft_echo(t_cmd *cmd)
 		printf("%s ", cmd->args[i++]);
 	if (flag == 0)
 		printf("\n");
-	//add process termination
+	free_cmd(&cmd);
+	free_list(env_list);
 	exit(0);
 }
 
-void	ft_pwd(t_cmd *cmd)
+void	ft_pwd(t_cmd *cmd, t_env **env_list)
 {
 	char	*s;
 
@@ -40,7 +41,8 @@ void	ft_pwd(t_cmd *cmd)
 	printf("%s\n", s);
 	free(s);
 	free_cmd(&cmd);
-	//add process termination
+	free_cmd(&cmd);
+	free_list(env_list);
 	exit(0);
 }
 
@@ -89,6 +91,7 @@ void	ft_cd(t_cmd *cmd, t_env **env_list)
 	old_temp->val = ft_strdup(temp->val);
 	free(temp->val);
 	temp->val = getcwd(NULL, 0);
-	//add process termination
+	free_cmd(&cmd);
+	free_list(env_list);
 	exit(0);
 }
