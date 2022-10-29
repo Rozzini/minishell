@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/29 03:04:50 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/29 04:23:40 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int argc, char **argv, char **env)
 
 	env_list = NULL;
 	cmd = NULL;
-	argc = 0;
+	argc = 0; 
 	if (argv == NULL)
 		argc++;
 	init_env_list(&env_list, env);

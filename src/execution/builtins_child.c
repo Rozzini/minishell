@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 22:22:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/28 22:43:19 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/30 00:05:46 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,44 +16,36 @@ void	ft_env(t_cmd *cmd, t_env **env_list)
 {
 	print_env(env_list);
 	free_cmd(&cmd);
-	free_list(env_list);
 	exit(0);
 }
 
-void	ft_unset(t_cmd *cmd, t_env **env_list)
+void	ft_echo(t_cmd *cmd)
 {
-	t_env	*temp;
-	int		i;
+	int	i;
+	int	flag;
 
+	flag = 0;
 	i = 1;
-	while (i < cmd->arg_c)
+	if (ft_strcmp(cmd->args[1], "-n") == 0)
 	{
-		temp = *env_list;
-		if (ft_strcmp(temp->key, cmd->args[i]) == 0)
-			delete_head(env_list);
-		temp = find_node_by_key_del(*env_list, cmd->args[i]);
-		if (temp != NULL)
-			delete_node(temp);
-		i++;
-	}
+		flag = 1;
+		i = 2;
+	}	
+	while (cmd->args[i] != NULL)
+		printf("%s ", cmd->args[i++]);
+	if (flag == 0)
+		printf("\n");
 	free_cmd(&cmd);
-	free_list(env_list);
 	exit(0);
 }
 
-void	ft_exit(t_cmd *cmd, t_env **env_list)
+void	ft_pwd(t_cmd *cmd)
 {
 	char	*s;
 
-	s = NULL;
-	if (cmd->args != NULL)
-		s = cmd->args[0];
-	else
-		return ;
-	if (ft_strcmp("exit", s) == 0)
-	{
-		free_cmd(&cmd);
-		free_list(env_list);
-		exit(0);
-	}
+	s = getcwd(NULL, 0);
+	printf("%s\n", s);
+	free(s);
+	free_cmd(&cmd);
+	exit(0);
 }

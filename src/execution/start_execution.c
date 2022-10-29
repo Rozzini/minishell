@@ -6,13 +6,35 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/29 03:07:04 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/30 00:02:59 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	try_builtins(t_cmd *cmd, t_env **env)
+//FINISH THIS FUNCTION
+int		try_parent_builtins(t_cmd *cmd, t_env **env)
+{
+	char	*s;
+
+	s = NULL;
+	if (cmd->args != NULL)
+		s = cmd->args[0];
+	else
+		return (0);
+	if (ft_strcmp("exit", s) == 0)
+		ft_exit(cmd, env);
+	if (ft_strcmp("cd", s) == 0)
+		return (ft_cd(cmd, env));
+	else if (ft_strcmp("unset", s) == 0)
+		return (ft_unset(cmd, env));
+	else if (ft_strcmp("export", s) == 0)
+		return (ft_export(cmd, env));
+	else
+		return (0);
+}
+
+void	try_child_builtins(t_cmd *cmd, t_env **env)
 {
 	char	*s;
 
@@ -21,85 +43,70 @@ void	try_builtins(t_cmd *cmd, t_env **env)
 		s = cmd->args[0];
 	else
 		return ;
-	if (ft_strcmp("cd", s) == 0)
-		ft_cd(cmd, env);
 	if (ft_strcmp("pwd", s) == 0)
-		ft_pwd(cmd, env);
+		ft_pwd(cmd);
 	if (ft_strcmp("echo", s) == 0)
-		ft_echo(cmd, env);
-	if (ft_strcmp("unset", s) == 0)
-		ft_unset(cmd, env);
+		ft_echo(cmd);
 	if (ft_strcmp("env", s) == 0)
 		ft_env(cmd, env);
-	if (ft_strcmp("export", s) == 0)
-		ft_export(cmd, env);
 }
 
 int	ft_execs(t_cmd *cmd, t_env **env)
 {
 	int		i;
+	int		pid;
 	char	*str;
 	char	*temp;
 	char	**env_s;
 	char	**path;
 
 	i = 0;
-	try_builtins(cmd, env);
-	if (cmd->args == NULL)
+	if (try_parent_builtins(cmd, env) == 1)
+		return (0);
+	pid = fork();
+	if (pid == 0)
 	{
-		printf("empty command\n");
-		return(0);
+		try_child_builtins(cmd, env);
+		env_s = env_list_to_string(*env);
+		path = ft_split(find_node_by_key(*env, "PATH")->val, ':');
+		while (path[i] != NULL)
+		{
+			temp = ft_strjoin(path[i], "/");
+			str = ft_strjoin(temp, cmd->args[0]);
+			free(temp);
+			execve(str, cmd->args, env_s);
+			free(str);
+			i++;
+		}
+		printf("mininshell: %s: command not found\n", cmd->args[0]);
+		free_cmd(&cmd);
+		free_list(env);
+		free_doublptr(env_s);
+		free_doublptr(path);
+		exit(0);
 	}
-	env_s = env_list_to_string(*env);
-	path = ft_split(find_node_by_key(*env, "PATH")->val, ':');
-	while (path[i] != NULL)
-	{
-		temp = ft_strjoin(path[i], "/");
-		str = ft_strjoin(temp, cmd->args[0]);
-		free(temp);
-		execve(str, cmd->args, env_s);
-		free(str);
-		i++;
-	}
-	printf("mininshell: %s: command not found\n", cmd->args[0]);
-	free_cmd(&cmd);
-	free_list(env);
-	free_doublptr(env_s);
-	free_doublptr(path);
-	exit(0);
+	return (0);
 }
 
 void	try_execute(t_cmd **commands, t_env **env)
 {
-	int		pid;
 	t_cmd	*cmd;
 
 	cmd = *commands;
 	ft_exit(cmd, env);
-	pid = fork();			// ->remove this after testing for leaks
-	if (pid == 0)			// ->remove this after testing for leaks
-		ft_execs(cmd, env);	// ->remove this after testing for leaks
-	// if  (check_heredoc(cmd))
-	// {
-	// 	exec_heredog(1, cmd);
-	// 	return ;
-	// }
-	// if (cmd->next == NULL)
-	// {
-	// 	pid = fork();
-	// 	if (pid == 0)
-	// 	{
-	// 		if (cmd->input != NULL || cmd->output != NULL)
-	// 			exec_redir(cmd, env);
-	// 		else
-	// 			ft_execs(cmd, env);
-	// 	}
-	// }
-	// else
-	// {
-	// 	pid = fork();
-	// 	if (pid == 0)
-	// 		exec_pipes(cmd, env);
-	// }
+	if  (check_heredoc(cmd))
+	{
+		exec_heredog(1, cmd);
+		return ;
+	}
+	if (cmd->next == NULL)
+	{
+		if (cmd->input != NULL || cmd->output != NULL)
+			exec_redir(cmd, env);
+		else
+			ft_execs(cmd, env);
+	}
+	else
+		exec_pipes(cmd, env);
 	wait(0);
 }

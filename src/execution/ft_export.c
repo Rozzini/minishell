@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 18:05:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/28 22:43:23 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/30 00:04:14 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	do_export(t_cmd *cmd, t_env **env_list)
 	}
 }
 
-void	ft_export(t_cmd *cmd, t_env **env_list)
+int		ft_export(t_cmd *cmd, t_env **env_list)
 {
 	if (cmd->arg_c == 1)
 		print_env_export(env_list);
@@ -101,7 +101,5 @@ void	ft_export(t_cmd *cmd, t_env **env_list)
 		}
 		do_export(cmd, env_list);
 	}
-	free_cmd(&cmd);
-	free_list(env_list);
-	exit(0);
+	return (1);
 }

@@ -6,45 +6,48 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:31:15 by mrizk             #+#    #+#             */
-/*   Updated: 2022/10/28 22:43:03 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/30 00:05:40 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	ft_echo(t_cmd *cmd, t_env **env_list)
-{
-	int	i;
-	int	flag;
-
-	flag = 0;
-	i = 1;
-	if (ft_strcmp(cmd->args[1], "-n") == 0)
-	{
-		flag = 1;
-		i = 2;
-	}	
-	while (cmd->args[i] != NULL)
-		printf("%s ", cmd->args[i++]);
-	if (flag == 0)
-		printf("\n");
-	free_cmd(&cmd);
-	free_list(env_list);
-	exit(0);
-}
-
-void	ft_pwd(t_cmd *cmd, t_env **env_list)
+void	ft_exit(t_cmd *cmd, t_env **env_list)
 {
 	char	*s;
 
-	s = getcwd(NULL, 0);
-	printf("%s\n", s);
-	free(s);
-	free_cmd(&cmd);
-	free_cmd(&cmd);
-	free_list(env_list);
-	exit(0);
+	s = NULL;
+	if (cmd->args != NULL)
+		s = cmd->args[0];
+	else
+		return ;
+	if (ft_strcmp("exit", s) == 0)
+	{
+		free_cmd(&cmd);
+		free_list(env_list);
+		exit(0);
+	}
 }
+
+int		ft_unset(t_cmd *cmd, t_env **env_list)
+{
+	t_env	*temp;
+	int		i;
+
+	i = 1;
+	while (i < cmd->arg_c)
+	{
+		temp = *env_list;
+		if (ft_strcmp(temp->key, cmd->args[i]) == 0)
+			delete_head(env_list);
+		temp = find_node_by_key_del(*env_list, cmd->args[i]);
+		if (temp != NULL)
+			delete_node(temp);
+		i++;
+	}
+	return (1);
+}
+
 
 void	ft_cd_helper(t_env **env_list)
 {
@@ -70,7 +73,7 @@ void	ft_cd_helper(t_env **env_list)
 	temp->val = getcwd(NULL, 0);
 }
 
-void	ft_cd(t_cmd *cmd, t_env **env_list)
+int	ft_cd(t_cmd *cmd, t_env **env_list)
 {
 	t_env	*temp;
 	t_env	*old_temp;
@@ -91,7 +94,5 @@ void	ft_cd(t_cmd *cmd, t_env **env_list)
 	old_temp->val = ft_strdup(temp->val);
 	free(temp->val);
 	temp->val = getcwd(NULL, 0);
-	free_cmd(&cmd);
-	free_list(env_list);
-	exit(0);
+	return(1);
 }
