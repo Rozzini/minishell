@@ -6,13 +6,12 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/30 00:02:59 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/30 00:16:00 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-//FINISH THIS FUNCTION
 int		try_parent_builtins(t_cmd *cmd, t_env **env)
 {
 	char	*s;
