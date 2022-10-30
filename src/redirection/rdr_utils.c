@@ -6,14 +6,14 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 12:58:11 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/10/24 12:58:25 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/10/27 19:31:19 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 
-int	ft_2d_size(char **arr)
+int	arr_size(char **arr)
 {
 	int	i;
 
@@ -39,7 +39,7 @@ void update_out_args(t_cmd *cmd, t_rdr *file)
 	io_args = file->args;
 	i = 0;
 	j = 0;
-	cmd->args = malloc(sizeof(char *) * (ft_2d_size(cmd->args) + ft_2d_size(cmd->output->args) + 1));
+	cmd->args = malloc(sizeof(char *) * (arr_size(cmd->args) + arr_size(cmd->output->args) + 1));
 	while (og_args[i])
 	{
 		cmd->args[i] = ft_strdup(og_args[i]);
@@ -55,6 +55,7 @@ void update_out_args(t_cmd *cmd, t_rdr *file)
 	}
 	cmd->args[i] = NULL;
 	cmd->arg_c = i;
+	// printf("%s %s %s %d\n-----\n", cmd->args[0], cmd->args[1], cmd->args[2], cmd->arg_c);
 	free_doublptr(io_args);
 	free_doublptr(og_args);
 }
@@ -72,7 +73,7 @@ void update_in_args(t_cmd *cmd, t_rdr *file)
 	io_args = file->args;
 	i = 0;
 	j = 0;
-	cmd->args = malloc(sizeof(char *) * (ft_2d_size(cmd->args) + ft_2d_size(cmd->input->args) + 1));
+	cmd->args = malloc(sizeof(char *) * (arr_size(cmd->args) + arr_size(cmd->input->args) + 1));
 	//printf("size: %d\n", ft_2d_size(cmd->args) + ft_2d_size(cmd->input->args));
 	printf("%s\n", og_args[0]);
 	while (og_args[i])
