@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/31 07:40:36 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/01 14:29:07 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	init_env_list(t_env **env_list, char **env);
 void	print_env(t_env **head);
 
 //prints env for export builtin
-void	print_env_export(t_env **head);
+void	print_env_export(t_cmd *cmd, t_env **head);
 
 //Returns node with provided key
 //if there is no such key returns NULL

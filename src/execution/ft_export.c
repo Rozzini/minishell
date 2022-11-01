@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 18:05:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/01 07:46:41 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/01 14:28:15 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,18 @@ int		ft_export(t_cmd *cmd, t_env **env_list)
 	int		i;
 
 	if (cmd->arg_c == 1)
-		print_env_export(env_list);
+		return (0);
 	else
 	{
-		export_d = malloc(sizeof(t_env));
 		export_d = NULL;
 		i = 1;
 		while (cmd->args[i] != NULL)
 			get_push_export_d(cmd->args[i++], &export_d);
 		if (parse_export(export_d) == 1)
+		{
+			free_list(&export_d);
 			return (1);
+		}
 		do_export(export_d, env_list);
 		free_list(&export_d);
 	}

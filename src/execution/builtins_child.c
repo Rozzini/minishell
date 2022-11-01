@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 22:22:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/30 00:44:24 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/01 14:28:41 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,29 @@ void	ft_pwd(t_cmd *cmd)
 	printf("%s\n", s);
 	free(s);
 	free_cmd(&cmd);
+	exit(0);
+}
+
+void	print_env_export(t_cmd *cmd, t_env **head)
+{
+	t_env	*temp;
+
+	temp = *head;
+	while (temp != NULL)
+	{
+		printf("declare -x ");
+		if (temp->val != NULL)
+		{
+			if (ft_strchr(temp->val, 34) == NULL)
+				printf("%s=\"%s\"\n", temp->key, temp->val);
+			else
+				printf("%s=%s\n", temp->key, temp->val);
+		}
+		else
+			printf("%s\n", temp->key);
+		temp = temp->next;
+	}
+	free_cmd(&cmd);
+	free_list(head);
 	exit(0);
 }

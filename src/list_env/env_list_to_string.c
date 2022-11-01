@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 19:44:21 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/28 23:36:26 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/01 09:53:48 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,26 +29,16 @@ int	count_env(t_env *env)
 
 char	*ft_str(char *key, char *val)
 {
-	char			*str;
-	unsigned long	i;
+	char	*str;
+	char	*str_eq;
 
-	i = 0;
 	if (val == NULL)
-		return (NULL);
-	if (val == NULL)
-		str = (char *)malloc(sizeof(char) * (ft_strlen(key) + 2));
+		str = ft_strjoin(key, "=");
 	else
-		str = (char *)malloc(sizeof(char)
-				* (ft_strlen(key) + ft_strlen(val) + 2));
-	while (i < ft_strlen(key) + ft_strlen(val))
 	{
-		while (*key != '\0')
-			str[i++] = *(key++);
-		str[i++] = '=';
-		while (*val != '\0')
-			str[i++] = *(val++);
+		str_eq = ft_strjoin(key, "=");
+		str = ft_strjoin(str_eq, val);
 	}
-	str[i] = '\0';
 	return (str);
 }
 
