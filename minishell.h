@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/29 22:05:20 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/31 07:40:36 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ int		ft_cd(t_cmd *cmd, t_env **env_list);
 
 int		ft_export(t_cmd *cmd, t_env **env_list);
 
+void	get_push_export_d(char	*s, t_env	**export_d);
+
 int		ft_unset(t_cmd *cmd, t_env **env_list);
 
 //=================================================//
@@ -181,7 +183,7 @@ int		start_pipes_parsing(t_tokens *tokens, t_cmd **cmd);
 //function for export builtin parsing
 //returns 1 if smthing is wrong
 //returns 0 if all good
-int		parse_export(t_cmd *cmd);
+int		parse_export(t_env *export_d);
 
 char	*tokens_q_iter(char *s);
 

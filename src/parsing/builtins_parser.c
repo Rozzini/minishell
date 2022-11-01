@@ -6,53 +6,64 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 22:55:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/26 04:50:22 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/01 07:46:55 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	parse_export_helper(char *s)
+int	parse_export_key(char *s)
 {
-	char	c;
-	char	*p;
+	int	len;
+	int	i;
 
-	c = 33;
-	while (c <= 126)
+	i = 0;
+	len = ft_strlen(s);
+	if (s[len - 1] == '+')
+		len--;
+	if (ft_isalpha(s[i++]) == 0)
+		return (1);
+	while (i < len)
 	{
-		if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122)
-		 || c == '=' || c == '+' || c == '"' || c =='\'')
-			c++;
-		else if (c >= 48 && c <= 57)
-		{
-			if (s[0] == c)
-				return (1);
-			c++;
-		}
+		if (ft_isalnum(s[i]) != 0)
+			i++;
+		else if (s[i] == '_')
+			i++;
 		else
-		{
-			p = ft_strchr(s, c);
-			if (p != NULL)
-				return (1);
-			c++;
-		}
+			return (1);
 	}
 	return (0);
 }
 
-int	parse_export(t_cmd *cmd)
+int	parse_export(t_env *export_d)
 {
-	int	i;
+	t_env	*temp;
 
-	i = 1;
-	while (i < cmd->arg_c)
+	temp = export_d;
+	while (temp != NULL)
 	{
-		if (ft_isalnum(cmd->args[i][0]) != 0 && cmd->args[i][0] == '=' && cmd->args[i][0] == '+')
+		if (parse_export_key(temp->key) == 1)
+		{
+			printf("minishell: export:  '%s' not a valid identifier\n", temp->key);
+			free_list(&export_d);
 			return (1);
-		if (parse_export_helper(cmd->args[i]) == 1)
-			return (1);
-		i++;
+		}
+		temp = temp->next;
 	}
 	return (0);
- }
- 
+}
+
+void	get_push_export_d(char	*s, t_env	**export_d)
+{
+	char	*equal;
+	char	*key;
+
+	equal = ft_strchr(s, '=');
+	if (equal == NULL)
+		push(export_d, s, NULL);
+	else
+	{
+		key = ft_substr(s, 0, ft_strlen(s) - ft_strlen(equal));
+		push(export_d, key, &equal[1]);
+	}
+}
