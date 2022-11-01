@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/01 14:29:34 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/01 14:43:49 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,11 @@ void	try_execute(t_cmd **commands, t_env **env)
 
 	cmd = *commands;
 	ft_exit(cmd, env);
-	if  (check_heredoc(cmd))
-	{
-		exec_heredog(1, cmd);
-		return ;
-	}
+	// if  (check_heredoc(cmd))
+	// {
+	// 	exec_heredog(1, cmd);
+	// 	return ;
+	// }
 	if (cmd->next == NULL)
 	{
 		if (cmd->input != NULL || cmd->output != NULL)

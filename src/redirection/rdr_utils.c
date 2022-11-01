@@ -6,21 +6,19 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 12:58:11 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/10/27 22:15:48 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/01 14:35:02 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 
-int	array_size(char **arr)
+int	arr_size(char **arr)
 {
 	int	i;
 
 	i = 0;
-	if (arr == NULL)
-		return (0);
-	while (arr[i] != NULL)
+	while (arr[i])
 	{
 		i++;
 	}
@@ -41,23 +39,23 @@ void update_out_args(t_cmd *cmd, t_rdr *file)
 	io_args = file->args;
 	i = 0;
 	j = 0;
-	cmd->args = malloc(sizeof(char *) * (array_size(cmd->args) + array_size(cmd->output->args) + 1));
-	if (og_args != NULL)
+	cmd->args = malloc(sizeof(char *) * (arr_size(cmd->args) + arr_size(cmd->output->args) + 1));
+	while (og_args[i])
 	{
-		while (og_args[i])
-		{
-			cmd->args[i] = ft_strdup(og_args[i]);
-			i++;
-		}
+		cmd->args[i] = ft_strdup(og_args[i]);
+		// printf("[%d]: %s\n",i, cmd->args[i]);
+		i++;
 	}
 	while (io_args[j])
 	{
 		cmd->args[i] = ft_strdup(io_args[j]);
+		// printf("[%d]: %s\n",i, cmd->args[i]);
 		j++;
 		i++;
 	}
 	cmd->args[i] = NULL;
 	cmd->arg_c = i;
+	// printf("%s %s %s %d\n-----\n", cmd->args[0], cmd->args[1], cmd->args[2], cmd->arg_c);
 	free_doublptr(io_args);
 	free_doublptr(og_args);
 }
@@ -75,18 +73,20 @@ void update_in_args(t_cmd *cmd, t_rdr *file)
 	io_args = file->args;
 	i = 0;
 	j = 0;
-	cmd->args = malloc(sizeof(char *)
-		* (array_size(cmd->args) + array_size(cmd->input->args) + 1));
+	cmd->args = malloc(sizeof(char *) * (arr_size(cmd->args) + arr_size(cmd->input->args) + 1));
+	//printf("size: %d\n", ft_2d_size(cmd->args) + ft_2d_size(cmd->input->args));
 	printf("%s\n", og_args[0]);
 	while (og_args[i])
 	{
 		cmd->args[i] = ft_strdup(og_args[i]);
+		// printf("[%d]: %s\n",i, cmd->args[i]);
 		i++;
 	}
 	j = 0;
 	while (io_args[j])
 	{
 		cmd->args[i] = ft_strdup(io_args[j]);
+		// printf("[%d]: %s\n",i, cmd->args[i]);
 		j++;
 		i++;
 	}
