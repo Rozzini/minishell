@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 19:44:21 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/01 09:53:48 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/01 15:11:15 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ char	*ft_str(char *key, char *val)
 	{
 		str_eq = ft_strjoin(key, "=");
 		str = ft_strjoin(str_eq, val);
+		free(str_eq);
 	}
 	return (str);
 }
