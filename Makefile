@@ -6,7 +6,7 @@
 #    By: mraspors <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/11/03 04:22:40 by mraspors         ###   ########.fr        #
+#    Updated: 2022/11/03 04:56:55 by mraspors         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,11 +17,25 @@ MAKE = make
 
 CC = gcc
 
-CFLAG = -Wall -Werror -Wextra -g
 
 LIBFTDIR = ./libft
 
 LIBFT_A = ./libft/libft.a
+
+prefix		=	/usr/local/Cellar/readline/8.1
+# prefix		=	/opt/homebrew/Cellar/readline/8.1.2
+
+exec_prefix	=	${prefix}
+
+libdir		=	${exec_prefix}/lib
+
+includedir	=	${prefix}/include
+
+CFLAG = -Wall -Werror -Wextra -g3 -I${includedir}
+
+LDFLAGS 	=	-lreadline -L /usr/local/Cellar/readline/8.1/lib
+
+LDFLAGS 	=	-lreadline -L${libdir}
 
 SRC	=   ./src/execution/builtins_parent.c ./src/execution/builtins_child.c\
 	./src/execution/start_execution.c ./src/execution/ft_export.c\
@@ -46,7 +60,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	$(MAKE) -C $(LIBFTDIR)
-	$(CC) $(CFLAG) $(SRC) $(LIBFT_A) -o $(NAME) -lreadline && clear
+	$(CC) $(CFLAG) $(SRC) $(LIBFT_A) -o $(NAME) $(LDFLAGS) && clear
 
 clean:
 	$(MAKE) -C $(LIBFTDIR) clean
