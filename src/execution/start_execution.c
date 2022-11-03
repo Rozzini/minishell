@@ -6,96 +6,109 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/27 19:34:43 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/11/03 16:11:46 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-//tries to execute builtins
-//if one of them executed successfully returns 0;
-//else returns 1;
-int	try_builtins(t_cmd *cmd, t_env **env)
+int		try_parent_builtins(t_cmd *cmd, t_env **env)
 {
-	ft_exit(cmd, env);
-	if (ft_echo(cmd) == 0
-		|| ft_pwd(cmd) == 0
-		|| ft_cd(cmd, env) == 0
-		|| ft_env(cmd, env) == 0
-		|| ft_export(cmd, env) == 0
-		|| ft_unset(cmd, env) == 0)
+	char	*s;
+
+	s = NULL;
+	if (cmd->args != NULL)
+		s = cmd->args[0];
+	else
 		return (0);
-	return (1);
+	if (ft_strcmp("exit", s) == 0)
+		ft_exit(cmd, env);
+	if (ft_strcmp("cd", s) == 0)
+		return (ft_cd(cmd, env));
+	else if (ft_strcmp("unset", s) == 0)
+		return (ft_unset(cmd, env));
+	else if (ft_strcmp("export", s) == 0)
+		return (ft_export(cmd, env));
+	else
+		return (0);
 }
 
-int	ft_execs(t_cmd *cmd, t_env **env, char **path)
+void	try_child_builtins(t_cmd *cmd, t_env **env)
+{
+	char	*s;
+
+	s = NULL;
+	if (cmd->args != NULL)
+		s = cmd->args[0];
+	else
+		return ;
+	if (ft_strcmp("export", s) == 0)
+		print_env_export(cmd, env);
+	if (ft_strcmp("pwd", s) == 0)
+		ft_pwd(cmd);
+	if (ft_strcmp("echo", s) == 0)
+		ft_echo(cmd);
+	if (ft_strcmp("env", s) == 0)
+		ft_env(cmd, env);
+}
+
+int	ft_execs(t_cmd *cmd, t_env **env)
 {
 	int		i;
+	int		pid;
 	char	*str;
+	char	*temp;
 	char	**env_s;
+	char	**path;
 
 	i = 0;
-	env_s = env_list_to_string(*env);
-	if (try_builtins(cmd, env) == 0)
+	if (try_parent_builtins(cmd, env) == 1)
 		return (0);
-	
-	if (cmd->args == NULL)
+	pid = fork();
+	if (pid == 0)
 	{
-		printf("empty command\n");
-		return(0);
+		try_child_builtins(cmd, env);
+		env_s = env_list_to_string(*env);
+		path = ft_split(find_node_by_key(*env, "PATH")->val, ':');
+		while (path[i] != NULL)
+		{
+			temp = ft_strjoin(path[i], "/");
+			str = ft_strjoin(temp, cmd->args[0]);
+			free(temp);
+			execve(str, cmd->args, env_s);
+			free(str);
+			i++;
+		}
+		printf("mininshell: %s: command not found\n", cmd->args[0]);
+		free_cmd(&cmd);
+		free_list(env);
+		free_doublptr(env_s);
+		free_doublptr(path);
+		exit(0);
 	}
-	while (path[i] != NULL)
-	{
-		str = ft_strjoin(path[i], "/");
-		str = ft_strjoin(str, cmd->args[0]);
-		if (execve(str, cmd->args, env_s) != -1)
-			return (0);
-		i++;
-	}
-	printf("mininshell: %s: command not found\n", cmd->args[0]);
 	return (0);
 }
 
-
-//function that is called from main
-//tryes to run builtins first
-//if not succeed need to make fork 0--
-//and call OG function from bash
-void	try_execute(t_cmd **commands, t_env **env, char **path)
+void	try_execute(t_cmd **commands, t_env **env)
 {
-	int		pid;
 	t_cmd	*cmd;
+	// int		fd[2];
 
 	cmd = *commands;
-	// printf("------ARGS\n");
-	// for (int i = 0; cmd->args[i]; i++)
-	// {
-	// 	printf("%s\n", cmd->args[i]);
-    // }
-	// printf("------ARGS\n");
-
-	// printf("------UPDATED ARGS\n");
-	// for (int i = 0; cmd->args[i]; i++)
-	// {
-	// 	printf("%s\n", cmd->args[i]);
-    // }
-	// printf("------UPDATED ARGS\n");
+	ft_exit(cmd, env);
+	printf("heredogs: %d\n", heredogs_count(cmd));
+	if (heredogs_count(cmd))
+			prep_heredog(cmd, heredogs_count(cmd));
+	// if  (check_heredog(cmd))
+	// 	prep_heredog(cmd);
 	if (cmd->next == NULL)
 	{
-		pid = fork();
-		if (pid == 0)
-		{
-			if (cmd->input != NULL || cmd->output != NULL)
-				exec_redir(cmd, env, path);
-			else
-				ft_execs(cmd, env, path);
-		}
+		if (cmd->input != NULL || cmd->output != NULL)
+			exec_redir(cmd, env);
+		else
+			ft_execs(cmd, env);
 	}
 	else
-	{
-		pid = fork();
-		if (pid == 0)
-			exec_pipes(cmd, env, path);
-	}
+		exec_pipes(cmd, env); //maybe.. unless u dont remove from l98-102; check for heredog when exec pipes
 	wait(0);
 }

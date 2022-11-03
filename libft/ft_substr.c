@@ -6,9 +6,10 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 20:23:35 by mraspors          #+#    #+#             */
-/*   Updated: 2021/12/22 20:23:37 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/28 04:12:16 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "libft.h"
 
 size_t	ft_mem_l(char const *s, unsigned int start, size_t len)

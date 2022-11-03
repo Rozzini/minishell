@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/27 19:27:28 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/11/03 16:01:09 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 # define REDRR 2
 # define REDL 3
 # define HEREDOC 4
+# define PREPPED_HEREDOC 6
 # define NONE 5
 
 typedef struct s_rdr
@@ -78,10 +79,11 @@ typedef struct s_tokens
 //structure for parsing
 typedef struct s_parsing
 {
-	char	*s;
 	char	*token;
 	char	*og_token;
-	char	*exp_name[1000];
+	char	**exp_name;
+	int		sq;
+	int		dq;
 	int		i;
 	int		j;
 	int		c;
@@ -92,19 +94,21 @@ typedef struct s_parsing
 
 //for now returns 0 if successfully executed
 //returns 1 if not executed
-int		ft_echo(t_cmd *cmd);
+void	ft_echo(t_cmd *cmd);
 
-int		ft_pwd(t_cmd *cmd);
+void	ft_pwd(t_cmd *cmd);
+
+void	ft_env(t_cmd *cmd, t_env **env_list);
+
+void	ft_exit(t_cmd *cmd, t_env **env_list);
 
 int		ft_cd(t_cmd *cmd, t_env **env_list);
 
-int		ft_env(t_cmd *cmd, t_env **env_list);
-
 int		ft_export(t_cmd *cmd, t_env **env_list);
 
-int		ft_unset(t_cmd *cmd, t_env **env_list);
+void	get_push_export_d(char	*s, t_env	**export_d);
 
-int		ft_exit(t_cmd *cmd, t_env **env_list);
+int		ft_unset(t_cmd *cmd, t_env **env_list);
 
 //=================================================//
 
@@ -116,7 +120,7 @@ void	init_env_list(t_env **env_list, char **env);
 void	print_env(t_env **head);
 
 //prints env for export builtin
-void	print_env_export(t_env **head);
+void	print_env_export(t_cmd *cmd, t_env **head);
 
 //Returns node with provided key
 //if there is no such key returns NULL
@@ -133,33 +137,40 @@ char	**env_list_to_string(t_env *env);
 
 //====================EXECUTION=====================//
 //launches execution routine
-void	try_execute(t_cmd **commands, t_env **env, char **path);
+void	try_execute(t_cmd **commands, t_env **env);
 
 //tries to execute builtins
 //if one of them executed successfully returns 0;
 //else returns 1;
-int		try_builtins(t_cmd *cmd, t_env **env);
+void	try_builtins(t_cmd *cmd, t_env **env);
 
+int		try_parent_builtins(t_cmd *cmd, t_env **env);
 //executes non builtins
-int		ft_execs(t_cmd *cmd, t_env **env, char **path);
+int		ft_execs(t_cmd *cmd, t_env **env);
 
 //==================================================//
 
 //================PIPES_REDIRECTIONS================//
 
-void	exec_pipes(t_cmd *cmd, t_env **env, char **path);
+void	exec_pipes(t_cmd *cmd, t_env **env);
 
-int		make_baby_pipe(int *fd, t_cmd *cmd, char **path, t_env **env);
+int		make_baby_pipe(int *fd, t_cmd *cmd, t_env **env);
 
-int		exec_redir(t_cmd *cmd, t_env **env, char **path);
+int		exec_redir(t_cmd *cmd, t_env **env);
 
-int		make_baby_redir(t_cmd *cmd, t_env **env, char **path);
+int		redirect(t_cmd *cmd, t_env **env);
 
 void	update_in_args(t_cmd *cmd, t_rdr *file);
 
 void	update_out_args(t_cmd *cmd, t_rdr *file);
 
-int		arr_size(char **arr);
+int		array_size(char **arr);
+
+t_cmd	*get_heredog_cmd(t_cmd	*cmd);
+
+int		prep_heredog(t_cmd	*cmd, int heredogs);
+
+int		heredogs_count(t_cmd *cmd);
 
 //==================================================//
 
@@ -176,7 +187,7 @@ int		start_pipes_parsing(t_tokens *tokens, t_cmd **cmd);
 //function for export builtin parsing
 //returns 1 if smthing is wrong
 //returns 0 if all good
-int		parse_export(t_cmd *cmd);
+int		parse_export(t_env *export_d);
 
 char	*tokens_q_iter(char *s);
 

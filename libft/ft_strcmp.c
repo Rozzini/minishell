@@ -6,15 +6,19 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:51:55 by mraspors          #+#    #+#             */
-/*   Updated: 2022/07/23 15:50:12 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/27 02:20:57 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <stdio.h>
 
 int	ft_strcmp(char *s1, char *s2)
 {
 	int	i;
 
 	i = 0;
+	if (s1 == NULL || s2 == NULL)
+		return (1);
 	while (s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0')
 		i++;
 	return (s1[i] - s2[i]);

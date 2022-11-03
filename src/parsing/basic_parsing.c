@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 16:35:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/21 19:55:50 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/28 03:29:15 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,6 @@ void	remove_quotes(char *string, t_parsing *prs)
 
 void	check_quotes(char	*string, t_parsing	*prs)
 {
-	int		i;
-
-	i = 0;
 	while (*string != '\0')
 	{
 		if (*string == 34 || *string == 39)
@@ -65,39 +62,59 @@ void	save_exp_data(char *string, t_parsing *parsing)
 			i++;
 			while (string[i] != c)
 			{
-				if (string[i] == '$' && c == 34)
+				if (string[i] == '$' && c == 34 && string[i + 1] != c && string[i + 1] > 32)
 					i = copy_expansion_name(string, parsing, i);
 				else
 				i++;
 			}
 			i++;
 		}
-		else if (string[i] == '$')
+		else if (string[i] == '$' && string[i + 1] != '\0')
 			i = copy_expansion_name(string, parsing, i);
 		else
 			i++;
 	}	
 }
 
+int		exp_count(char	*s)
+{
+	int	i;
+	int	c;
+
+	i = 0;
+	c = 0;
+	if (s == NULL)
+		return (0);
+	while (s[i] != '\0')
+	{
+		if (s[i] == '$')
+			c++;
+		i++;
+	}
+	return (c);
+}
 void	quotes_exp_check(t_tokens *tokens, t_env **env)
 {
 	t_parsing	*prs;
 	int			i;
 
 	i = 0;
-	prs = malloc(sizeof(t_parsing));
 	while (tokens->args[i] != NULL)
 	{
+		prs = malloc(sizeof(t_parsing));
 		prs->og_token = ft_strdup(tokens->args[i]);
+		prs->token = ft_strdup(tokens->args[i]);
+		prs->exp_name = malloc(sizeof(char *) * (exp_count(prs->og_token) + 1));
+		prs->exp_name[0] = NULL;
 		prs->iter = 0;
 		prs->i = 0;
-		prs->token = ft_strdup(tokens->args[i]);
 		save_exp_data(tokens->args[i], prs);
 		prs->exp_name[prs->iter] = NULL;
 		check_quotes(tokens->args[i], prs);
 		do_expansion(prs, env);
 		free(tokens->args[i]);
-		tokens->args[i] = prs->token;
+		tokens->args[i] = ft_strdup(prs->token);
+		free_parsing(prs);
 		i++;
 	}
 }

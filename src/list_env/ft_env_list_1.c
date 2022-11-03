@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:38:30 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/18 17:14:36 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/01 14:23:56 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,28 +41,6 @@ void	print_env(t_env **head)
 	{
 		if (temp->val != NULL)
 			printf("%s=%s\n", temp->key, temp->val);
-		temp = temp->next;
-	}
-}
-
-//prints env for export builtin
-void	print_env_export(t_env **head)
-{
-	t_env	*temp;
-
-	temp = *head;
-	while (temp != NULL)
-	{
-		printf("declare -x ");
-		if (temp->val != NULL)
-		{
-			if (ft_strchr(temp->val, 34) == NULL)
-				printf("%s=\"%s\"\n", temp->key, temp->val);
-			else
-				printf("%s=%s\n", temp->key, temp->val);
-		}
-		else
-			printf("%s\n", temp->key);
 		temp = temp->next;
 	}
 }

@@ -6,17 +6,22 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/22 16:45:51 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/11/03 10:48:16 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 
-int make_baby_pipe(int *prev_new_fd, t_cmd *cmd, char **path, t_env **env)
+int make_baby_pipe(int *prev_new_fd, t_cmd *cmd, t_env **env)
 {
 	pid_t pid;
 
+	//TRY CALL EXIT HERE
+	ft_exit(cmd, env);
+	//TRY CALL PARENT BUILTINS HERE
+	if (try_parent_builtins(cmd, env) == 1)
+		return (0);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -31,14 +36,14 @@ int make_baby_pipe(int *prev_new_fd, t_cmd *cmd, char **path, t_env **env)
 			close(prev_new_fd[1]);
 		}
 		if (cmd->input || cmd->output)
-			return (exec_redir(cmd, env, path));
+			return (exec_redir(cmd, env));
 		else
-		return (ft_execs(cmd, env, path));
+		return (ft_execs(cmd, env));
 	}
 	return (pid);
 }
 
-void exec_pipes(t_cmd *cmd, t_env **env, char **path)
+void exec_pipes(t_cmd *cmd, t_env **env)
 {
 	int fd[2]; // fd[0]->read fd[1]->write
 	int prev_new_fd[2]; //prev_new[0] is the original and prev_new[1] is the write end from fd[1]
@@ -59,7 +64,7 @@ void exec_pipes(t_cmd *cmd, t_env **env, char **path)
 		// f[1]->write end of the pipe
 		// carry `prev` from the prev iteration.
 		prev_new_fd[1] = fd[1]; // ***
-		pid = make_baby_pipe(prev_new_fd, curr_cmd, path, env);
+		pid = make_baby_pipe(prev_new_fd, curr_cmd, env);
 		if (pid == -1)
 		{
 			printf("fork error");
@@ -79,9 +84,8 @@ void exec_pipes(t_cmd *cmd, t_env **env, char **path)
 		dup2(prev_new_fd[0], 0);
 	close(prev_new_fd[0]);
 	if (curr_cmd->output || curr_cmd->input) //APPLY AFTER FILE LIST
-		exec_redir(curr_cmd, env, path);
+		exec_redir(curr_cmd, env);
 	else
-		ft_execs(curr_cmd, env, path);
+		ft_execs(curr_cmd, env);
 	return ;
 }
-

@@ -6,104 +6,96 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 18:05:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/09/12 09:43:42 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/01 14:28:15 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	export_cat_value(char *args, t_env **env_list, char *equal, char *val)
+void	export_cat_value(t_env	*export_d, t_env **env_list)
 {
-	char	*key;
 	t_env	*temp;
+	char	*s;
 
-	key = ft_substr(args, 0,
-			ft_strlen(args) - ft_strlen(val));
-	temp = find_node_by_key(*env_list, key);
+	temp = find_node_by_key(*env_list, export_d->key);
 	if (temp == NULL)
-	{
-		push(env_list, key, &equal[1]);
-		free(key);
-	}
+		push(env_list, export_d->key, export_d->val);
 	else
 	{
-		free(key);
 		if (temp->val == NULL)
-			temp->val = ft_strdup(&equal[1]);
+			temp->val = ft_strdup(export_d->val);
 		else
 		{
-			key = ft_strdup(temp->val);
-			free (temp->val);
-			temp->val = ft_strjoin(key, &equal[1]);
-			free(key);
+			s = ft_strdup(temp->val);
+			free(temp->val);
+			temp->val = ft_strjoin(s, export_d->val);
+			free(s);
 		}
 	}
 }
 
-void	export_add_value(char *args, t_env **env_list, char *equal)
+void	export_add_value(t_env	*export_d, t_env **env_list)
 {
-	char	*key;
 	t_env	*temp;
 
-	key = ft_substr(args, 0,
-			ft_strlen(args) - ft_strlen(equal));
-	temp = find_node_by_key(*env_list, key);
+	temp = find_node_by_key(*env_list, export_d->key);
 	if (temp == NULL)
-		push(env_list, key, &equal[1]);
+		push(env_list, export_d->key, export_d->val);
 	else
 	{
 		if (temp->val != NULL)
 			free (temp->val);
-		temp->val = ft_strdup(&equal[1]);
+		if (export_d->val != NULL)
+			temp->val = ft_strdup(export_d->val);
+		else
+			temp->val = NULL;
 	}
-	free(key);
 }
 
-void	do_export(t_cmd *cmd, t_env **env_list)
+void	do_export(t_env	*export_d, t_env **env_list)
 {
 	t_env	*temp;
-	char	*equal;
-	char	*val;
-	int		i;
+	char	*s;
+	int		len;
 
-	i = 1;
-	while (i < cmd->arg_c)
+	temp = export_d;
+	while (temp != NULL)
 	{
-		equal = ft_strchr(cmd->args[i], '=');
-		if (equal == NULL)
+		len = ft_strlen(temp->key);
+		if (temp->key[len - 1] == '+')
 		{
-			temp = find_node_by_key(*env_list, cmd->args[i]);
-			if (temp == NULL)
-				push(env_list, cmd->args[i], NULL);
+			s = ft_substr(temp->key, 0, len - 1);
+			free(temp->key);
+			temp->key = ft_strdup(s);
+			free(s);
+			export_cat_value(temp, env_list);
 		}
 		else
-		{
-			val = ft_strchr(cmd->args[i], '+');
-			if (val == NULL)
-				export_add_value(cmd->args[i], env_list, equal);
-			else
-				export_cat_value(cmd->args[i], env_list, equal, val);
-		}
-		i++;
+			export_add_value(temp, env_list);
+		temp = temp->next;
 	}
 }
 
-int	ft_export(t_cmd *cmd, t_env **env_list)
+int		ft_export(t_cmd *cmd, t_env **env_list)
 {
-	if (ft_strcmp("export", cmd->args[0]) == 0)
-	{
-		if (cmd->arg_c == 1)
-			print_env_export(env_list);
-		else
-		{
-			if (parse_export(cmd) == 1)
-			{
-				printf("minishell: export:  not a valid identifier\n");
-				return (0);
-			}
-			do_export(cmd, env_list);
-		}
+	t_env	*export_d;
+	int		i;
+
+	if (cmd->arg_c == 1)
 		return (0);
+	else
+	{
+		export_d = NULL;
+		i = 1;
+		while (cmd->args[i] != NULL)
+			get_push_export_d(cmd->args[i++], &export_d);
+		if (parse_export(export_d) == 1)
+		{
+			free_list(&export_d);
+			return (1);
+		}
+		do_export(export_d, env_list);
+		free_list(&export_d);
 	}
 	return (1);
 }

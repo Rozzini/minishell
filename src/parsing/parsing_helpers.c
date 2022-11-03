@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:14:23 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/21 18:50:02 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/10/24 22:35:06 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,24 @@ int	is_special(char *s)
 
 int	check_type(char *s)
 {
+	int	len;
+
+	len = ft_strlen(s);
 	if (s == NULL)
 		return (-1);
-	if (ft_strcmp(s, "|") == 0)
-		return (0);
-	if (ft_strcmp(s, ">") == 0)
-		return (1);
+	if (len == 1)
+	{
+		if (ft_strcmp(s, "|") == 0)
+			return (0);
+		if (ft_strcmp(s, ">") == 0)
+			return (1);
+		if (ft_strcmp(s, "<") == 0)
+			return (3);
+		else
+			return (5);
+	}
 	if (ft_strcmp(s, ">>") == 0)
 		return (2);
-	if (ft_strcmp(s, "<") == 0)
-		return (3);
 	if (ft_strcmp(s, "<<") == 0)
 		return (4);
 	return (5);
