@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/03 04:32:30 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/03 23:33:11 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,10 @@ void	get_push_export_d(char	*s, t_env	**export_d);
 
 int		ft_unset(t_cmd *cmd, t_env **env_list);
 
+int		try_parent_builtins(t_cmd *cmd, t_env **env);
+
+void	try_child_builtins(t_cmd *cmd, t_env **env);
+
 //=================================================//
 
 //====================ENV_LIST=====================//
@@ -146,7 +150,7 @@ void	try_execute(t_cmd **commands, t_env **env);
 void	try_builtins(t_cmd *cmd, t_env **env);
 
 //executes non builtins
-int		ft_execs(t_cmd *cmd, t_env **env);
+void	ft_execs(t_cmd *cmd, t_env **env);
 
 //==================================================//
 
@@ -264,6 +268,6 @@ void	free_parsing(t_parsing *prs);
 
 int		check_minishell_exec(t_tokens	*tokens, t_env **env);
 
-void	new_line_sig(int sig);
+void	sig_handler(int sig);
 
 #endif

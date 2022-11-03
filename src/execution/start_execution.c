@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/03 03:58:43 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/03 20:07:07 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,41 +52,33 @@ void	try_child_builtins(t_cmd *cmd, t_env **env)
 		ft_env(cmd, env);
 }
 
-int	ft_execs(t_cmd *cmd, t_env **env)
+void	ft_execs(t_cmd *cmd, t_env **env)
 {
 	int		i;
-	int		pid;
 	char	*str;
 	char	*temp;
 	char	**env_s;
 	char	**path;
 
 	i = 0;
-	if (try_parent_builtins(cmd, env) == 1)
-		return (0);
-	pid = fork();
-	if (pid == 0)
+	try_child_builtins(cmd, env);
+	env_s = env_list_to_string(*env);
+	path = ft_split(find_node_by_key(*env, "PATH")->val, ':');
+	while (path[i] != NULL)
 	{
-		try_child_builtins(cmd, env);
-		env_s = env_list_to_string(*env);
-		path = ft_split(find_node_by_key(*env, "PATH")->val, ':');
-		while (path[i] != NULL)
-		{
-			temp = ft_strjoin(path[i], "/");
-			str = ft_strjoin(temp, cmd->args[0]);
-			free(temp);
-			execve(str, cmd->args, env_s);
-			free(str);
-			i++;
-		}
-		printf("mininshell: %s: command not found\n", cmd->args[0]);
-		free_cmd(&cmd);
-		free_list(env);
-		free_doublptr(env_s);
-		free_doublptr(path);
-		exit(0);
+		temp = ft_strjoin(path[i], "/");
+		str = ft_strjoin(temp, cmd->args[0]);
+		free(temp);
+		execve(str, cmd->args, env_s);
+		free(str);
+		i++;
 	}
-	return (0);
+	printf("mininshell: %s: command not found\n", cmd->args[0]);
+	free_cmd(&cmd);
+	free_list(env);
+	free_doublptr(env_s);
+	free_doublptr(path);
+	exit(0);
 }
 
 void	try_execute(t_cmd **commands, t_env **env)
@@ -106,7 +98,13 @@ void	try_execute(t_cmd **commands, t_env **env)
 		if (cmd->input != NULL || cmd->output != NULL)
 			exec_redir(cmd, env);
 		else
+		{
+			if (try_parent_builtins(cmd, env) == 1)
+				return ;
+			pid = fork();
+			if (pid == 0)
 			ft_execs(cmd, env);
+		}
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 01:22:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/01 14:42:36 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/03 20:08:17 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int redirect(t_cmd *cmd, t_env **env)
 			//wtvr will be output to STDOUT will now be in fd_out (which is our file)
 			dup2(fd_out, STDOUT_FILENO);
 			close(fd_out); //since stdout now points to fd_out we close fd_out.. no longer needed
-			return (ft_execs(cmd, env)); //this will output in our new stdout which is fd_out which is our file
+			ft_execs(cmd, env); //this will output in our new stdout which is fd_out which is our file
 		}
 		//if cmd has inputs
 		if (cmd->input)
@@ -122,7 +122,7 @@ int redirect(t_cmd *cmd, t_env **env)
 				return (1);
 			dup2(fd_in, STDIN_FILENO);
 			close(fd_in);
-			return(ft_execs(cmd, env));
+			ft_execs(cmd, env);
 		}
 		return (0);
 	}
