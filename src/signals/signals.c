@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 04:22:10 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/03 23:34:01 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/03 23:42:18 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,5 @@ void	sig_handler(int sig)
 		printf("\n");
 		rl_on_new_line();
 		rl_redisplay();
-	}
-	if (sig == SIGQUIT)
-	{
-		printf("\nexit\n");
-		exit(0);
 	}
 }

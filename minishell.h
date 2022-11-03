@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/03 23:33:11 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/03 23:41:19 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ typedef struct s_parsing
 	int		iter;
 }			t_parsing;
 
+extern int	g_signal;
 //====================BUILTINS=====================//
 
 //for now returns 0 if successfully executed
