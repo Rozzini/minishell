@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/30 02:55:29 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/03 04:31:10 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	main(int argc, char **argv, char **env)
 	t_cmd		*cmd;
 	t_tokens	*tokens;
 
+	signal(SIGINT, new_line_sig);
+	signal(SIGQUIT, SIG_IGN);
 	env_list = NULL;
 	cmd = NULL;
 	argc = 0; 

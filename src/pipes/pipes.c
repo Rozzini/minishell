@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/01 14:43:29 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/03 04:01:55 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void exec_pipes(t_cmd *cmd, t_env **env)
 	while (curr_cmd->next != NULL)
 	{
 		pipe(fd);
-		printf("	cmd i (%d): %s\n", i, curr_cmd->args[0]);
 		// f[1]->write end of the pipe
 		// carry `prev` from the prev iteration.
 		prev_new_fd[1] = fd[1]; // ***
@@ -74,7 +73,6 @@ void exec_pipes(t_cmd *cmd, t_env **env)
 		curr_cmd = curr_cmd->next;
 		i++;
 	}
-	printf("	last to execute and redirect to stdout:\n	cmd i (%d): %s\n", i, curr_cmd->args[0]);
 	//last cmd on pipe: set stdin be the read end of the prev pipe
 	//and output to the original STDOUT
 	if (prev_new_fd[0] != 0)

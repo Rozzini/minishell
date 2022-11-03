@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/01 14:29:07 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/03 04:32:30 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <fcntl.h>
+# include <errno.h>
+
 # include "./libft/libft.h"
 
 # define PIPE 0
@@ -261,5 +263,7 @@ void	free_parsing(t_parsing *prs);
 //==================================================//
 
 int		check_minishell_exec(t_tokens	*tokens, t_env **env);
+
+void	new_line_sig(int sig);
 
 #endif
