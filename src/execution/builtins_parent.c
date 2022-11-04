@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins1.c                                        :+:      :+:    :+:   */
+/*   builtins_parent.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:31:15 by mrizk             #+#    #+#             */
-/*   Updated: 2022/10/30 00:05:40 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/04 02:06:00 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,14 @@
 
 void	ft_exit(t_cmd *cmd, t_env **env_list)
 {
-	char	*s;
-
-	s = NULL;
 	if (cmd->args != NULL)
-		s = cmd->args[0];
-	else
-		return ;
-	if (ft_strcmp("exit", s) == 0)
 	{
-		free_cmd(&cmd);
-		free_list(env_list);
-		exit(0);
+		if (ft_strcmp("exit", cmd->args[0]) == 0)
+		{
+			free_cmd(&cmd);
+			free_list(env_list);
+			exit(0);
+		}
 	}
 }
 

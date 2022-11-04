@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/03 20:07:07 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/05 03:41:58 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,42 +14,33 @@
 
 int		try_parent_builtins(t_cmd *cmd, t_env **env)
 {
-	char	*s;
-
-	s = NULL;
 	if (cmd->args != NULL)
-		s = cmd->args[0];
-	else
-		return (0);
-	if (ft_strcmp("exit", s) == 0)
-		ft_exit(cmd, env);
-	if (ft_strcmp("cd", s) == 0)
-		return (ft_cd(cmd, env));
-	else if (ft_strcmp("unset", s) == 0)
-		return (ft_unset(cmd, env));
-	else if (ft_strcmp("export", s) == 0)
-		return (ft_export(cmd, env));
-	else
-		return (0);
+	{
+		if (ft_strcmp("exit", cmd->args[0]) == 0)
+			ft_exit(cmd, env);
+		if (ft_strcmp("cd", cmd->args[0]) == 0)
+			return (ft_cd(cmd, env));
+		else if (ft_strcmp("unset", cmd->args[0]) == 0)
+			return (ft_unset(cmd, env));
+		else if (ft_strcmp("export", cmd->args[0]) == 0)
+			return (ft_export(cmd, env));
+	}
+	return (0);
 }
 
 void	try_child_builtins(t_cmd *cmd, t_env **env)
 {
-	char	*s;
-
-	s = NULL;
 	if (cmd->args != NULL)
-		s = cmd->args[0];
-	else
-		return ;
-	if (ft_strcmp("export", s) == 0)
-		print_env_export(cmd, env);
-	if (ft_strcmp("pwd", s) == 0)
-		ft_pwd(cmd);
-	if (ft_strcmp("echo", s) == 0)
-		ft_echo(cmd);
-	if (ft_strcmp("env", s) == 0)
-		ft_env(cmd, env);
+	{
+		if (ft_strcmp("export", cmd->args[0]) == 0)
+			print_env_export(cmd, env);
+		if (ft_strcmp("pwd", cmd->args[0]) == 0)
+			ft_pwd(cmd);
+		if (ft_strcmp("echo", cmd->args[0]) == 0)
+			ft_echo(cmd);
+		if (ft_strcmp("env", cmd->args[0]) == 0)
+			ft_env(cmd, env);
+	}
 }
 
 void	ft_execs(t_cmd *cmd, t_env **env)
@@ -103,7 +94,7 @@ void	try_execute(t_cmd **commands, t_env **env)
 				return ;
 			pid = fork();
 			if (pid == 0)
-			ft_execs(cmd, env);
+				ft_execs(cmd, env);
 		}
 	}
 	else
