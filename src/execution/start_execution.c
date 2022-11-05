@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/05 07:13:11 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/06 02:26:24 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,14 @@ void	ft_execs(t_cmd *cmd, t_env **env)
 	free_list(env);
 	free_doublptr(env_s);
 	free_doublptr(path);
-	exit(0);
+	exit(1);
 }
 
 void	try_execute(t_cmd **commands, t_env **env)
 {
 	t_cmd	*cmd;
 	int		pid;
+	int		status;
 
 	cmd = *commands;
 	if (cmd->next == NULL)
@@ -107,5 +108,6 @@ void	try_execute(t_cmd **commands, t_env **env)
 		if (pid == 0)
 			exec_pipes(cmd, env);
 	}
-	wait(0);
+	waitpid(0, &status, 0);
+	g_signal = status;
 }

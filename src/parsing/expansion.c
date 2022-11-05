@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 22:14:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/05 07:41:18 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/06 01:31:14 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,14 @@ t_env	*check_expansion_name(char *name, t_env **env)
 
 	if (name == NULL)
 		return (NULL);
+	if (ft_strcmp(name, "?") == 0)
+	{
+		temp = malloc(sizeof(t_env));
+		temp->key = ft_strdup("?");
+		temp->val = ft_itoa(g_signal);
+		temp->next = NULL;
+		return (temp);
+	}
 	temp = find_node_by_key(*env, name);
 	if (temp == NULL)
 		return (NULL);
@@ -71,6 +79,12 @@ int	do_expansion_helper(int i, t_parsing *prs, t_env **env)
 	else
 	s = ft_strjoin(temp_s, &(prs->token[i + 1
 					+ ft_strlen(prs->exp_name[prs->c])]));
+	if (ft_strcmp(temp->key, "?") == 0)
+	{
+		free(temp->key);
+		free(temp->val);
+		free(temp);
+	}
 	free(temp_s);
 	free(prs->token);
 	prs->token = ft_strdup(s);
