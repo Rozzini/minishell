@@ -6,13 +6,13 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/05 05:29:25 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/05 07:13:11 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int		try_parent_builtins(t_cmd *cmd, t_env **env)
+int	try_parent_builtins(t_cmd *cmd, t_env **env)
 {
 	if (cmd->args != NULL)
 	{
@@ -84,12 +84,6 @@ void	try_execute(t_cmd **commands, t_env **env)
 	int		pid;
 
 	cmd = *commands;
-	ft_exit(cmd, env);
-	// if  (check_heredoc(cmd))
-	// {
-	// 	exec_heredog(1, cmd);
-	// 	return ;
-	// }
 	if (cmd->next == NULL)
 	{
 		if (cmd->input != NULL || cmd->output != NULL)

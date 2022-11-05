@@ -6,21 +6,11 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 22:14:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/29 03:15:11 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/05 07:41:18 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-int	count_expansion_pointers(t_parsing *prs)
-{
-	int	i;
-
-	i = 0;
-	while (prs->exp_name[i] != NULL)
-		i++;
-	return (i);
-}
 
 int	copy_expansion_name(char *s, t_parsing *prs, int i)
 {
@@ -76,11 +66,11 @@ int	do_expansion_helper(int i, t_parsing *prs, t_env **env)
 		temp_s = ft_strdup(s);
 		free(s);
 		s = ft_strjoin(temp_s, &(prs->token[i + 1
-				+ ft_strlen(prs->exp_name[prs->c])]));
+					+ ft_strlen(prs->exp_name[prs->c])]));
 	}
 	else
 	s = ft_strjoin(temp_s, &(prs->token[i + 1
-				+ ft_strlen(prs->exp_name[prs->c])]));
+					+ ft_strlen(prs->exp_name[prs->c])]));
 	free(temp_s);
 	free(prs->token);
 	prs->token = ft_strdup(s);
@@ -89,7 +79,7 @@ int	do_expansion_helper(int i, t_parsing *prs, t_env **env)
 	return (i);
 }
 
-int		check_if_next_expansion(char *s, t_parsing *prs)
+int	check_if_next_expansion(char *s, t_parsing *prs)
 {
 	while (s[prs->j] != '\0')
 	{
@@ -136,7 +126,7 @@ void	do_expansion(t_parsing	*prs, t_env **env)
 		while (prs->token[i] != '$')
 		{
 			if (prs->token[i] == '\0')
-				break;
+				break ;
 			i++;
 		}
 		if (do_exp == 0)

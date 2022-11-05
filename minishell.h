@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/05 05:26:34 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/05 09:42:21 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ typedef struct s_parsing
 }			t_parsing;
 
 extern int	g_signal;
+
 //====================BUILTINS=====================//
 
 //for now returns 0 if successfully executed
@@ -186,7 +187,7 @@ int		check_q(char *s);
 //just splits arguments and count them
 int		start_parsing(t_tokens *tokens, t_env **env, t_cmd **cmd);
 
-int		start_pipes_parsing(t_tokens *tokens, t_cmd **cmd);
+void	start_pipes_parsing(t_tokens *tokens, t_cmd **cmd);
 //function for export builtin parsing
 //returns 1 if smthing is wrong
 //returns 0 if all good
@@ -203,6 +204,8 @@ int		is_separator(char c);
 
 //removes quotes and does expansion
 void	quotes_exp_check(t_tokens *tokens, t_env **env);
+
+char	*count_save_tokens_iteration(int *special, char *s);
 
 //==================================================//
 
@@ -269,8 +272,11 @@ void	free_parsing(t_parsing *prs);
 
 int		check_minishell_exec(t_cmd *cmd, t_env **env);
 
-void    increment_shlvl(t_env **env);
+void	increment_shlvl(t_env **env);
 
 void	sig_handler(int sig);
 
+void	push_cmd_init_data(t_cmd *new_node, t_tokens *tokens);
+
+void	push_rdr_init_data(t_rdr *new_node, t_tokens *tokens);
 #endif

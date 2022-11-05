@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 04:22:10 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/04 01:48:04 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/05 07:55:46 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	sig_handler(int sig)
 {
-    if (sig == SIGINT)
+	if (sig == SIGINT)
 	{
 		rl_replace_line("", 1);
 		printf("\n");

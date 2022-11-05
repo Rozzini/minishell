@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 18:05:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/01 14:28:15 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/05 07:37:30 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	do_export(t_env	*export_d, t_env **env_list)
 	}
 }
 
-int		ft_export(t_cmd *cmd, t_env **env_list)
+int	ft_export(t_cmd *cmd, t_env **env_list)
 {
 	t_env	*export_d;
 	int		i;

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:31:15 by mrizk             #+#    #+#             */
-/*   Updated: 2022/11/04 02:06:00 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/05 07:37:23 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ft_exit(t_cmd *cmd, t_env **env_list)
 	}
 }
 
-int		ft_unset(t_cmd *cmd, t_env **env_list)
+int	ft_unset(t_cmd *cmd, t_env **env_list)
 {
 	t_env	*temp;
 	int		i;
@@ -43,7 +43,6 @@ int		ft_unset(t_cmd *cmd, t_env **env_list)
 	}
 	return (1);
 }
-
 
 void	ft_cd_helper(t_env **env_list)
 {
@@ -90,5 +89,5 @@ int	ft_cd(t_cmd *cmd, t_env **env_list)
 	old_temp->val = ft_strdup(temp->val);
 	free(temp->val);
 	temp->val = getcwd(NULL, 0);
-	return(1);
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/05 05:01:06 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/05 09:47:13 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	tokens_init(t_tokens *tokens)
 {
-	tokens = malloc(sizeof(t_tokens));
 	tokens->arg_c = 0;
 	tokens->args = NULL;
 	tokens->cmdl = NULL;
@@ -27,9 +26,20 @@ void	signals_env_init(int argc, char **argv)
 	rl_catch_signals = 0;
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
-	argc = 0; 
+	argc = 0;
 	if (argv == NULL)
 		argc++;
+}
+
+void	check_if_ctr_d(t_tokens *tokens, t_env *env_list)
+{
+	if (tokens->cmdl == NULL)
+	{
+		free(tokens->cmdl);
+		free(tokens);
+		free_list(&env_list);
+		exit(0);
+	}
 }
 
 int	main(int argc, char **argv, char **env)
@@ -47,19 +57,9 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		tokens = malloc(sizeof(t_tokens));
-		tokens->arg_c = 0;
-		tokens->args = NULL;
-		tokens->cmdl = NULL;
-		tokens->start = 0;
-		tokens->end = 0;
+		tokens_init(tokens);
 		tokens->cmdl = readline("minishell$ ");
-		if (tokens->cmdl == NULL)
-		{
-			free(tokens->cmdl);
-			free(tokens);
-			free_list(&env_list);
-			exit(0);
-		}
+		check_if_ctr_d(tokens, env_list);
 		if (start_parsing(tokens, &env_list, &cmd) == 0)
 		{
 			free(tokens);

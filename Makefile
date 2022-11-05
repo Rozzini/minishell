@@ -6,7 +6,7 @@
 #    By: mraspors <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/11/05 05:27:33 by mraspors         ###   ########.fr        #
+#    Updated: 2022/11/05 09:44:12 by mraspors         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,13 +39,14 @@ LDFLAGS 	=	-lreadline -L${libdir}
 
 SRC	=   ./src/execution/builtins_parent.c ./src/execution/builtins_child.c\
 	./src/execution/start_execution.c ./src/execution/ft_export.c\
-	./src/list_env/list_operations.c ./src/list_env/ft_env_list_1.c\
-	./src/list_env/env_list_to_string.c ./src/parsing/ft_check_quotes.c\
-	./src/parsing/minihell_call.c ./src/parsing/expansion.c ./src/parsing/basic_parsing.c\
+	./src/list/list_operations.c ./src/list/ft_env_list_1.c\
+	./src/list/env_list_to_string.c ./src/parsing/ft_check_quotes.c\
+	./src/execution/minihell_call.c ./src/parsing/expansion.c ./src/parsing/basic_parsing.c\
 	./src/parsing/builtins_parser.c ./src/parsing/start_parsing.c ./src/parsing/parsing_helpers.c\
-	./src/helpers/free.c ./src/parsing/pipes_parsing.c\
+	./src/helpers/free.c  ./src/helpers/print_structs.c ./src/parsing/pipes_parsing.c\
 	./src/redirection/rdr_utils.c ./src/redirection/redirection.c\
-	./src/pipes/pipes.c  ./src/signals/signals.c minishell.c
+	./src/pipes/pipes.c  ./src/signals/signals.c\
+	./src/list/rdr_cmd_helpers.c minishell.c
 
 HEADER	= minishell.h
 
