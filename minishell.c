@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/04 05:47:42 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/05 05:01:06 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,21 @@ int	main(int argc, char **argv, char **env)
 	tokens = NULL;
 	signals_env_init(argc, argv);
 	init_env_list(&env_list, env);
+	increment_shlvl(&env_list);
 	while (1)
 	{
 		tokens = malloc(sizeof(t_tokens));
-	tokens->arg_c = 0;
-	tokens->args = NULL;
-	tokens->cmdl = NULL;
-	tokens->start = 0;
-	tokens->end = 0;
+		tokens->arg_c = 0;
+		tokens->args = NULL;
+		tokens->cmdl = NULL;
+		tokens->start = 0;
+		tokens->end = 0;
 		tokens->cmdl = readline("minishell$ ");
 		if (tokens->cmdl == NULL)
 		{
-			//free all shit;
+			free(tokens->cmdl);
+			free(tokens);
+			free_list(&env_list);
 			exit(0);
 		}
 		if (start_parsing(tokens, &env_list, &cmd) == 0)

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/05 03:41:58 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/05 05:29:25 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,12 @@ void	ft_execs(t_cmd *cmd, t_env **env)
 	char	**path;
 
 	i = 0;
+	if (check_minishell_exec(cmd, env) == 1)
+	{
+		free_cmd(&cmd);
+		free_list(env);
+		exit(0);
+	}
 	try_child_builtins(cmd, env);
 	env_s = env_list_to_string(*env);
 	path = ft_split(find_node_by_key(*env, "PATH")->val, ':');
@@ -87,7 +93,11 @@ void	try_execute(t_cmd **commands, t_env **env)
 	if (cmd->next == NULL)
 	{
 		if (cmd->input != NULL || cmd->output != NULL)
-			exec_redir(cmd, env);
+		{
+			pid = fork();
+			if (pid == 0)
+				exec_redir(cmd, env);
+		}
 		else
 		{
 			if (try_parent_builtins(cmd, env) == 1)

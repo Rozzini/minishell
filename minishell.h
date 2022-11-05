@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/03 23:41:19 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/05 05:26:34 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,7 +267,9 @@ void	free_parsing(t_parsing *prs);
 
 //==================================================//
 
-int		check_minishell_exec(t_tokens	*tokens, t_env **env);
+int		check_minishell_exec(t_cmd *cmd, t_env **env);
+
+void    increment_shlvl(t_env **env);
 
 void	sig_handler(int sig);
 
