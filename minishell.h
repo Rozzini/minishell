@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/06 01:32:15 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/06 03:30:52 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,9 @@ int	g_signal;
 
 //for now returns 0 if successfully executed
 //returns 1 if not executed
-void	ft_echo(t_cmd *cmd);
+void	ft_echo(t_cmd *cmd, t_env **env_list);
 
-void	ft_pwd(t_cmd *cmd);
+void	ft_pwd(t_cmd *cmd, t_env **env_list);
 
 void	ft_env(t_cmd *cmd, t_env **env_list);
 

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/06 02:26:24 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/06 03:29:30 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void	try_child_builtins(t_cmd *cmd, t_env **env)
 		if (ft_strcmp("export", cmd->args[0]) == 0)
 			print_env_export(cmd, env);
 		if (ft_strcmp("pwd", cmd->args[0]) == 0)
-			ft_pwd(cmd);
+			ft_pwd(cmd, env);
 		if (ft_strcmp("echo", cmd->args[0]) == 0)
-			ft_echo(cmd);
+			ft_echo(cmd, env);
 		if (ft_strcmp("env", cmd->args[0]) == 0)
 			ft_env(cmd, env);
 	}
