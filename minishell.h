@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/03 16:01:09 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/11/06 18:57:23 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <fcntl.h>
+# include <errno.h>
+
 # include "./libft/libft.h"
 
 # define PIPE 0
@@ -36,8 +38,8 @@
 # define REDRR 2
 # define REDL 3
 # define HEREDOC 4
-# define PREPPED_HEREDOC 6
 # define NONE 5
+# define PREPPED_HEREDOC 6
 
 typedef struct s_rdr
 {
@@ -90,13 +92,15 @@ typedef struct s_parsing
 	int		iter;
 }			t_parsing;
 
+int	g_signal;
+
 //====================BUILTINS=====================//
 
 //for now returns 0 if successfully executed
 //returns 1 if not executed
-void	ft_echo(t_cmd *cmd);
+void	ft_echo(t_cmd *cmd, t_env **env_list);
 
-void	ft_pwd(t_cmd *cmd);
+void	ft_pwd(t_cmd *cmd, t_env **env_list);
 
 void	ft_env(t_cmd *cmd, t_env **env_list);
 
@@ -109,6 +113,10 @@ int		ft_export(t_cmd *cmd, t_env **env_list);
 void	get_push_export_d(char	*s, t_env	**export_d);
 
 int		ft_unset(t_cmd *cmd, t_env **env_list);
+
+int		try_parent_builtins(t_cmd *cmd, t_env **env);
+
+void	try_child_builtins(t_cmd *cmd, t_env **env);
 
 //=================================================//
 
@@ -144,9 +152,8 @@ void	try_execute(t_cmd **commands, t_env **env);
 //else returns 1;
 void	try_builtins(t_cmd *cmd, t_env **env);
 
-int		try_parent_builtins(t_cmd *cmd, t_env **env);
 //executes non builtins
-int		ft_execs(t_cmd *cmd, t_env **env);
+void	ft_execs(t_cmd *cmd, t_env **env);
 
 //==================================================//
 
@@ -158,7 +165,7 @@ int		make_baby_pipe(int *fd, t_cmd *cmd, t_env **env);
 
 int		exec_redir(t_cmd *cmd, t_env **env);
 
-int		redirect(t_cmd *cmd, t_env **env);
+int		make_baby_redir(t_cmd *cmd, t_env **env);
 
 void	update_in_args(t_cmd *cmd, t_rdr *file);
 
@@ -171,7 +178,6 @@ t_cmd	*get_heredog_cmd(t_cmd	*cmd);
 int		prep_heredog(t_cmd	*cmd, int heredogs);
 
 int		heredogs_count(t_cmd *cmd);
-
 //==================================================//
 
 //=====================PARSING======================//
@@ -183,7 +189,7 @@ int		check_q(char *s);
 //just splits arguments and count them
 int		start_parsing(t_tokens *tokens, t_env **env, t_cmd **cmd);
 
-int		start_pipes_parsing(t_tokens *tokens, t_cmd **cmd);
+void	start_pipes_parsing(t_tokens *tokens, t_cmd **cmd);
 //function for export builtin parsing
 //returns 1 if smthing is wrong
 //returns 0 if all good
@@ -200,6 +206,8 @@ int		is_separator(char c);
 
 //removes quotes and does expansion
 void	quotes_exp_check(t_tokens *tokens, t_env **env);
+
+char	*count_save_tokens_iteration(int *special, char *s);
 
 //==================================================//
 
@@ -264,6 +272,13 @@ void	free_parsing(t_parsing *prs);
 
 //==================================================//
 
-int		check_minishell_exec(t_tokens	*tokens, t_env **env);
+int		check_minishell_exec(t_cmd *cmd, t_env **env);
 
+void	increment_shlvl(t_env **env);
+
+void	sig_handler(int sig);
+
+void	push_cmd_init_data(t_cmd *new_node, t_tokens *tokens);
+
+void	push_rdr_init_data(t_rdr *new_node, t_tokens *tokens);
 #endif

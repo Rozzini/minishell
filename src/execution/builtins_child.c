@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 22:22:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/01 14:28:41 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/06 03:29:06 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ft_env(t_cmd *cmd, t_env **env_list)
 	exit(0);
 }
 
-void	ft_echo(t_cmd *cmd)
+void	ft_echo(t_cmd *cmd, t_env **env_list)
 {
 	int	i;
 	int	flag;
@@ -37,10 +37,11 @@ void	ft_echo(t_cmd *cmd)
 	if (flag == 0)
 		printf("\n");
 	free_cmd(&cmd);
+	free_list(env_list);
 	exit(0);
 }
 
-void	ft_pwd(t_cmd *cmd)
+void	ft_pwd(t_cmd *cmd, t_env **env_list)
 {
 	char	*s;
 
@@ -48,6 +49,7 @@ void	ft_pwd(t_cmd *cmd)
 	printf("%s\n", s);
 	free(s);
 	free_cmd(&cmd);
+	free_list(env_list);
 	exit(0);
 }
 

@@ -6,19 +6,40 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/30 02:55:29 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/05 22:54:38 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	base_init(t_tokens *tokens)
+void	tokens_init(t_tokens *tokens)
 {
 	tokens->arg_c = 0;
 	tokens->args = NULL;
 	tokens->cmdl = NULL;
 	tokens->start = 0;
 	tokens->end = 0;
+}
+
+void	signals_env_init(int argc, char **argv)
+{
+	rl_catch_signals = 0;
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
+	argc = 0;
+	if (argv == NULL)
+		argc++;
+}
+
+void	check_if_ctr_d(t_tokens *tokens, t_env *env_list)
+{
+	if (tokens->cmdl == NULL)
+	{
+		free(tokens->cmdl);
+		free(tokens);
+		free_list(&env_list);
+		exit(0);
+	}
 }
 
 int	main(int argc, char **argv, char **env)
@@ -29,15 +50,16 @@ int	main(int argc, char **argv, char **env)
 
 	env_list = NULL;
 	cmd = NULL;
-	argc = 0; 
-	if (argv == NULL)
-		argc++;
+	tokens = NULL;
+	signals_env_init(argc, argv);
 	init_env_list(&env_list, env);
+	increment_shlvl(&env_list);
 	while (1)
 	{
 		tokens = malloc(sizeof(t_tokens));
-		base_init(tokens);
+		tokens_init(tokens);
 		tokens->cmdl = readline("minishell$ ");
+		check_if_ctr_d(tokens, env_list);
 		if (start_parsing(tokens, &env_list, &cmd) == 0)
 		{
 			free(tokens);

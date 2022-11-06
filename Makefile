@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mraspors <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/10/30 00:06:37 by mraspors         ###   ########.fr        #
+#    Updated: 2022/11/06 18:57:54 by alalmazr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,21 +17,36 @@ MAKE = make
 
 CC = gcc
 
-CFLAG = -Wall -Werror -Wextra -g
 
 LIBFTDIR = ./libft
 
 LIBFT_A = ./libft/libft.a
 
+prefix		=	/usr/local/Cellar/readline/8.1
+# prefix		=	/opt/homebrew/Cellar/readline/8.1.2
+
+exec_prefix	=	${prefix}
+
+libdir		=	${exec_prefix}/lib
+
+includedir	=	${prefix}/include
+
+CFLAG = -Wall -Werror -Wextra -g3 -I${includedir}
+
+LDFLAGS 	=	-lreadline -L /usr/local/Cellar/readline/8.1/lib
+
+LDFLAGS 	=	-lreadline -L${libdir}
+
 SRC	=   ./src/execution/builtins_parent.c ./src/execution/builtins_child.c\
 	./src/execution/start_execution.c ./src/execution/ft_export.c\
-	./src/list_env/list_operations.c ./src/list_env/ft_env_list_1.c\
-	./src/list_env/env_list_to_string.c ./src/parsing/ft_check_quotes.c\
-	./src/parsing/temp_name.c ./src/parsing/expansion.c ./src/parsing/basic_parsing.c\
+	./src/list/list_operations.c ./src/list/ft_env_list_1.c\
+	./src/list/env_list_to_string.c ./src/parsing/ft_check_quotes.c\
+	./src/execution/minihell_call.c ./src/parsing/expansion.c ./src/parsing/basic_parsing.c\
 	./src/parsing/builtins_parser.c ./src/parsing/start_parsing.c ./src/parsing/parsing_helpers.c\
-	./src/helpers/free.c ./src/parsing/pipes_parsing.c\
+	./src/helpers/free.c  ./src/helpers/print_structs.c ./src/parsing/pipes_parsing.c\
 	./src/redirection/rdr_utils.c ./src/redirection/redirection.c\
-	./src/pipes/pipes.c  minishell.c
+	./src/pipes/pipes.c  ./src/signals/signals.c ./src/redirection/heredog.c\
+	./src/list/rdr_cmd_helpers.c minishell.c
 
 HEADER	= minishell.h
 
@@ -46,7 +61,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	$(MAKE) -C $(LIBFTDIR)
-	$(CC) $(CFLAG) $(SRC) $(LIBFT_A) -o $(NAME) -lreadline && clear
+	$(CC) $(CFLAG) $(SRC) $(LIBFT_A) -o $(NAME) $(LDFLAGS) && clear
 
 clean:
 	$(MAKE) -C $(LIBFTDIR) clean

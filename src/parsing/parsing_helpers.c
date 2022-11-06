@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:14:23 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/24 22:35:06 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/05 09:42:34 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,86 +55,29 @@ int	check_type(char *s)
 	return (5);
 }
 
-void	p_tokens(t_tokens *tokens)
+char	*tokens_q_iter(char *s)
 {
-	int	i;
+	char	q;
 
-	i = 0;
-	printf("\n===================================\n");
-	printf("tokens output\n");
-	while (tokens->args[i] != NULL)
-	{
-		printf("[%s]  ", tokens->args[i]);
-		i++;
-	}
-	printf("\ntoken_count: %d\n", tokens->arg_c);
-	printf("===================================\n");
+	q = *s;
+	s++;
+	if (*s == q)
+		return (s);
+	while (*s != q && *s != '\0')
+		s++;
+	return (s);
 }
 
-void	p_inout(t_rdr *rdr)
+char	*count_save_tokens_iteration(int *special, char *s)
 {
-	int		i;
-	t_rdr	*temp;
-
-	temp = rdr;
-	if (temp == NULL)
+	while (is_separator(*s) == 0 && *s != '\0')
 	{
-		printf("	NO REDIRECIONS\n\n");
-		return ;
+		*special = is_special(s);
+		if (*special != 0)
+			break ;
+		if (*s == 34 || *s == 39)
+			s = tokens_q_iter(s);
+		s++;
 	}
-	while (temp != NULL)
-	{
-		printf("	FILE: %s\n", temp->file);
-		printf("	TYPE: %d\n", temp->type);
-		i = 0;
-		printf("	RDR ARGS: ");
-		if (temp->args == NULL)
-			printf("NULL");
-		else
-		{
-			while (temp->args[i] != NULL)
-			{
-				printf("[%s] ", temp->args[i]);
-				i++;
-			}	
-		}
-		printf("\n	------------\n");
-		temp = temp->next;
-	}
-	printf("\n\n");
-}
-
-void	p_cmd(t_cmd *cmd)
-{
-	t_cmd	*temp;
-	int		i;
-
-	i = 0;
-	temp = cmd;
-	printf("===========cmd struct output=============\n");
-	while (temp != NULL)
-	{
-		i = 0;
-		printf("\nARGS: ");
-		if (temp->args == NULL)
-			printf("NULL");
-		else
-		{
-			while (temp->args[i] != NULL)
-			{
-				printf("[%s] ", temp->args[i]);
-				i++;
-			}	
-		}
-		printf("\n");
-		printf("ARGC: %d\n\n", temp->arg_c);
-		printf("	INPUT REDIRECTIONS\n--------------------------------\n");
-		p_inout(temp->input);
-		printf("	OUTPUT REDIRECTIONS\n--------------------------------\n");
-		p_inout(temp->output);
-		temp = temp->next;
-		if (temp != NULL)
-			printf("\n=====================================\n");
-	}
-	printf("===================================\n\n");
+	return (s);
 }

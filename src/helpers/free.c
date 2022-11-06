@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/25 19:11:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/10/28 03:28:17 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/05 07:37:39 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	free_cmd(t_cmd **head)
 	free(temp);
 	*head = NULL;
 }
-
 
 void	free_list(t_env **list)
 {
