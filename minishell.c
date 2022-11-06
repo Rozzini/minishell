@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/05 22:54:38 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/06 22:19:16 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,21 @@ void	signals_env_init(int argc, char **argv)
 		argc++;
 }
 
+void	free_token(t_tokens *t)
+{
+	if (t != NULL)
+	{
+		if (t->cmdl)
+			free(t->cmdl);
+		//free_doublptr(t->args);
+		free(t);	
+	}
+}
 void	check_if_ctr_d(t_tokens *tokens, t_env *env_list)
 {
 	if (tokens->cmdl == NULL)
 	{
-		free(tokens->cmdl);
-		free(tokens);
+		free_token(tokens);
 		free_list(&env_list);
 		exit(0);
 	}
@@ -62,10 +71,10 @@ int	main(int argc, char **argv, char **env)
 		check_if_ctr_d(tokens, env_list);
 		if (start_parsing(tokens, &env_list, &cmd) == 0)
 		{
-			free(tokens);
 			try_execute(&cmd, &env_list);
 			free_cmd(&cmd);
 		}
+		free_token(tokens);
 	}
 	return (0);
 }

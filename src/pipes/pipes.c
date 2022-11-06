@@ -6,21 +6,15 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/05 03:43:36 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/06 22:04:55 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-
-int make_baby_pipe(int *prev_new_fd, t_cmd *cmd, t_env **env)
+void	ft_peepeeing(int *prev_new_fd, t_cmd *cmd)
 {
-	pid_t pid;
-
-	if (try_parent_builtins(cmd, env) == 1)
-		return (0);
-	pid = fork();
-	if (pid == 0)
+	if (cmd->next != NULL)
 	{
 		if (prev_new_fd[0] != 0)
 		{
@@ -32,10 +26,29 @@ int make_baby_pipe(int *prev_new_fd, t_cmd *cmd, t_env **env)
 			dup2(prev_new_fd[1], STDOUT_FILENO);
 			close(prev_new_fd[1]);
 		}
+	}
+	else
+	{
+		dup2(prev_new_fd[0], STDIN_FILENO);
+		close(prev_new_fd[0]);
+	}
+}
+
+int make_baby_pipe(int *prev_new_fd, t_cmd *cmd, t_env **env)
+{
+	pid_t pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		if (try_parent_builtins(cmd, env) == 1)
+			exit (g_signal);
+		ft_peepeeing(prev_new_fd, cmd);
 		if (cmd->input || cmd->output)
-			return (exec_redir(cmd, env));
+			exec_redir(cmd, env);
 		else
 			ft_execs(cmd, env);
+		exit(g_signal);
 	}
 	return (pid);
 }
@@ -50,7 +63,7 @@ void exec_pipes(t_cmd *cmd, t_env **env)
 	prev_new_fd[0] = STDIN_FILENO;
 	//make all child processes except for last which we will redirect to stdout
 	// printf("	no of cmds:%d\n", n_cmd);
-	while (cmd->next != NULL)
+	while (cmd != NULL)
 	{
 		if (pipe(fd) == -1)
 		{
@@ -71,18 +84,4 @@ void exec_pipes(t_cmd *cmd, t_env **env)
 		prev_new_fd[0] = fd[0];
 		cmd = cmd->next;
 	}
-	//last cmd on pipe: set stdin be the read end of the prev pipe
-	//and output to the original STDOUT
-	// if (prev_new_fd[0] != 0)
-		dup2(prev_new_fd[0], STDIN_FILENO);
-	close(prev_new_fd[0]);
-	if (cmd->output || cmd->input)
-		exec_redir(cmd, env);
-	else
-	{
-		if (try_parent_builtins(cmd, env) == 1)
-			return ;
-		ft_execs(cmd, env);
-	}
-	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/06 03:29:30 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/06 21:56:35 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,7 @@ void	try_execute(t_cmd **commands, t_env **env)
 	if (cmd->next == NULL)
 	{
 		if (cmd->input != NULL || cmd->output != NULL)
-		{
-			pid = fork();
-			if (pid == 0)
-				exec_redir(cmd, env);
-		}
+			exec_redir(cmd, env);
 		else
 		{
 			if (try_parent_builtins(cmd, env) == 1)
@@ -103,11 +99,7 @@ void	try_execute(t_cmd **commands, t_env **env)
 		}
 	}
 	else
-	{
-		pid = fork();
-		if (pid == 0)
-			exec_pipes(cmd, env);
-	}
+		exec_pipes(cmd, env);
 	waitpid(0, &status, 0);
 	g_signal = status;
 }
