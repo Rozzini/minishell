@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 02:48:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/05 09:32:03 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/08 08:51:20 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	push_cmd(t_cmd **head_ref, t_tokens *tokens)
 	new_node->output = NULL;
 	new_node->input = NULL;
 	push_cmd_init_data(new_node, tokens);
+	// new_node->next = (*head_ref);
+	// (*head_ref) = new_node;
 	tokens->last = new_node;
 	last = find_last(head_ref);
 	if (*head_ref == NULL)
@@ -112,4 +114,5 @@ void	start_pipes_parsing(t_tokens *tokens, t_cmd **cmd)
 		}
 		tokens->start = i;
 	}
+	//p_cmd(*cmd);
 }

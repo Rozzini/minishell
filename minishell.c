@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/06 22:19:16 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/08 09:37:33 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,11 @@ int	main(int argc, char **argv, char **env)
 		check_if_ctr_d(tokens, env_list);
 		if (start_parsing(tokens, &env_list, &cmd) == 0)
 		{
+			free_token(tokens);
 			try_execute(&cmd, &env_list);
 			free_cmd(&cmd);
 		}
-		free_token(tokens);
+		//free_token(tokens);
 	}
 	return (0);
 }

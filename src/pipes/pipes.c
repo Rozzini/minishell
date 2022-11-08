@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/08 07:55:57 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/08 09:54:19 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void exec_pipes(t_cmd *cmd, t_env **env)
 		// carry `prev` from the prev iteration.
 		prev_new_fd[1] = fd[1]; // ***
 		pid = make_baby_pipe(prev_new_fd, cmd, env);
+		wait(0);
 		if (pid == -1)
 		{
 			printf("fork error");
@@ -74,5 +75,33 @@ void exec_pipes(t_cmd *cmd, t_env **env)
 		prev_new_fd[0] = fd[0];
 		cmd = cmd->next;
 	}
+	close(fd[0]);
+	close(fd[1]);
 	wait(0);
 }
+
+// void	exec_pipes(t_cmd *cmd, t_env **env)
+// {
+// 	int	fd[2];
+// 	pid_t pid;
+
+//     if (cmd->next != NULL)
+//     {
+//         if (pipe(fd) != 0)
+//             printf("Failed to create pipe");
+//         if ((pid = fork()) < 0)
+//             printf("Failed to fork");
+//         if (pid == 0)
+//         {
+// 			dup2(fd[1], 1);
+//     		close(fd[0]);
+//     		close(fd[1]);
+//    			exec_pipes(cmd, env);
+//         }
+//         /* Fix standard input to read end of pipe */
+//         dup2(fd[0], 0);
+//         close(fd[0]);
+//         close(fd[1]);
+//     }
+//     ft_execs(cmd, env);
+// }
