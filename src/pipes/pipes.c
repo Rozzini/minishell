@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/08 11:38:56 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/08 12:50:46 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,24 +116,47 @@ int make_baby_pipe(int fd_in, t_cmd *cmd, t_env **env)
 	//-----update-------------------
 }
 
+int		count_cmd_nodes(t_cmd *cmd)
+{
+	int		i;
+	t_cmd	*temp;
+
+	temp = cmd;
+	i = 0;
+	while (temp != NULL)
+	{
+		i++;
+		temp = temp->next;
+	}
+	return (i);
+}
+
 void exec_pipes(t_cmd *cmd, t_env **env)
 {
 	//-----update-------------------
-	int		fd[2]; // fd[0]->read fd[1]->write
+	int		**fd; // fd[0]->read fd[1]->write
 	pid_t	pid;
 	int		fd_in;
+	int		nodes;
+	int		i;
 
-	// first process  getS input from the stdin->0
+	i = 0;
+	nodes = count_cmd_nodes(cmd);
+	fd = (int**)malloc(nodes * sizeof(int *));
+	while (i < nodes)
+	{
+		fd[i] = malloc(2 * sizeof(int));
+		i++;
+	}
+	i = 0;
 	fd_in = STDIN_FILENO;
 	while (cmd != NULL)
 	{
-		if (pipe(fd) == -1)
+		if (pipe(fd[i]) == -1)
 		{
 			printf("pipe fked\n");
 		}
-		// f[1]->write end of the pipe
-		//when we exec->output of command goes to write end of pipe
-		cmd->fd_out = fd[1]; // ***
+		cmd->fd_out = fd[i][1];
 		pid = make_baby_pipe(fd_in, cmd, env);
 		wait(0);
 		if (pid == -1)
@@ -141,14 +164,25 @@ void exec_pipes(t_cmd *cmd, t_env **env)
 			printf("fork error");
 			return ;
 		}
-		//no need for write end bcz child process will use it
-		close(fd[1]);
-		//save fd[0] to give it to next child
-		fd_in = fd[0];
+		close(fd[i][1]);
+		fd_in = fd[i][0];
 		cmd = cmd->next;
+		i++;
 	}
-	close(fd[1]);
-	close(fd[0]);
+	i = 0;
+	while (i < nodes)
+	{
+		close(fd[i][0]);
+		close(fd[i][1]);
+		i++;
+	}
+	i = 0;
+	while (i < nodes)
+	{
+		free(fd[i]);
+		i++;
+	}
+	free(fd);
 	wait(0);
 	//-----update-------------------
 }
