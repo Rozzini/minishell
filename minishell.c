@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/08 09:37:33 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/08 12:29:30 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ int	main(int argc, char **argv, char **env)
 			try_execute(&cmd, &env_list);
 			free_cmd(&cmd);
 		}
-		//free_token(tokens);
+		else
+			free_token(tokens);
 	}
 	return (0);
 }
