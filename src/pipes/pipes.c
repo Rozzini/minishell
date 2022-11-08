@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/08 11:25:06 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/08 11:27:14 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ void exec_pipes(t_cmd *cmd, t_env **env)
 		fd_in = fd[0];
 		cmd = cmd->next;
 	}
+	close(fd[0]);
 	wait(0);
 	//-----update-------------------
 }
