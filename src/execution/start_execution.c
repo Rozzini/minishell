@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/08 12:33:11 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/08 14:20:15 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,11 @@ void	try_execute(t_cmd **commands, t_env **env)
 		}
 	}
 	else
-		exec_pipes(cmd, env);
+	{
+		pid = fork();
+		if (pid == 0)
+			exec_pipes(cmd, env);
+	}
 	waitpid(0, &status, 0);
 	g_signal = status;
 }
