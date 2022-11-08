@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/06 22:04:55 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/08 07:55:57 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,14 @@ void	ft_peepeeing(int *prev_new_fd, t_cmd *cmd)
 	if (cmd->next != NULL)
 	{
 		if (prev_new_fd[0] != 0)
-		{
 			dup2(prev_new_fd[0], STDIN_FILENO);
-			close(prev_new_fd[0]);
-		}
 		if (prev_new_fd[1] != 1)
-		{
 			dup2(prev_new_fd[1], STDOUT_FILENO);
-			close(prev_new_fd[1]);
-		}
 	}
 	else
-	{
 		dup2(prev_new_fd[0], STDIN_FILENO);
-		close(prev_new_fd[0]);
-	}
+	close(prev_new_fd[0]);
+	close(prev_new_fd[1]);
 }
 
 int make_baby_pipe(int *prev_new_fd, t_cmd *cmd, t_env **env)
@@ -41,9 +34,9 @@ int make_baby_pipe(int *prev_new_fd, t_cmd *cmd, t_env **env)
 	pid = fork();
 	if (pid == 0)
 	{
+		ft_peepeeing(prev_new_fd, cmd);
 		if (try_parent_builtins(cmd, env) == 1)
 			exit (g_signal);
-		ft_peepeeing(prev_new_fd, cmd);
 		if (cmd->input || cmd->output)
 			exec_redir(cmd, env);
 		else
@@ -61,8 +54,6 @@ void exec_pipes(t_cmd *cmd, t_env **env)
 
 	//first process  getS input from the stdin->0
 	prev_new_fd[0] = STDIN_FILENO;
-	//make all child processes except for last which we will redirect to stdout
-	// printf("	no of cmds:%d\n", n_cmd);
 	while (cmd != NULL)
 	{
 		if (pipe(fd) == -1)
@@ -78,10 +69,10 @@ void exec_pipes(t_cmd *cmd, t_env **env)
 			printf("fork error");
 			return ;
 		}
-		//no need for write end bcz child process will use it
 		close(fd[1]);
 		//save fd[0] to give it to next child
 		prev_new_fd[0] = fd[0];
 		cmd = cmd->next;
 	}
+	wait(0);
 }

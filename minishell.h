@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/06 03:30:52 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/08 05:40:07 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_cmd
 {
 	char			**args;
 	int				arg_c;
+	int				fd[2];
 	t_rdr			*input;
 	t_rdr			*output;
 	struct s_cmd	*next;
@@ -159,8 +160,6 @@ void	ft_execs(t_cmd *cmd, t_env **env);
 //================PIPES_REDIRECTIONS================//
 
 void	exec_pipes(t_cmd *cmd, t_env **env);
-
-int		make_baby_pipe(int *fd, t_cmd *cmd, t_env **env);
 
 int		exec_redir(t_cmd *cmd, t_env **env);
 
