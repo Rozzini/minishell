@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/08 10:25:38 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/08 11:25:06 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,25 +78,26 @@
 
 
 
-void	ft_peepeeing(t_cmd *cmd)
+void	ft_peepeeing(int fd_in, t_cmd *cmd)
 {
 	//-----update-------------------
 	if (cmd->next != NULL)
 	{
-		if (cmd->fd_in != 0)
-			dup2(cmd->fd_in, STDIN_FILENO);
+		if (fd_in != 0)
+			dup2(fd_in, STDIN_FILENO);
 		if (cmd->fd_out != 1)
 			dup2(cmd->fd_out, STDOUT_FILENO);
 	}
 	else
-		dup2(cmd->fd_in, STDIN_FILENO);
-	close(cmd->fd_in);
+		dup2(fd_in, STDIN_FILENO);
 	close(cmd->fd_out);
+	close(fd_in);
 	//-----update
 }
 
-int make_baby_pipe(t_cmd *cmd, t_env **env)
+int make_baby_pipe(int fd_in, t_cmd *cmd, t_env **env)
 {
+	//-----update-------------------
 	pid_t pid;
 
 	pid = fork();
@@ -104,7 +105,7 @@ int make_baby_pipe(t_cmd *cmd, t_env **env)
 	{
 		if (try_parent_builtins(cmd, env) == 1)
 			exit (g_signal);
-		ft_peepeeing(cmd);
+		ft_peepeeing(fd_in, cmd);
 		if (cmd->input || cmd->output)
 			exec_redir(cmd, env);
 		else
@@ -112,16 +113,18 @@ int make_baby_pipe(t_cmd *cmd, t_env **env)
 		exit(g_signal);
 	}
 	return (pid);
-
+	//-----update-------------------
 }
 
 void exec_pipes(t_cmd *cmd, t_env **env)
 {
+	//-----update-------------------
 	int		fd[2]; // fd[0]->read fd[1]->write
 	pid_t	pid;
+	int		fd_in;
 
 	// first process  getS input from the stdin->0
-	cmd->fd_in = STDIN_FILENO;
+	fd_in = STDIN_FILENO;
 	while (cmd != NULL)
 	{
 		if (pipe(fd) == -1)
@@ -131,7 +134,8 @@ void exec_pipes(t_cmd *cmd, t_env **env)
 		// f[1]->write end of the pipe
 		//when we exec->output of command goes to write end of pipe
 		cmd->fd_out = fd[1]; // ***
-		pid = make_baby_pipe(cmd, env);
+		pid = make_baby_pipe(fd_in, cmd, env);
+		wait(0);
 		if (pid == -1)
 		{
 			printf("fork error");
@@ -140,8 +144,9 @@ void exec_pipes(t_cmd *cmd, t_env **env)
 		//no need for write end bcz child process will use it
 		close(fd[1]);
 		//save fd[0] to give it to next child
-		cmd->fd_in = fd[0];
+		fd_in = fd[0];
 		cmd = cmd->next;
 	}
 	wait(0);
+	//-----update-------------------
 }
