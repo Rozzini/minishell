@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/08 14:20:15 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/10 20:42:06 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ void	try_execute(t_cmd **commands, t_env **env)
 {
 	t_cmd	*cmd;
 	int		pid;
-	int		status;
 
+	pid = 0;
 	cmd = *commands;
 	if (cmd->next == NULL)
 	{
@@ -103,11 +103,6 @@ void	try_execute(t_cmd **commands, t_env **env)
 		}
 	}
 	else
-	{
-		pid = fork();
-		if (pid == 0)
-			exec_pipes(cmd, env);
-	}
-	waitpid(0, &status, 0);
-	g_signal = status;
+		exec_pipes(cmd, env);
+	waitpid(pid, &g_signal, 0);
 }

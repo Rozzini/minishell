@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/08 10:25:40 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/10 20:37:44 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ typedef struct s_cmd
 {
 	char			**args;
 	int				arg_c;
-	int				fd_in;
-	int				fd_out;
+	int				fd[2];
+	int				pid;
 	t_rdr			*input;
 	t_rdr			*output;
 	struct s_cmd	*next;
@@ -279,4 +279,6 @@ void	sig_handler(int sig);
 void	push_cmd_init_data(t_cmd *new_node, t_tokens *tokens);
 
 void	push_rdr_init_data(t_rdr *new_node, t_tokens *tokens);
+
+void	ft_closer(t_cmd *cmd);
 #endif

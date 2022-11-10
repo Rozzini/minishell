@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/08 12:29:30 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/10 20:40:26 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	tokens_init(t_tokens *tokens)
 
 void	signals_env_init(int argc, char **argv)
 {
-	rl_catch_signals = 0;
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
 	argc = 0;
@@ -60,6 +59,7 @@ int	main(int argc, char **argv, char **env)
 	env_list = NULL;
 	cmd = NULL;
 	tokens = NULL;
+	rl_catch_signals = 0;
 	signals_env_init(argc, argv);
 	init_env_list(&env_list, env);
 	increment_shlvl(&env_list);
@@ -67,6 +67,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		tokens = malloc(sizeof(t_tokens));
 		tokens_init(tokens);
+		wait(0);
 		tokens->cmdl = readline("minishell$ ");
 		check_if_ctr_d(tokens, env_list);
 		if (start_parsing(tokens, &env_list, &cmd) == 0)
