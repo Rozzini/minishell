@@ -1,68 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   free2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/25 19:11:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/05 07:37:39 by mraspors         ###   ########.fr       */
+/*   Created: 2022/11/11 17:02:24 by mraspors          #+#    #+#             */
+/*   Updated: 2022/11/11 18:03:27 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	free_doublptr(char **s)
+//free_doublptr(t->args);
+void	free_token(t_tokens *t)
 {
-	int	i;
-
-	i = 0;
-	if (s == NULL)
-		return ;
-	while (s[i] != NULL)
-		free(s[i++]);
-	free(s);
-	s = NULL;
-}
-
-void	free_rdr(t_rdr **rdr)
-{
-	t_rdr	*temp;
-	t_rdr	*del_node;
-
-	temp = *rdr;
-	while (temp != NULL)
+	if (t != NULL)
 	{
-		if (temp->file != NULL)
-			free (temp->file);
-		free_doublptr(temp->args);
-		del_node = temp;
-		temp = temp->next;
-		free(del_node);
+		if (t->cmdl)
+			free(t->cmdl);
+		free(t);
 	}
-	free(temp);
-	rdr = NULL;
-}
-
-void	free_cmd(t_cmd **head)
-{
-	t_cmd	*temp;
-	t_cmd	*del_node;
-
-	temp = *head;
-	while (temp != NULL)
-	{
-		free_doublptr(temp->args);
-		if (temp->input != NULL)
-			free_rdr(&temp->input);
-		if (temp->output != NULL)
-			free_rdr(&temp->output);
-		del_node = temp;
-		temp = temp->next;
-		free(del_node);
-	}
-	free(temp);
-	*head = NULL;
 }
 
 void	free_list(t_env **list)
@@ -86,4 +44,19 @@ void	free_parsing(t_parsing *prs)
 	free_doublptr(prs->exp_name);
 	free(prs);
 	prs = NULL;
+}
+
+void	expansion_freeing(t_env	*temp, t_parsing *prs, char	*temp_s, char *s)
+{
+	if (temp != NULL && ft_strcmp(temp->key, "?") == 0)
+	{
+		free(temp->key);
+		free(temp->val);
+		free(temp);
+	}
+	free(temp_s);
+	free(prs->token);
+	prs->token = ft_strdup(s);
+	free(s);
+	prs->c++;
 }

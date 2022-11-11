@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/10 20:37:44 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/11 17:18:03 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,6 +267,10 @@ void	free_cmd(t_cmd **head);
 void	free_list(t_env **list);
 
 void	free_parsing(t_parsing *prs);
+
+void	free_token(t_tokens *t);
+
+void	expansion_freeing(t_env	*temp, t_parsing *prs, char	*temp_s, char *s);
 
 //==================================================//
 

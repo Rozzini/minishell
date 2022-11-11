@@ -6,7 +6,7 @@
 #    By: mraspors <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/11/05 09:44:12 by mraspors         ###   ########.fr        #
+#    Updated: 2022/11/11 17:04:24 by mraspors         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,10 +43,10 @@ SRC	=   ./src/execution/builtins_parent.c ./src/execution/builtins_child.c\
 	./src/list/env_list_to_string.c ./src/parsing/ft_check_quotes.c\
 	./src/execution/minihell_call.c ./src/parsing/expansion.c ./src/parsing/basic_parsing.c\
 	./src/parsing/builtins_parser.c ./src/parsing/start_parsing.c ./src/parsing/parsing_helpers.c\
-	./src/helpers/free.c  ./src/helpers/print_structs.c ./src/parsing/pipes_parsing.c\
-	./src/redirection/rdr_utils.c ./src/redirection/redirection.c\
-	./src/pipes/pipes.c  ./src/signals/signals.c\
-	./src/list/rdr_cmd_helpers.c minishell.c
+	./src/helpers/free1.c ./src/helpers/free2.c ./src/helpers/print_structs.c\
+	./src/parsing/pipes_parsing.c ./src/redirection/rdr_utils.c\
+	./src/pipes/pipes.c ./src/redirection/redirection.c\
+	./src/signals/signals.c ./src/list/rdr_cmd_helpers.c minishell.c
 
 HEADER	= minishell.h
 

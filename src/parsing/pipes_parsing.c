@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 02:48:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/09 12:55:04 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/11 17:05:56 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,4 @@ void	start_pipes_parsing(t_tokens *tokens, t_cmd **cmd)
 		}
 		tokens->start = i;
 	}
-	//p_cmd(*cmd);
 }

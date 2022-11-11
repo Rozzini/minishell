@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 22:14:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/06 01:31:14 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/11 18:03:49 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,17 +79,7 @@ int	do_expansion_helper(int i, t_parsing *prs, t_env **env)
 	else
 	s = ft_strjoin(temp_s, &(prs->token[i + 1
 					+ ft_strlen(prs->exp_name[prs->c])]));
-	if (ft_strcmp(temp->key, "?") == 0)
-	{
-		free(temp->key);
-		free(temp->val);
-		free(temp);
-	}
-	free(temp_s);
-	free(prs->token);
-	prs->token = ft_strdup(s);
-	free(s);
-	prs->c++;
+	expansion_freeing(temp, prs, temp_s, s);
 	return (i);
 }
 

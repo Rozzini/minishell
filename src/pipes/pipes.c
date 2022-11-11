@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/10 20:40:11 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/11 15:16:03 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,14 +139,13 @@ void	exec_pipes(t_cmd *cmd, t_env **env)
 	t_cmd	*node;
 	int		*prev_fd;
 	int		i;
-	
+
 	temp = cmd;
 	while (temp->next != NULL)
 	{
 		if (pipe(temp->fd) < 0)
 		{
 			printf("piping error\n");
-			//close opened pipes;
 			return ;
 		}
 		temp = temp->next;
@@ -156,7 +155,8 @@ void	exec_pipes(t_cmd *cmd, t_env **env)
 	prev_fd = NULL;
 	while (temp != NULL)
 	{
-		if ((temp->pid = fork()) < 0)
+		temp->pid = fork();
+		if (temp->pid < 0)
 			return ;
 		if (temp->pid == 0)
 		{

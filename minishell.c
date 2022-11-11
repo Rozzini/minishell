@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/10 20:40:26 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/11 17:03:09 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,6 @@ void	signals_env_init(int argc, char **argv)
 		argc++;
 }
 
-void	free_token(t_tokens *t)
-{
-	if (t != NULL)
-	{
-		if (t->cmdl)
-			free(t->cmdl);
-		//free_doublptr(t->args);
-		free(t);	
-	}
-}
 void	check_if_ctr_d(t_tokens *tokens, t_env *env_list)
 {
 	if (tokens->cmdl == NULL)
@@ -50,19 +40,13 @@ void	check_if_ctr_d(t_tokens *tokens, t_env *env_list)
 	}
 }
 
-int	main(int argc, char **argv, char **env)
+void	shell_routine(t_env	*env_list)
 {
-	t_env		*env_list;
-	t_cmd		*cmd;
 	t_tokens	*tokens;
+	t_cmd		*cmd;
 
-	env_list = NULL;
 	cmd = NULL;
 	tokens = NULL;
-	rl_catch_signals = 0;
-	signals_env_init(argc, argv);
-	init_env_list(&env_list, env);
-	increment_shlvl(&env_list);
 	while (1)
 	{
 		tokens = malloc(sizeof(t_tokens));
@@ -79,5 +63,17 @@ int	main(int argc, char **argv, char **env)
 		else
 			free_token(tokens);
 	}
+}
+
+int	main(int argc, char **argv, char **env)
+{
+	t_env		*env_list;
+
+	env_list = NULL;
+	rl_catch_signals = 0;
+	signals_env_init(argc, argv);
+	init_env_list(&env_list, env);
+	increment_shlvl(&env_list);
+	shell_routine(env_list);
 	return (0);
 }
