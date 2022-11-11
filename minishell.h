@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/11 17:18:03 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/11 19:16:48 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_cmd
 	int				arg_c;
 	int				fd[2];
 	int				pid;
+	int				first_cmd;
 	t_rdr			*input;
 	t_rdr			*output;
 	struct s_cmd	*next;
@@ -176,6 +177,8 @@ int		check_heredoc(t_cmd	*cmd);
 
 int		exec_heredog(int fd, t_cmd	*cmd);
 
+void	cur_cmd_cpy(t_cmd **head_ref, t_cmd *cmd);
+
 //==================================================//
 
 //=====================PARSING======================//
@@ -236,6 +239,10 @@ int		copy_expansion_name(char *s, t_parsing *prs, int i);
 //replaces expansion name in OG string with expansion value
 void	do_expansion(t_parsing	*prs, t_env **env);
 
+void	expansion_freeing(t_env	*temp, t_parsing *prs, char	*temp_s, char *s);
+
+int		check_if_next_expansion(char *s, t_parsing *prs);
+
 //==================================================//
 
 //====================ALL_LIST======================//
@@ -269,8 +276,6 @@ void	free_list(t_env **list);
 void	free_parsing(t_parsing *prs);
 
 void	free_token(t_tokens *t);
-
-void	expansion_freeing(t_env	*temp, t_parsing *prs, char	*temp_s, char *s);
 
 //==================================================//
 

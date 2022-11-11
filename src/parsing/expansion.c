@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 22:14:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/11 18:03:49 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/11 18:43:50 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,36 +81,6 @@ int	do_expansion_helper(int i, t_parsing *prs, t_env **env)
 					+ ft_strlen(prs->exp_name[prs->c])]));
 	expansion_freeing(temp, prs, temp_s, s);
 	return (i);
-}
-
-int	check_if_next_expansion(char *s, t_parsing *prs)
-{
-	while (s[prs->j] != '\0')
-	{
-		if (s[prs->j] == 34 && prs->sq == 0)
-		{
-			if (prs->dq == 0)
-				prs->dq = 1;
-			else
-				prs->dq = 0;
-		}
-		if (s[prs->j] == 39 && prs->dq == 0)
-		{
-			if (prs->sq == 0)
-				prs->sq = 1;
-			else
-				prs->sq = 0;
-		}
-		if (s[prs->j] == '$')
-		{
-			if (prs->sq == 0)
-				return (0);
-			else
-				return (1);
-		}
-		prs->j++;
-	}
-	return (1);
 }
 
 void	do_expansion(t_parsing	*prs, t_env **env)

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 02:48:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/11 17:05:56 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/11 19:17:49 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	push_cmd(t_cmd **head_ref, t_tokens *tokens)
 	new_node->input = NULL;
 	new_node->output = NULL;
 	new_node->input = NULL;
+	new_node->first_cmd = 0;
 	push_cmd_init_data(new_node, tokens);
 	tokens->last = new_node;
 	last = find_last(head_ref);
@@ -74,6 +75,7 @@ void	save_first_cmd(t_tokens *tokens, t_cmd **cmd)
 		{
 			tokens->end = i;
 			push_cmd(cmd, tokens);
+			(*cmd)->first_cmd = 1;
 			tokens->last = *cmd;
 			tokens->start = i;
 			return ;

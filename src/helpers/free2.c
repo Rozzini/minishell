@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 17:02:24 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/11 18:03:27 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/11 18:42:11 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,4 @@ void	free_parsing(t_parsing *prs)
 	free_doublptr(prs->exp_name);
 	free(prs);
 	prs = NULL;
-}
-
-void	expansion_freeing(t_env	*temp, t_parsing *prs, char	*temp_s, char *s)
-{
-	if (temp != NULL && ft_strcmp(temp->key, "?") == 0)
-	{
-		free(temp->key);
-		free(temp->val);
-		free(temp);
-	}
-	free(temp_s);
-	free(prs->token);
-	prs->token = ft_strdup(s);
-	free(s);
-	prs->c++;
 }
