@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/06 19:40:55 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/11/13 18:44:22 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,17 @@ void	try_execute(t_cmd **commands, t_env **env)
 	int		pid;
 	int		status;
 	int		heredogs;
+	int		fd[2];
 
 	cmd = *commands;
 	heredogs = heredogs_count(cmd);
 	//---------check if cmdline contains heredog
 	printf("heredogs: %d\n", heredogs);
 	if (heredogs)
+	{
+			pipe(fd);
 			prep_heredog(cmd, heredogs);
+	}
 	//----------
 	if (cmd->next == NULL)
 	{
