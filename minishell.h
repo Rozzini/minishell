@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/11 19:16:48 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/15 03:31:46 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,13 +100,13 @@ int	g_signal;
 
 //for now returns 0 if successfully executed
 //returns 1 if not executed
-void	ft_echo(t_cmd *cmd, t_env **env_list);
+int		ft_echo(t_cmd *cmd);
 
-void	ft_pwd(t_cmd *cmd, t_env **env_list);
+int		ft_pwd(void);
 
-void	ft_env(t_cmd *cmd, t_env **env_list);
+int		ft_env(t_env **env_list);
 
-void	ft_exit(t_cmd *cmd, t_env **env_list);
+int		ft_exit(t_cmd *cmd, t_env **env_list);
 
 int		ft_cd(t_cmd *cmd, t_env **env_list);
 
@@ -118,7 +118,7 @@ int		ft_unset(t_cmd *cmd, t_env **env_list);
 
 int		try_parent_builtins(t_cmd *cmd, t_env **env);
 
-void	try_child_builtins(t_cmd *cmd, t_env **env);
+int		try_child_builtins(t_cmd *cmd, t_env **env);
 
 //=================================================//
 
@@ -130,7 +130,7 @@ void	init_env_list(t_env **env_list, char **env);
 void	print_env(t_env **head);
 
 //prints env for export builtin
-void	print_env_export(t_cmd *cmd, t_env **head);
+int		print_env_export(t_env **head);
 
 //Returns node with provided key
 //if there is no such key returns NULL

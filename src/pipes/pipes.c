@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/11 19:18:12 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/13 18:38:46 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,24 @@ void	ft_dup2(t_cmd *cmd, int *prev_fd)
 {
 	if (cmd->first_cmd == 1)
 	{
+		close(cmd->fd[0]);
 		dup2(cmd->fd[1], 1);
 		close(cmd->fd[1]);
-		close(cmd->fd[0]);
 	}
 	else if (cmd->next == NULL)
 	{
+		close(prev_fd[1]);
 		dup2(prev_fd[0], 0);
 		close(prev_fd[0]);
-		close(prev_fd[1]);
 	}
 	else
 	{
+		close(prev_fd[1]);
+		close(cmd->fd[0]);
 		dup2(prev_fd[0], 0);
 		dup2(cmd->fd[1], 1);
-		close(prev_fd[1]);
 		close(prev_fd[0]);
 		close(cmd->fd[1]);
-		close(cmd->fd[0]);
 	}
 }
 
@@ -53,30 +53,70 @@ void	create_pipes(t_cmd *cmd)
 	}
 }
 
+void	close_unused_fds(t_cmd *cmd, int counter)
+{
+	int		i;
+	t_cmd	*temp;
+
+	i = 0;
+	temp = cmd;
+	while (temp->next != NULL)
+	{
+		if (i != counter && i != counter - 1)
+		{
+			if (temp->fd[0] != 0)
+			{
+				close(temp->fd[0]);
+				temp->fd[0] = 0;
+			}
+			if (temp->fd[1] != 0)
+			{
+				close(temp->fd[1]);
+				temp->fd[1] = 0;
+			}
+		}
+		temp = temp->next;
+		i++;
+	}	
+}
+
 void	exec_pipes_helper(t_cmd	*temp, t_cmd *cmd, t_env **env, int *prev_fd)
 {
-	t_cmd	*node;
+	t_cmd		*node;
+	static int	counter;
 
 	if (temp->pid == 0)
 	{
 		ft_dup2(temp, prev_fd);
+		close_unused_fds(cmd, counter);
 		cur_cmd_cpy(&node, temp);
-		free_cmd(&cmd);
-		if (try_parent_builtins(node, env) == 1)
+		if (try_parent_builtins(node, env) == 1
+				|| try_child_builtins(node, env) == 1)
+		{
+			ft_closer(cmd);
+			free_cmd(&cmd);
+			free_list(env);
+			free_cmd(&node);
 			exit (g_signal);
+		}
+		free_cmd(&cmd);
 		if (node->input || node->output)
 			exec_redir(node, env);
 		else
 			ft_execs(node, env);
-		exit(g_signal);
 	}
+	counter++;
+	if (temp->next == NULL)
+		counter = 0;
 }
 
 void	exec_pipes(t_cmd *cmd, t_env **env)
 {
 	t_cmd	*temp;
 	int		*prev_fd;
+	int		i;
 
+	i = 0;
 	create_pipes(cmd);
 	temp = cmd;
 	prev_fd = NULL;
@@ -88,6 +128,7 @@ void	exec_pipes(t_cmd *cmd, t_env **env)
 		exec_pipes_helper(temp, cmd, env, prev_fd);
 		prev_fd = temp->fd;
 		temp = temp->next;
+		i++;
 	}
 	ft_closer(cmd);
 	temp = cmd;
@@ -96,4 +137,7 @@ void	exec_pipes(t_cmd *cmd, t_env **env)
 		waitpid(temp->pid, &g_signal, 0);
 		temp = temp->next;
 	}
+	free_cmd(&cmd);
+	free_list(env);
+	exit(g_signal);
 }

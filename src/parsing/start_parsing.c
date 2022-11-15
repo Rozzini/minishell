@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 22:13:41 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/05 09:42:30 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/14 15:40:55 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,11 @@ int	start_parsing(t_tokens *tokens, t_env **env, t_cmd **cmd)
 		return (1);
 	add_history(tokens->cmdl);
 	if (check_q(tokens->cmdl) == 1)
+	{
+		free(tokens->cmdl);
+		free(tokens);
 		return (1);
+	}
 	tokens->arg_c = 0;
 	count_tokens(tokens->cmdl, tokens);
 	tokens->args = malloc(sizeof(char *) * (tokens->arg_c + 1));
@@ -125,7 +129,12 @@ int	start_parsing(t_tokens *tokens, t_env **env, t_cmd **cmd)
 	tokens->args[tokens->arg_c] = NULL;
 	quotes_exp_check(tokens, env);
 	if (check_tokens_validity(tokens) == 1)
+	{
+		free_doublptr(tokens->args);
+		free(tokens->cmdl);
+		free(tokens);
 		return (1);
+	}
 	start_pipes_parsing(tokens, cmd);
 	free_doublptr(tokens->args);
 	return (0);

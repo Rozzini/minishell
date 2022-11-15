@@ -6,21 +6,19 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 22:22:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/09 13:41:08 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/12 20:45:57 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	ft_env(t_cmd *cmd, t_env **env_list)
+int	ft_env(t_env **env_list)
 {
 	print_env(env_list);
-	free_cmd(&cmd);
-	free_list(env_list);
-	exit(0);
+	return (1);
 }
 
-void	ft_echo(t_cmd *cmd, t_env **env_list)
+int	ft_echo(t_cmd *cmd)
 {
 	int	i;
 	int	flag;
@@ -36,24 +34,20 @@ void	ft_echo(t_cmd *cmd, t_env **env_list)
 		printf("%s ", cmd->args[i++]);
 	if (flag == 0)
 		printf("\n");
-	free_cmd(&cmd);
-	free_list(env_list);
-	exit(0);
+	return (1);
 }
 
-void	ft_pwd(t_cmd *cmd, t_env **env_list)
+int	ft_pwd(void)
 {
 	char	*s;
 
 	s = getcwd(NULL, 0);
 	printf("%s\n", s);
 	free(s);
-	free_cmd(&cmd);
-	free_list(env_list);
-	exit(0);
+	return (1);
 }
 
-void	print_env_export(t_cmd *cmd, t_env **head)
+int	print_env_export(t_env **head)
 {
 	t_env	*temp;
 
@@ -72,7 +66,5 @@ void	print_env_export(t_cmd *cmd, t_env **head)
 			printf("%s\n", temp->key);
 		temp = temp->next;
 	}
-	free_cmd(&cmd);
-	free_list(head);
-	exit(0);
+	return (1);
 }

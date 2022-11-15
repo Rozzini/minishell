@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/11 15:44:49 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/15 03:33:53 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	try_parent_builtins(t_cmd *cmd, t_env **env)
 	if (cmd->args != NULL)
 	{
 		if (ft_strcmp("exit", cmd->args[0]) == 0)
-			ft_exit(cmd, env);
+			return (ft_exit(cmd, env));
 		if (ft_strcmp("cd", cmd->args[0]) == 0)
 			return (ft_cd(cmd, env));
 		else if (ft_strcmp("unset", cmd->args[0]) == 0)
@@ -28,19 +28,20 @@ int	try_parent_builtins(t_cmd *cmd, t_env **env)
 	return (0);
 }
 
-void	try_child_builtins(t_cmd *cmd, t_env **env)
+int	try_child_builtins(t_cmd *cmd, t_env **env)
 {
 	if (cmd->args != NULL)
 	{
 		if (ft_strcmp("export", cmd->args[0]) == 0)
-			print_env_export(cmd, env);
+			return (print_env_export(env));
 		if (ft_strcmp("pwd", cmd->args[0]) == 0)
-			ft_pwd(cmd, env);
+			return (ft_pwd());
 		if (ft_strcmp("echo", cmd->args[0]) == 0)
-			ft_echo(cmd, env);
+			return (ft_echo(cmd));
 		if (ft_strcmp("env", cmd->args[0]) == 0)
-			ft_env(cmd, env);
+			return (ft_env(env));
 	}
+	return (0);
 }
 
 void	ft_execve(t_cmd *cmd, t_env **env)
@@ -69,18 +70,24 @@ void	ft_execve(t_cmd *cmd, t_env **env)
 
 void	ft_execs(t_cmd *cmd, t_env **env)
 {
-	if (check_minishell_exec(cmd, env) == 1)
+	char	*command_error;
+
+	if (check_minishell_exec(cmd, env) == 1
+		|| try_child_builtins(cmd, env) == 1)
 	{
 		free_cmd(&cmd);
 		free_list(env);
 		exit(0);
 	}
-	try_child_builtins(cmd, env);
 	ft_execve(cmd, env);
-	printf("mininshell: %s: command not found\n", cmd->args[0]);
+	command_error = ft_strdup(cmd->args[0]);
+	write(1, "minishell: ", 11);
+	write(1, command_error, ft_strlen(command_error));
+	write(1, ": command not found\n", 20);
+	free(command_error);
 	free_cmd(&cmd);
 	free_list(env);
-	exit(1);
+	exit(127);
 }
 
 void	try_execute(t_cmd **commands, t_env **env)
@@ -108,6 +115,10 @@ void	try_execute(t_cmd **commands, t_env **env)
 		}
 	}
 	else
-		exec_pipes(cmd, env);
+	{
+		pid = fork();
+		if (pid == 0)
+			exec_pipes(cmd, env);
+	}
 	waitpid(pid, &g_signal, 0);
 }
