@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/14 15:40:28 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/15 23:27:13 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	shell_routine(t_env	*env_list)
 		check_if_ctr_d(tokens, env_list);
 		if (start_parsing(tokens, &env_list, &cmd) == 0)
 		{
-			free_token(tokens);
 			try_execute(&cmd, &env_list);
 			free_cmd(&cmd);
 		}
