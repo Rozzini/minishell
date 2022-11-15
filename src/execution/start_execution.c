@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/15 03:33:53 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/15 04:55:08 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,9 @@ void	ft_execs(t_cmd *cmd, t_env **env)
 	}
 	ft_execve(cmd, env);
 	command_error = ft_strdup(cmd->args[0]);
-	write(1, "minishell: ", 11);
-	write(1, command_error, ft_strlen(command_error));
-	write(1, ": command not found\n", 20);
+	write(2, "minishell: ", 11);
+	write(2, command_error, ft_strlen(command_error));
+	write(2, ": command not found\n", 20);
 	free(command_error);
 	free_cmd(&cmd);
 	free_list(env);

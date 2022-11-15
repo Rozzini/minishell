@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/13 18:38:46 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/15 04:49:19 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,8 @@ void	exec_pipes_helper(t_cmd	*temp, t_cmd *cmd, t_env **env, int *prev_fd)
 		close_unused_fds(cmd, counter);
 		cur_cmd_cpy(&node, temp);
 		if (try_parent_builtins(node, env) == 1
-				|| try_child_builtins(node, env) == 1)
+				|| try_child_builtins(node, env) == 1
+				|| ft_strcmp(node->args[0], "./minishell") == 0)
 		{
 			ft_closer(cmd);
 			free_cmd(&cmd);
