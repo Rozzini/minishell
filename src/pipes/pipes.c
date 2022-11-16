@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/15 04:49:19 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/16 18:00:51 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	exec_pipes_helper(t_cmd	*temp, t_cmd *cmd, t_env **env, int *prev_fd)
 			free_cmd(&cmd);
 			free_list(env);
 			free_cmd(&node);
-			exit (g_signal);
+			exit (g_global.signal);
 		}
 		free_cmd(&cmd);
 		if (node->input || node->output)
@@ -135,10 +135,10 @@ void	exec_pipes(t_cmd *cmd, t_env **env)
 	temp = cmd;
 	while (temp != NULL)
 	{
-		waitpid(temp->pid, &g_signal, 0);
+		waitpid(temp->pid, &g_global.signal, 0);
 		temp = temp->next;
 	}
 	free_cmd(&cmd);
 	free_list(env);
-	exit(g_signal);
+	exit(g_global.signal);
 }

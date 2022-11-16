@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/15 03:31:46 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/16 18:06:55 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 # define REDL 3
 # define HEREDOC 4
 # define NONE 5
+# define PREPPED_HEREDOC 6
 
 typedef struct s_rdr
 {
@@ -94,7 +95,14 @@ typedef struct s_parsing
 	int		iter;
 }			t_parsing;
 
-int	g_signal;
+typedef struct s_global
+{
+	int signal;
+	int sv_in;
+	int sv_out;
+}			t_global;
+
+t_global	g_global;
 
 //====================BUILTINS=====================//
 
@@ -290,4 +298,10 @@ void	push_cmd_init_data(t_cmd *new_node, t_tokens *tokens);
 void	push_rdr_init_data(t_rdr *new_node, t_tokens *tokens);
 
 void	ft_closer(t_cmd *cmd);
+
+void	reset_fd(void);
+
+int		prep_heredog(t_cmd	*cmd, int heredogs);
+
+int		heredogs_count(t_cmd *cmd);
 #endif

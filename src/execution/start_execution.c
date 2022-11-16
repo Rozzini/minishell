@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/15 04:55:08 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/16 18:08:44 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,18 @@ void	try_execute(t_cmd **commands, t_env **env)
 {
 	t_cmd	*cmd;
 	int		pid;
+	int		heredogs;
 
 	pid = 0;
 	cmd = *commands;
+	heredogs = heredogs_count(cmd);
+	//---------check if cmdline contains heredog
+	if (heredogs)
+	{
+			// pipe(fd);
+			prep_heredog(cmd, heredogs);
+	}
+	//----------
 	if (cmd->next == NULL)
 	{
 		if (cmd->input != NULL || cmd->output != NULL)
@@ -120,5 +129,5 @@ void	try_execute(t_cmd **commands, t_env **env)
 		if (pid == 0)
 			exec_pipes(cmd, env);
 	}
-	waitpid(pid, &g_signal, 0);
+	waitpid(pid, &g_global.signal, 0);
 }

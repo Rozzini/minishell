@@ -6,7 +6,7 @@
 #    By: mraspors <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/11/11 19:13:22 by mraspors         ###   ########.fr        #
+#    Updated: 2022/11/16 18:03:02 by mraspors         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,8 @@ SRC	=   ./src/execution/builtins_parent.c ./src/execution/builtins_child.c\
 	./src/list/env_list_to_string.c ./src/parsing/ft_check_quotes.c\
 	./src/execution/minihell_call.c ./src/parsing/expansion.c\
 	./src/parsing/expansion_helpers.c ./src/parsing/basic_parsing.c\
-	./src/parsing/builtins_parser.c ./src/parsing/start_parsing.c ./src/parsing/parsing_helpers.c\
+	./src/parsing/builtins_parser.c ./src/parsing/start_parsing.c\
+	./src/parsing/parsing_helpers.c ./src/redirection/heredog.c\
 	./src/helpers/free1.c ./src/helpers/free2.c ./src/helpers/print_structs.c\
 	./src/parsing/pipes_parsing.c ./src/redirection/rdr_utils.c\
 	./src/pipes/pipes.c ./src/pipes/pipes_helper.c ./src/redirection/redirection.c\

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:31:15 by mrizk             #+#    #+#             */
-/*   Updated: 2022/11/15 23:34:19 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/16 18:00:33 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	ft_unset(t_cmd *cmd, t_env **env_list)
 			delete_node(temp);
 		i++;
 	}
-	g_signal = 0;
+	g_global.signal = 0;
 	return (1);
 }
 
@@ -114,13 +114,13 @@ int	ft_cd(t_cmd *cmd, t_env **env_list)
 	if (cmd->arg_c == 1)
 	{
 		ft_cd_helper(env_list);
-		g_signal = 0;
+		g_global.signal = 0;
 		return (1);
 	}
 	if (chdir(cmd->args[1]) == -1)
 	{
 		printf("cd: no such file or directory: %s\n", cmd->args[1]);
-		g_signal = 1;
+		g_global.signal = 1;
 		return (1);
 	}
 	temp = find_node_by_key(*env_list, "PWD");
@@ -129,6 +129,6 @@ int	ft_cd(t_cmd *cmd, t_env **env_list)
 	old_temp->val = ft_strdup(temp->val);
 	free(temp->val);
 	temp->val = getcwd(NULL, 0);
-	g_signal = 0;
+	g_global.signal = 0;
 	return (1);
 }

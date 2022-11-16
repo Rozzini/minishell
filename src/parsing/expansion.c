@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 22:14:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/11 18:43:50 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/16 18:00:47 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_env	*check_expansion_name(char *name, t_env **env)
 	{
 		temp = malloc(sizeof(t_env));
 		temp->key = ft_strdup("?");
-		temp->val = ft_itoa(g_signal);
+		temp->val = ft_itoa(g_global.signal);
 		temp->next = NULL;
 		return (temp);
 	}
