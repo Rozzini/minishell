@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:31:15 by mrizk             #+#    #+#             */
-/*   Updated: 2022/11/16 18:00:33 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/16 22:08:31 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ void	ft_cd_helper(t_env **env_list)
 	t_env	*temp;
 	t_env	*old_temp;
 	t_env	*home;
-	char	*s;
 
 	home = find_node_by_key(*env_list, "HOME");
 	if (home == NULL)
@@ -91,14 +90,7 @@ void	ft_cd_helper(t_env **env_list)
 	old_temp = find_node_by_key(*env_list, "OLDPWD");
 	free(old_temp->val);
 	old_temp->val = ft_strdup(temp->val);
-	s = getcwd(NULL, 0);
-	while (ft_strcmp(s, home->val) != 0)
-	{
-		chdir("..");
-		free(s);
-		s = getcwd(NULL, 0);
-	}
-	free(s);
+	chdir(home->val);
 	free(temp->val);
 	temp->val = getcwd(NULL, 0);
 }
@@ -111,7 +103,7 @@ int	ft_cd(t_cmd *cmd, t_env **env_list)
 	if (find_node_by_key(*env_list, "PWD") == NULL
 			|| find_node_by_key(*env_list, "OLDPWD") == NULL)
 		return (1);
-	if (cmd->arg_c == 1)
+	if (cmd->arg_c == 1 || ft_strcmp(cmd->args[1], "~") == 0)
 	{
 		ft_cd_helper(env_list);
 		g_global.signal = 0;
