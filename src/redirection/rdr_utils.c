@@ -6,12 +6,11 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 12:58:11 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/11/16 18:01:43 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/17 18:50:30 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
 
 int	arr_size(char **arr)
 {
@@ -24,7 +23,6 @@ int	arr_size(char **arr)
 	}
 	return (i);
 }
-
 
 void update_out_args(t_cmd *cmd, t_rdr *file)
 {

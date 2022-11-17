@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 18:47:45 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/12 17:51:17 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/17 20:28:59 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	cur_cmd_cpy_rdr(t_cmd *cmd, t_cmd	*new_node)
 	while (temp != NULL)
 	{
 		push_rdr_cpy(&new_node->output, temp);
+		write(2, new_node->output->file, ft_strlen(new_node->output->file));
 		temp = temp->next;
 	}
 }
@@ -84,6 +85,7 @@ void	cur_cmd_cpy(t_cmd **head_ref, t_cmd *cmd)
 	new_node->arg_c = cmd->arg_c;
 	new_node->first_cmd = 0;
 	cur_cmd_cpy_rdr(cmd, new_node);
+	write(2, "1\n", 2);
 	new_node->args = malloc(sizeof(char *) * (cmd->arg_c + 1));
 	while (cmd->args[i] != NULL)
 	{

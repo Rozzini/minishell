@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/17 18:11:02 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/17 22:19:50 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,29 +82,35 @@ void	close_unused_fds(t_cmd *cmd, int counter)
 
 void	exec_pipes_helper(t_cmd	*temp, t_cmd *cmd, t_env **env, int *prev_fd)
 {
-	t_cmd		*node;
+	//t_cmd		*node;
 	static int	counter;
 
 	if (temp->pid == 0)
 	{
 		ft_dup2(temp, prev_fd);
 		close_unused_fds(cmd, counter);
-		cur_cmd_cpy(&node, temp);
-		if (try_parent_builtins(node, env) == 1
-				|| try_child_builtins(node, env) == 1
-				|| ft_strcmp(node->args[0], "./minishell") == 0)
+		//cur_cmd_cpy(&node, temp);
+		if (try_parent_builtins(temp, env) == 1
+				|| try_child_builtins(temp, env) == 1
+				|| ft_strcmp(temp->args[0], "./minishell") == 0)
 		{
-			ft_closer(cmd);
+			ft_closer(temp);
 			free_cmd(&cmd);
 			free_list(env);
-			free_cmd(&node);
+			//free_cmd(&node);
 			exit (g_global.signal);
 		}
-		free_cmd(&cmd);
-		if (node->input || node->output)
-			exec_redir(node, env);
+		//free_cmd(&cmd);
+		if (temp->input || temp->output)
+		{
+			write(2,"excredir\n",9);
+			exec_redir(temp, env);
+		}
 		else
-			ft_execs(node, env);
+		{
+			write(1,"norml\n",6);
+			ft_execs(temp, env);
+		}
 	}
 	counter++;
 	if (temp->next == NULL)

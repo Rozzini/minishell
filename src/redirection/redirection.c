@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 01:22:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/16 18:01:25 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/17 19:36:34 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int open_files_input(t_cmd *cmd)
 	t_rdr *file;
 
 	file = cmd->input;
+	if (file->type == PREPPED_HEREDOC && file->next == NULL)
+		return (open(file->file, O_RDONLY));
 	while (file->next != NULL)
 	{
 		if (file->type == REDL)
@@ -35,19 +37,19 @@ int open_files_input(t_cmd *cmd)
 	}
 	if (file->type == REDL)
 	{
-		if (open(file->file, O_RDONLY) < 0)
+		fd = open(file->file, O_RDONLY);
+		if (fd < 0)
 		{
 			printf("%s: No such file or directory\n", file->file); //make it >
 			return (-1);
 		}
 		if (file->args != NULL)
 			update_in_args(cmd, file);
-		return (open(file->file, O_RDONLY));
+		return (fd);
 	}
-	else if (file->type == PREPPED_HEREDOC)
-		return (open(file->file, O_RDONLY));
 	return (0);
 }
+
 
 //check by cmd->output.. -> next.. -> next
 //the last output file gets opened and returned.

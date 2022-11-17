@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/16 18:06:55 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/17 19:45:37 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@
 
 typedef struct s_rdr
 {
+	int				fd_in;
+	int				fd_out;
 	char			*file;
 	char			**args;
 	int				type;
@@ -304,4 +306,12 @@ void	reset_fd(void);
 int		prep_heredog(t_cmd	*cmd, int heredogs);
 
 int		heredogs_count(t_cmd *cmd);
+
+int		cmdline_heredogs_count(t_cmd *cmd);
+
+int		*prep_heredogs(t_cmd *cmd);
+
+int 	open_files_input(t_cmd *cmd);
+
+int 	open_files_output(t_cmd *cmd);
 #endif

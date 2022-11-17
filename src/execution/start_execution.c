@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/17 18:10:10 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/17 19:59:56 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,22 +90,86 @@ void	ft_execs(t_cmd *cmd, t_env **env)
 	exit(127);
 }
 
+void prep_in_files(t_cmd *cmd)
+{
+	int fd;
+	t_rdr *file;
+
+	file = cmd->input;
+	while (file != NULL)
+	{
+		if (file->type == REDL || file->type == PREPPED_HEREDOC)
+			fd = (open(file->file, O_RDONLY));
+		if (fd < 0)
+		{
+			printf("%s: No such file or directory\n", file->file); //make it >
+			return ;
+		}
+		if (file->args != NULL)
+			update_in_args(cmd, file);
+		file = file->next;
+		close(fd);
+	}
+}
+
+void prep_out_files(t_cmd *cmd)
+{
+	int fd;
+	t_rdr *file;
+
+	file = cmd->output;
+	while (file != NULL)
+	{
+		if (file->type == REDR)
+			fd = (open(file->file, O_WRONLY | O_CREAT | O_TRUNC, 0666)); //O_TRUNC delete past shit
+		else if (file->type == REDRR)
+			fd = (open(file->file, O_WRONLY | O_APPEND | O_CREAT, 0666));
+		if (fd < 0)
+			return ;
+		// if current node has args then add them to cmd->args so they get executed right
+		if (file->args != NULL)
+			update_out_args(cmd, file);
+		file = file->next;
+		close(fd);
+	}
+}
+
+void	prep_redirections(t_cmd *cmd)
+{
+	int	hd_c;
+
+	hd_c = cmdline_heredogs_count(cmd);
+	printf("prep redir\n");
+	//---------check if cmdline contains heredog
+	if (hd_c > 0)
+	{
+			printf("prep heredogs with %d\n", hd_c);
+			prep_heredogs(cmd);
+	}
+	while (cmd)
+	{
+		if (cmd->input)
+		{
+			printf("open input files\n");
+			prep_in_files(cmd);
+		}
+		if (cmd->output)
+		{
+			printf("open output files\n");
+			prep_out_files(cmd);
+		}
+		cmd = cmd->next;
+	}
+}
+
 void	try_execute(t_cmd **commands, t_env **env)
 {
 	t_cmd	*cmd;
 	int		pid;
-	int		heredogs;
 
 	pid = 0;
 	cmd = *commands;
-	heredogs = heredogs_count(cmd);
-	//---------check if cmdline contains heredog
-	if (heredogs)
-	{
-			// pipe(fd);
-			prep_heredog(cmd, heredogs);
-	}
-	//----------
+	prep_redirections(cmd);
 	if (cmd->next == NULL)
 	{
 		if (cmd->input != NULL || cmd->output != NULL)
@@ -125,6 +189,7 @@ void	try_execute(t_cmd **commands, t_env **env)
 	}
 	else
 	{
+		printf("x\n");
 		pid = fork();
 		if (pid == 0)
 			exec_pipes(cmd, env);
