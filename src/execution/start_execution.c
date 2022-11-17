@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/16 18:08:44 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/17 18:10:10 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,4 +130,5 @@ void	try_execute(t_cmd **commands, t_env **env)
 			exec_pipes(cmd, env);
 	}
 	waitpid(pid, &g_global.signal, 0);
+	g_global.signal = WEXITSTATUS(g_global.signal);
 }

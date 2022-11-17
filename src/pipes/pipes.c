@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/16 18:00:51 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/17 18:11:02 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ void	exec_pipes(t_cmd *cmd, t_env **env)
 	while (temp != NULL)
 	{
 		waitpid(temp->pid, &g_global.signal, 0);
+		g_global.signal = WEXITSTATUS(g_global.signal);
 		temp = temp->next;
 	}
 	free_cmd(&cmd);
