@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/18 15:09:41 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/18 18:14:57 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,4 +317,10 @@ int 	open_files_input(t_cmd *cmd);
 int 	open_files_output(t_cmd *cmd);
 
 void	cur_cmd_cpy_rdr(t_cmd *cmd, t_rdr **input, t_rdr **output);
+
+void	close_unused_fds(t_cmd *cmd, int counter);
+
+void	ft_dup2(t_cmd *cmd, int *prev_fd);
+
+
 #endif

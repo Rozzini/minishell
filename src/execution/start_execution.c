@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_execution.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/18 15:12:50 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/18 19:46:09 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,6 @@ void	prep_redirections(t_cmd *cmd)
 	int	hd_c;
 
 	hd_c = cmdline_heredogs_count(cmd);
-	printf("prep redir\n");
 	//---------check if cmdline contains heredog
 	if (hd_c > 0)
 	{

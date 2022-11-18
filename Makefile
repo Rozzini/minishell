@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mraspors <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/11/16 18:03:02 by mraspors         ###   ########.fr        #
+#    Updated: 2022/11/18 18:19:01 by alalmazr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ libdir		=	${exec_prefix}/lib
 
 includedir	=	${prefix}/include
 
-CFLAG = -Wall -Werror -Wextra -g3 -I${includedir}
+CFLAG = -Wall -Werror -Wextra -g3 -I${includedir} -fsanitize=address
 
 LDFLAGS 	=	-lreadline -L /usr/local/Cellar/readline/8.1/lib
 
