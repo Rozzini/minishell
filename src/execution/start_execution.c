@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/17 19:59:56 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/18 15:12:50 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ void	ft_execs(t_cmd *cmd, t_env **env)
 	write(2, command_error, ft_strlen(command_error));
 	write(2, ": command not found\n", 20);
 	free(command_error);
+	while (cmd->prev != NULL)
+		cmd = cmd->prev;
 	free_cmd(&cmd);
 	free_list(env);
 	exit(127);

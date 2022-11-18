@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 02:48:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/15 23:21:37 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/18 15:14:08 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	push_cmd(t_cmd **head_ref, t_tokens *tokens)
 	push_cmd_init_data(new_node, tokens);
 	tokens->last = new_node;
 	last = find_last(head_ref);
+	new_node->prev = last;
 	if (*head_ref == NULL)
 		*head_ref = new_node;
 	else

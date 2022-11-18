@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/17 19:45:37 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/18 15:09:41 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_cmd
 	t_rdr			*input;
 	t_rdr			*output;
 	struct s_cmd	*next;
+	struct s_cmd	*prev;
 }					t_cmd;
 
 //structure for environment
@@ -314,4 +315,6 @@ int		*prep_heredogs(t_cmd *cmd);
 int 	open_files_input(t_cmd *cmd);
 
 int 	open_files_output(t_cmd *cmd);
+
+void	cur_cmd_cpy_rdr(t_cmd *cmd, t_rdr **input, t_rdr **output);
 #endif
