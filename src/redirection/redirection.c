@@ -6,21 +6,21 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 01:22:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/20 21:21:25 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/20 22:55:18 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 //gotta read from file
-int open_files_input(t_cmd *cmd)
+int	open_files_input(t_cmd *cmd)
 {
-	int fd;
-	t_rdr *file;
+	int		fd;
+	t_rdr	*file;
 
 	file = cmd->input;
 	if (file == NULL)
-		return -2;
+		return (-2);
 	while (file->next != NULL)
 	{
 		fd = open(file->file, O_RDONLY);
@@ -35,18 +35,18 @@ int open_files_input(t_cmd *cmd)
 	return (fd);
 }
 
-int open_files_output(t_cmd *cmd)
+int	open_files_output(t_cmd *cmd)
 {
-	int fd;
-	t_rdr *file;
+	int		fd;
+	t_rdr	*file;
 
 	file = cmd->output;
 	if (file == NULL)
-		return -2;
+		return (-2);
 	while (file->next != NULL)
 	{
 		if (file->type == REDR)
-			fd = (open(file->file, O_WRONLY | O_CREAT | O_TRUNC, 0666)); //O_TRUNC delete past shit
+			fd = (open(file->file, O_WRONLY | O_CREAT | O_TRUNC, 0666));
 		else if (file->type == REDRR)
 			fd = (open(file->file, O_WRONLY | O_APPEND | O_CREAT, 0666));
 		if (fd < 0)
@@ -62,7 +62,7 @@ int open_files_output(t_cmd *cmd)
 }
 
 //maybe split input/output redir into diff functions
-int redirect(t_cmd *cmd, t_env **env)
+int	redirect(t_cmd *cmd, t_env **env)
 {
 	g_global.fd_out = open_files_output(cmd);
 	g_global.fd_in = open_files_input(cmd);
@@ -91,7 +91,7 @@ int redirect(t_cmd *cmd, t_env **env)
 	return (0);
 }
 
-void exec_redir(t_cmd *cmd, t_env **env)
+void	exec_redir(t_cmd *cmd, t_env **env)
 {
 	if (redirect(cmd, env) == -1)
 	{

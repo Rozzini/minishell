@@ -6,7 +6,7 @@
 #    By: mraspors <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/11/20 20:07:18 by mraspors         ###   ########.fr        #
+#    Updated: 2022/11/20 23:27:27 by mraspors         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,8 @@ SRC	=   ./src/execution/builtins_parent.c ./src/execution/builtins_child.c\
 	./src/parsing/pipes_parsing.c ./src/redirection/rdr_utils.c\
 	./src/pipes/pipes.c ./src/pipes/pipes_helper.c ./src/redirection/redirection.c\
 	./src/signals/signals.c ./src/list/rdr_cmd_helpers.c minishell.c\
-	./src/helpers/error_msgs.c
+	./src/helpers/error_msgs.c ./src/execution/builtins_helpers.c\
+	./src/redirection/prepare_redirections.c ./src/redirection/heredog_helper.c
 
 HEADER	= minishell.h
 

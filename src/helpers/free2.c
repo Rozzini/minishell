@@ -6,13 +6,12 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 17:02:24 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/11 18:42:11 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/20 23:16:19 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-//free_doublptr(t->args);
 void	free_token(t_tokens *t)
 {
 	if (t != NULL)
@@ -44,4 +43,11 @@ void	free_parsing(t_parsing *prs)
 	free_doublptr(prs->exp_name);
 	free(prs);
 	prs = NULL;
+}
+
+void	free_for_start_parsing(t_tokens *tokens)
+{
+	free_doublptr(tokens->args);
+	free(tokens->cmdl);
+	free(tokens);
 }

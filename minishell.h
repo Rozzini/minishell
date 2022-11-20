@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/20 21:51:44 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/20 23:26:33 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,9 @@ typedef struct s_parsing
 typedef struct s_global
 {
 	int	rand;
-	int signal;
-	int fd_in;
-	int fd_out;
+	int	signal;
+	int	fd_in;
+	int	fd_out;
 }			t_global;
 
 t_global	g_global;
@@ -132,6 +132,7 @@ int		try_parent_builtins(t_cmd *cmd, t_env **env);
 
 int		try_child_builtins(t_cmd *cmd, t_env **env);
 
+void	ft_cd_helper(t_env **env_list);
 //=================================================//
 
 //====================ENV_LIST=====================//
@@ -179,7 +180,7 @@ void	exec_redir(t_cmd *cmd, t_env **env);
 
 int		make_baby_redir(t_cmd *cmd, t_env **env);
 
-void 	update_io_args(t_cmd *cmd, t_rdr *file);
+void	update_io_args(t_cmd *cmd, t_rdr *file);
 
 int		array_size(char **arr);
 
@@ -287,6 +288,7 @@ void	free_parsing(t_parsing *prs);
 
 void	free_token(t_tokens *t);
 
+void	free_for_start_parsing(t_tokens *tokens);
 //==================================================//
 
 int		check_minishell_exec(t_cmd *cmd, t_env **env);
@@ -301,8 +303,6 @@ void	push_rdr_init_data(t_rdr *new_node, t_tokens *tokens);
 
 void	ft_closer(t_cmd *cmd);
 
-void	reset_fd(void);
-
 void	prep_heredog(t_cmd	*cmd, int heredogs);
 
 int		heredogs_count(t_cmd *cmd);
@@ -311,9 +311,9 @@ int		cmdline_heredogs_count(t_cmd *cmd);
 
 int		*prep_heredogs(t_cmd *cmd);
 
-int 	open_files_input(t_cmd *cmd);
+int		open_files_input(t_cmd *cmd);
 
-int 	open_files_output(t_cmd *cmd);
+int		open_files_output(t_cmd *cmd);
 
 void	cur_cmd_cpy_rdr(t_cmd *cmd, t_rdr **input, t_rdr **output);
 
@@ -326,4 +326,16 @@ int		er_rdr_no_file(char *s);
 void	er_ft_execs(char *s);
 
 void	do_export(t_env	*export_d, t_env **env_list);
+
+int		ft_cd_error(t_cmd *cmd, t_env **env_list);
+
+int		ft_exit_helper(t_cmd *cmd);
+
+char	*generate_filename(int rand);
+
+int		check_heredog(t_rdr *file);
+
+t_cmd	*get_heredog_cmd(t_cmd *cmd);
+
+void	prep_redirections(t_cmd *cmd);
 #endif

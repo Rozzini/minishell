@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 12:58:11 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/11/20 17:10:09 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/20 23:29:39 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	arr_size(char **arr)
 	return (i);
 }
 
-void update_io_args(t_cmd *cmd, t_rdr *file)
+void	update_io_args(t_cmd *cmd, t_rdr *file)
 {
 	char	**io_args;
 	int		i;
@@ -35,7 +35,8 @@ void update_io_args(t_cmd *cmd, t_rdr *file)
 	io_args = NULL;
 	i = 0;
 	j = 0;
-	io_args = malloc(sizeof(char *) * (arr_size(cmd->args) + arr_size(file->args) + 1));
+	io_args = malloc(sizeof(char *)
+			* (arr_size(cmd->args) + arr_size(file->args) + 1));
 	while (cmd->args[i] != NULL)
 	{
 		io_args[i] = ft_strdup(cmd->args[i]);
@@ -43,8 +44,7 @@ void update_io_args(t_cmd *cmd, t_rdr *file)
 	}
 	while (file->args[j] != NULL)
 	{
-		io_args[i] = ft_strdup(file->args[j]);
-		j++;
+		io_args[i] = ft_strdup(file->args[j++]);
 		i++;
 	}
 	io_args[i] = NULL;

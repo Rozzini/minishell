@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 22:13:41 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/15 23:26:38 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/20 23:16:48 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,14 +130,10 @@ int	start_parsing(t_tokens *tokens, t_env **env, t_cmd **cmd)
 	quotes_exp_check(tokens, env);
 	if (check_tokens_validity(tokens) == 1)
 	{
-		free_doublptr(tokens->args);
-		free(tokens->cmdl);
-		free(tokens);
+		free_for_start_parsing(tokens);
 		return (1);
 	}
 	start_pipes_parsing(tokens, cmd);
-	free_doublptr(tokens->args);
-	free(tokens->cmdl);
-	free(tokens);
+	free_for_start_parsing(tokens);
 	return (0);
 }

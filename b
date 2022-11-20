@@ -1,0 +1,12 @@
+Makefile
+a
+b
+libft
+minishell
+minishell.c
+minishell.dSYM
+minishell.h
+minishell.o
+rl.supp
+src
+txt_files
