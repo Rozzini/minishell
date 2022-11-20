@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 22:55:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/15 04:33:06 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/20 21:34:27 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	parse_export_key(char *s)
 	return (0);
 }
 
-int	parse_export(t_env *export_d)
+int	parse_export(t_env *export_d, t_env **env_list)
 {
 	t_env	*temp;
 
@@ -50,8 +50,9 @@ int	parse_export(t_env *export_d)
 			else
 				printf("minishell: export:  '%s=%s' not a valid identifier\n",
 					temp->key, temp->val);
-			return (1);
 		}
+		else
+			do_export(temp, env_list);
 		temp = temp->next;
 	}
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_execution.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/18 19:46:09 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/11/20 21:19:02 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,6 @@ void	ft_execve(t_cmd *cmd, t_env **env)
 
 void	ft_execs(t_cmd *cmd, t_env **env)
 {
-	char	*command_error;
-
 	if (check_minishell_exec(cmd, env) == 1
 		|| try_child_builtins(cmd, env) == 1)
 	{
@@ -80,11 +78,7 @@ void	ft_execs(t_cmd *cmd, t_env **env)
 		exit(0);
 	}
 	ft_execve(cmd, env);
-	command_error = ft_strdup(cmd->args[0]);
-	write(2, "minishell: ", 11);
-	write(2, command_error, ft_strlen(command_error));
-	write(2, ": command not found\n", 20);
-	free(command_error);
+	er_ft_execs(cmd->args[0]);
 	while (cmd->prev != NULL)
 		cmd = cmd->prev;
 	free_cmd(&cmd);
@@ -103,12 +97,9 @@ void prep_in_files(t_cmd *cmd)
 		if (file->type == REDL || file->type == PREPPED_HEREDOC)
 			fd = (open(file->file, O_RDONLY));
 		if (fd < 0)
-		{
-			printf("%s: No such file or directory\n", file->file); //make it >
 			return ;
-		}
 		if (file->args != NULL)
-			update_in_args(cmd, file);
+			update_io_args(cmd, file);
 		file = file->next;
 		close(fd);
 	}
@@ -130,7 +121,7 @@ void prep_out_files(t_cmd *cmd)
 			return ;
 		// if current node has args then add them to cmd->args so they get executed right
 		if (file->args != NULL)
-			update_out_args(cmd, file);
+			update_io_args(cmd, file);
 		file = file->next;
 		close(fd);
 	}
@@ -143,22 +134,13 @@ void	prep_redirections(t_cmd *cmd)
 	hd_c = cmdline_heredogs_count(cmd);
 	//---------check if cmdline contains heredog
 	if (hd_c > 0)
-	{
-			printf("prep heredogs with %d\n", hd_c);
-			prep_heredogs(cmd);
-	}
+		prep_heredogs(cmd);
 	while (cmd)
 	{
 		if (cmd->input)
-		{
-			printf("open input files\n");
 			prep_in_files(cmd);
-		}
 		if (cmd->output)
-		{
-			printf("open output files\n");
 			prep_out_files(cmd);
-		}
 		cmd = cmd->next;
 	}
 }
@@ -190,11 +172,14 @@ void	try_execute(t_cmd **commands, t_env **env)
 	}
 	else
 	{
-		printf("x\n");
 		pid = fork();
 		if (pid == 0)
 			exec_pipes(cmd, env);
 	}
+	if (g_global.fd_in > -1)
+		close(g_global.fd_in);
+	if (g_global.fd_out > -1)
+		close(g_global.fd_out);
 	waitpid(pid, &g_global.signal, 0);
 	g_global.signal = WEXITSTATUS(g_global.signal);
 }

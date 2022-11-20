@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/18 18:14:57 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/11/20 21:33:26 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,10 @@ typedef struct s_parsing
 
 typedef struct s_global
 {
+	int	rand;
 	int signal;
-	int sv_in;
-	int sv_out;
+	int fd_in;
+	int fd_out;
 }			t_global;
 
 t_global	g_global;
@@ -174,13 +175,11 @@ void	ft_execs(t_cmd *cmd, t_env **env);
 
 void	exec_pipes(t_cmd *cmd, t_env **env);
 
-int		exec_redir(t_cmd *cmd, t_env **env);
+void	exec_redir(t_cmd *cmd, t_env **env);
 
 int		make_baby_redir(t_cmd *cmd, t_env **env);
 
-void	update_in_args(t_cmd *cmd, t_rdr *file);
-
-void	update_out_args(t_cmd *cmd, t_rdr *file);
+void 	update_io_args(t_cmd *cmd, t_rdr *file);
 
 int		array_size(char **arr);
 
@@ -205,7 +204,7 @@ void	start_pipes_parsing(t_tokens *tokens, t_cmd **cmd);
 //function for export builtin parsing
 //returns 1 if smthing is wrong
 //returns 0 if all good
-int		parse_export(t_env *export_d);
+int		parse_export(t_env *export_d, t_env **env_list);
 
 char	*tokens_q_iter(char *s);
 
@@ -322,5 +321,9 @@ void	close_unused_fds(t_cmd *cmd, int counter);
 
 void	ft_dup2(t_cmd *cmd, int *prev_fd);
 
+int		er_rdr_no_file(char *s);
 
+void	er_ft_execs(char *s);
+
+void	do_export(t_env	*export_d, t_env **env_list);
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredog.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 18:02:01 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/18 19:54:22 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/11/20 21:25:53 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,8 @@ t_cmd	*get_heredog_cmd(t_cmd *cmd)
 
 void	reset_fd(void)
 {
-	dup2(g_global.sv_in, 0);
-	dup2(g_global.sv_out, 1);
+	dup2(g_global.fd_in, 0);
+	dup2(g_global.fd_out, 1);
 }
 
 int check_heredog(t_rdr *file)
@@ -116,12 +116,11 @@ int	prep_heredog(t_cmd	*cmd, int heredogs)
 {
 	char	*line;
 	int		fd;
-	static int rand;
 	t_rdr	*file;
 	char	*filename;
 
 	line = NULL;
-	filename = generate_filename((int)rand++);
+	filename = generate_filename(g_global.rand++);
 	file = cmd->input;
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC , 0666);
 	while (heredogs > 0)
@@ -144,12 +143,11 @@ int	prep_heredog(t_cmd	*cmd, int heredogs)
 				write(fd, "\n", 1);
 			}
 		}
+		file->file = ft_strdup(filename);
+		file->type = PREPPED_HEREDOC;
 		file = file->next;
 		heredogs--;
 	}
-	cmd->input->file = ft_strdup(filename);
-	cmd->input->type = PREPPED_HEREDOC; //meaning temp file is ready to be used as input for execution
-	// cmd->input->type = REDL; maybe do this instead cz whatever its the same at this point
 	return (fd);
 }
 

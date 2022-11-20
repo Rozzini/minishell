@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/17 17:28:06 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/20 21:26:11 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	shell_routine(t_env	*env_list)
 	tokens = NULL;
 	while (1)
 	{
+		g_global.rand = 0;
 		tokens = malloc(sizeof(t_tokens));
 		tokens_init(tokens);
 		wait(0);
@@ -69,8 +70,8 @@ int	main(int argc, char **argv, char **env)
 	g_global.signal = 0;
 	env_list = NULL;
 	rl_catch_signals = 0;
-	g_global.sv_in = dup(0);
-	g_global.sv_out = dup(1);
+	g_global.fd_in = dup(0);
+	g_global.fd_out = dup(1);
 	signals_env_init(argc, argv);
 	init_env_list(&env_list, env);
 	increment_shlvl(&env_list);

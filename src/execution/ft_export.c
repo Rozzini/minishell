@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 18:05:02 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/05 07:37:30 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/20 21:36:02 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,21 +59,17 @@ void	do_export(t_env	*export_d, t_env **env_list)
 	int		len;
 
 	temp = export_d;
-	while (temp != NULL)
+	len = ft_strlen(temp->key);
+	if (temp->key[len - 1] == '+')
 	{
-		len = ft_strlen(temp->key);
-		if (temp->key[len - 1] == '+')
-		{
-			s = ft_substr(temp->key, 0, len - 1);
-			free(temp->key);
-			temp->key = ft_strdup(s);
-			free(s);
-			export_cat_value(temp, env_list);
-		}
-		else
-			export_add_value(temp, env_list);
-		temp = temp->next;
+		s = ft_substr(temp->key, 0, len - 1);
+		free(temp->key);
+		temp->key = ft_strdup(s);
+		free(s);
+		export_cat_value(temp, env_list);
 	}
+	else
+		export_add_value(temp, env_list);
 }
 
 int	ft_export(t_cmd *cmd, t_env **env_list)
@@ -89,12 +85,7 @@ int	ft_export(t_cmd *cmd, t_env **env_list)
 		i = 1;
 		while (cmd->args[i] != NULL)
 			get_push_export_d(cmd->args[i++], &export_d);
-		if (parse_export(export_d) == 1)
-		{
-			free_list(&export_d);
-			return (1);
-		}
-		do_export(export_d, env_list);
+		parse_export(export_d, env_list);
 		free_list(&export_d);
 	}
 	return (1);
