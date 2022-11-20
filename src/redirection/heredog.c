@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/06 18:56:19 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/11/13 18:41:55 by alalmazr         ###   ########.fr       */
+/*   Created: 2022/11/16 18:02:01 by mraspors          #+#    #+#             */
+/*   Updated: 2022/11/18 19:54:22 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	heredogs_count(t_cmd *cmd)
+int	cmdline_heredogs_count(t_cmd *cmd)
 {
 	t_cmd	*curr_cmd;
 	t_rdr	*file;
@@ -23,17 +23,38 @@ int	heredogs_count(t_cmd *cmd)
 	file = cmd->input;
 	while (curr_cmd != NULL)
 	{
-		if (cmd->input)
+		if (curr_cmd->input)
 		{
 			file = curr_cmd->input;
 			while (file)
 			{
 				if (file->type == HEREDOC)
+				{
 					count++;
+					break;
+				}
 				file = file->next;
 			}
 		}
 		curr_cmd = curr_cmd->next;
+	}
+	return (count);
+}
+
+int	heredogs_count(t_cmd *cmd)
+{
+	int		count;
+	t_rdr	*temp;
+	
+	count = 0;
+	temp = cmd->input;
+	if (temp == NULL)
+		return (count);
+	while (temp != NULL)
+	{
+		if (temp->type == HEREDOC)
+			count++;
+		temp = temp->next;
 	}
 	return (count);
 }
@@ -67,17 +88,42 @@ t_cmd	*get_heredog_cmd(t_cmd *cmd)
 //changes input type for redirection to to PREPPED_HEREDOC meaning it can be passed as
 //cmd < temp.txt for execution
 //have to remove the temp file for types PREPPED_HEREDOC after redirection
+
+void	reset_fd(void)
+{
+	dup2(g_global.sv_in, 0);
+	dup2(g_global.sv_out, 1);
+}
+
+int check_heredog(t_rdr *file)
+{
+	while(file)
+		{
+			if (file->type == HEREDOC)
+				return (1);
+			file = file->next;
+		}
+	return (0);
+}
+
+
+char	*generate_filename(int rand)
+{
+	return (ft_strjoin("tmp",ft_itoa(rand)));
+}
+
 int	prep_heredog(t_cmd	*cmd, int heredogs)
 {
 	char	*line;
 	int		fd;
+	static int rand;
 	t_rdr	*file;
-	int		i;
+	char	*filename;
 
-	i = 0;
 	line = NULL;
+	filename = generate_filename((int)rand++);
 	file = cmd->input;
-	fd = open("tmp.txt", O_WRONLY | O_CREAT | O_TRUNC , 0666);
+	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC , 0666);
 	while (heredogs > 0)
 	{
 		while(file)
@@ -90,7 +136,7 @@ int	prep_heredog(t_cmd	*cmd, int heredogs)
 		{
 			free(line);
 			line = readline("> ");
-			if (!ft_strcmp(line, file->file))//the file is EOF here
+			if (ft_strcmp(line, file->file) == 0)//the file is EOF here
 				break ;
 			if (line && heredogs == 1)
 			{
@@ -100,81 +146,25 @@ int	prep_heredog(t_cmd	*cmd, int heredogs)
 		}
 		file = file->next;
 		heredogs--;
-		printf("heredogs in loop: %d\n", heredogs);
 	}
-	close(fd);
-	cmd->input->file = ft_strdup("tmp.txt");
+	cmd->input->file = ft_strdup(filename);
 	cmd->input->type = PREPPED_HEREDOC; //meaning temp file is ready to be used as input for execution
-	return (0);
+	// cmd->input->type = REDL; maybe do this instead cz whatever its the same at this point
+	return (fd);
 }
 
-// static void	fd_closer(int *fd)
-// {
-// 	if (fd[1] != 0)
-// 	{
-// 		close(fd[1]);
-// 		fd[1] = 0;
-// 	}
-// 	if (fd[0] != 0)
-// 	{
-// 		close(fd[0]);
-// 		fd[0] = 0;
-// 	}
-// }
+int		*prep_heredogs(t_cmd *cmd)
+{
+	t_cmd	*temp;
+	int		hd_c;
 
-// int	check_builtins(t_cmd *cmd)
-// {
-// 	if (cmd->args != NULL)
-// 	{
-// 		if (ft_strcmp("cd", cmd->args[0]) == 0
-// 			|| strcmp("echo", cmd->args[0]) == 0
-// 			|| ft_strcmp("pwd", cmd->args[0]) == 0
-// 			|| ft_strcmp("env", cmd->args[0]) == 0
-// 			|| ft_strcmp("unset", cmd->args[0]) == 0
-// 			|| ft_strcmp("export", cmd->args[0]) == 0
-// 			|| ft_strcmp("exit", cmd->args[0]) == 0)
-// 			return (1);
-// 	}
-// 	return (0);
-// }
-
-// int	ft_here_doc(char *eof, int fd[2], t_cmd *cmd)
-// {
-// 	char	*buffer;
-
-// 	buffer = ft_strdup("");
-// 	// while (!ft_strcmp(eof, buffer))
-// 	while (1)
-// 	{
-// 		free(buffer);
-// 		buffer = NULL;
-// 		buffer = readline("> ");
-// 		if (!ft_strcmp(buffer, eof))//the file is EOF here
-// 				break ;
-// 		if (buffer) //write to write end of pipe
-// 		{
-// 			ft_putstr_fd(buffer, fd[1]);
-// 			write(fd[1], "\n", 1);
-// 		}
-// 	}
-// 	free(buffer);
-// 	if (check_builtins(cmd))
-// 		fd_closer(fd);
-// 	return (0);
-// }
-
-// int	heredoc_exec(t_cmd *cmd, int cmd_num)
-// {
-// 	int	fd[2];
-// 	int	status;
-
-	
-// 	pipe(fd); //pipe
-// 	ft_here_doc(cmd->input->file, fd, cmd);
-// 	// g_signal = WEXITSTATUS(status);
-// 	// if (builtin_checker(data, cmd_num) == 0)
-// 	// 	dup2(fd[0], 0); //if its a builtin dup
-// 	if (!check_builtins(cmd))
-// 		fd_closer(fd);
-// 	// return (g_signal);
-// }
+	temp = cmd;
+	while (temp != NULL)
+	{
+		hd_c = heredogs_count(temp);
+		if (hd_c > 0)
+			temp->input->fd_in = prep_heredog(temp, hd_c);
+		temp = temp->next;
+	}
+	return (0);
+}

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 22:55:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/05 07:38:40 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/15 04:33:06 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,12 @@ int	parse_export(t_env *export_d)
 	{
 		if (parse_export_key(temp->key) == 1)
 		{
-			printf("minishell: export:  '%s' not a valid identifier\n",
-				temp->key);
+			if (temp->val == NULL)
+				printf("minishell: export:  '%s' not a valid identifier\n",
+					temp->key);
+			else
+				printf("minishell: export:  '%s=%s' not a valid identifier\n",
+					temp->key, temp->val);
 			return (1);
 		}
 		temp = temp->next;

@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/05 22:54:38 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/17 17:28:06 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	tokens_init(t_tokens *tokens)
 
 void	signals_env_init(int argc, char **argv)
 {
-	rl_catch_signals = 0;
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
 	argc = 0;
@@ -35,37 +34,46 @@ void	check_if_ctr_d(t_tokens *tokens, t_env *env_list)
 {
 	if (tokens->cmdl == NULL)
 	{
-		free(tokens->cmdl);
-		free(tokens);
+		free_token(tokens);
 		free_list(&env_list);
 		exit(0);
+	}
+}
+
+void	shell_routine(t_env	*env_list)
+{
+	t_tokens	*tokens;
+	t_cmd		*cmd;
+
+	cmd = NULL;
+	tokens = NULL;
+	while (1)
+	{
+		tokens = malloc(sizeof(t_tokens));
+		tokens_init(tokens);
+		wait(0);
+		tokens->cmdl = readline("minishell$ ");
+		check_if_ctr_d(tokens, env_list);
+		if (start_parsing(tokens, &env_list, &cmd) == 0)
+		{
+			try_execute(&cmd, &env_list);
+			free_cmd(&cmd);
+		}
 	}
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	t_env		*env_list;
-	t_cmd		*cmd;
-	t_tokens	*tokens;
 
+	g_global.signal = 0;
 	env_list = NULL;
-	cmd = NULL;
-	tokens = NULL;
+	rl_catch_signals = 0;
+	g_global.sv_in = dup(0);
+	g_global.sv_out = dup(1);
 	signals_env_init(argc, argv);
 	init_env_list(&env_list, env);
 	increment_shlvl(&env_list);
-	while (1)
-	{
-		tokens = malloc(sizeof(t_tokens));
-		tokens_init(tokens);
-		tokens->cmdl = readline("minishell$ ");
-		check_if_ctr_d(tokens, env_list);
-		if (start_parsing(tokens, &env_list, &cmd) == 0)
-		{
-			free(tokens);
-			try_execute(&cmd, &env_list);
-			free_cmd(&cmd);
-		}
-	}
+	shell_routine(env_list);
 	return (0);
 }

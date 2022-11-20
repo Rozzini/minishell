@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 02:48:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/05 09:32:03 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/18 19:31:55 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,11 @@ void	push_cmd(t_cmd **head_ref, t_tokens *tokens)
 	new_node->input = NULL;
 	new_node->output = NULL;
 	new_node->input = NULL;
+	new_node->first_cmd = 0;
 	push_cmd_init_data(new_node, tokens);
 	tokens->last = new_node;
 	last = find_last(head_ref);
+	new_node->prev = last;
 	if (*head_ref == NULL)
 		*head_ref = new_node;
 	else
@@ -54,6 +56,7 @@ void	push_rdr(t_rdr **head, t_tokens *tokens, int type)
 	new_node->type = type;
 	new_node->next = NULL;
 	new_node->args = NULL;
+	push_rdr_init_data(new_node, tokens);
 	last = find_last_rdr(*head);
 	if (*head == NULL)
 		*head = new_node;
@@ -73,6 +76,7 @@ void	save_first_cmd(t_tokens *tokens, t_cmd **cmd)
 		{
 			tokens->end = i;
 			push_cmd(cmd, tokens);
+			(*cmd)->first_cmd = 1;
 			tokens->last = *cmd;
 			tokens->start = i;
 			return ;

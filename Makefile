@@ -6,7 +6,7 @@
 #    By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:24:41 by mraspors          #+#    #+#              #
-#    Updated: 2022/11/06 18:57:54 by alalmazr         ###   ########.fr        #
+#    Updated: 2022/11/18 18:19:01 by alalmazr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ libdir		=	${exec_prefix}/lib
 
 includedir	=	${prefix}/include
 
-CFLAG = -Wall -Werror -Wextra -g3 -I${includedir}
+CFLAG = -Wall -Werror -Wextra -g3 -I${includedir} -fsanitize=address
 
 LDFLAGS 	=	-lreadline -L /usr/local/Cellar/readline/8.1/lib
 
@@ -41,12 +41,14 @@ SRC	=   ./src/execution/builtins_parent.c ./src/execution/builtins_child.c\
 	./src/execution/start_execution.c ./src/execution/ft_export.c\
 	./src/list/list_operations.c ./src/list/ft_env_list_1.c\
 	./src/list/env_list_to_string.c ./src/parsing/ft_check_quotes.c\
-	./src/execution/minihell_call.c ./src/parsing/expansion.c ./src/parsing/basic_parsing.c\
-	./src/parsing/builtins_parser.c ./src/parsing/start_parsing.c ./src/parsing/parsing_helpers.c\
-	./src/helpers/free.c  ./src/helpers/print_structs.c ./src/parsing/pipes_parsing.c\
-	./src/redirection/rdr_utils.c ./src/redirection/redirection.c\
-	./src/pipes/pipes.c  ./src/signals/signals.c ./src/redirection/heredog.c\
-	./src/list/rdr_cmd_helpers.c minishell.c
+	./src/execution/minihell_call.c ./src/parsing/expansion.c\
+	./src/parsing/expansion_helpers.c ./src/parsing/basic_parsing.c\
+	./src/parsing/builtins_parser.c ./src/parsing/start_parsing.c\
+	./src/parsing/parsing_helpers.c ./src/redirection/heredog.c\
+	./src/helpers/free1.c ./src/helpers/free2.c ./src/helpers/print_structs.c\
+	./src/parsing/pipes_parsing.c ./src/redirection/rdr_utils.c\
+	./src/pipes/pipes.c ./src/pipes/pipes_helper.c ./src/redirection/redirection.c\
+	./src/signals/signals.c ./src/list/rdr_cmd_helpers.c minishell.c
 
 HEADER	= minishell.h
 

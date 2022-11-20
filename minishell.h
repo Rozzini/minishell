@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/06 18:57:23 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/11/18 18:14:57 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@
 
 typedef struct s_rdr
 {
+	int				fd_in;
+	int				fd_out;
 	char			*file;
 	char			**args;
 	int				type;
@@ -54,9 +56,13 @@ typedef struct s_cmd
 {
 	char			**args;
 	int				arg_c;
+	int				fd[2];
+	int				pid;
+	int				first_cmd;
 	t_rdr			*input;
 	t_rdr			*output;
 	struct s_cmd	*next;
+	struct s_cmd	*prev;
 }					t_cmd;
 
 //structure for environment
@@ -92,19 +98,26 @@ typedef struct s_parsing
 	int		iter;
 }			t_parsing;
 
-int	g_signal;
+typedef struct s_global
+{
+	int signal;
+	int sv_in;
+	int sv_out;
+}			t_global;
+
+t_global	g_global;
 
 //====================BUILTINS=====================//
 
 //for now returns 0 if successfully executed
 //returns 1 if not executed
-void	ft_echo(t_cmd *cmd, t_env **env_list);
+int		ft_echo(t_cmd *cmd);
 
-void	ft_pwd(t_cmd *cmd, t_env **env_list);
+int		ft_pwd(void);
 
-void	ft_env(t_cmd *cmd, t_env **env_list);
+int		ft_env(t_env **env_list);
 
-void	ft_exit(t_cmd *cmd, t_env **env_list);
+int		ft_exit(t_cmd *cmd, t_env **env_list);
 
 int		ft_cd(t_cmd *cmd, t_env **env_list);
 
@@ -116,7 +129,7 @@ int		ft_unset(t_cmd *cmd, t_env **env_list);
 
 int		try_parent_builtins(t_cmd *cmd, t_env **env);
 
-void	try_child_builtins(t_cmd *cmd, t_env **env);
+int		try_child_builtins(t_cmd *cmd, t_env **env);
 
 //=================================================//
 
@@ -128,7 +141,7 @@ void	init_env_list(t_env **env_list, char **env);
 void	print_env(t_env **head);
 
 //prints env for export builtin
-void	print_env_export(t_cmd *cmd, t_env **head);
+int		print_env_export(t_env **head);
 
 //Returns node with provided key
 //if there is no such key returns NULL
@@ -161,8 +174,6 @@ void	ft_execs(t_cmd *cmd, t_env **env);
 
 void	exec_pipes(t_cmd *cmd, t_env **env);
 
-int		make_baby_pipe(int *fd, t_cmd *cmd, t_env **env);
-
 int		exec_redir(t_cmd *cmd, t_env **env);
 
 int		make_baby_redir(t_cmd *cmd, t_env **env);
@@ -173,11 +184,12 @@ void	update_out_args(t_cmd *cmd, t_rdr *file);
 
 int		array_size(char **arr);
 
-t_cmd	*get_heredog_cmd(t_cmd	*cmd);
+int		check_heredoc(t_cmd	*cmd);
 
-int		prep_heredog(t_cmd	*cmd, int heredogs);
+int		exec_heredog(int fd, t_cmd	*cmd);
 
-int		heredogs_count(t_cmd *cmd);
+void	cur_cmd_cpy(t_cmd **head_ref, t_cmd *cmd);
+
 //==================================================//
 
 //=====================PARSING======================//
@@ -238,6 +250,10 @@ int		copy_expansion_name(char *s, t_parsing *prs, int i);
 //replaces expansion name in OG string with expansion value
 void	do_expansion(t_parsing	*prs, t_env **env);
 
+void	expansion_freeing(t_env	*temp, t_parsing *prs, char	*temp_s, char *s);
+
+int		check_if_next_expansion(char *s, t_parsing *prs);
+
 //==================================================//
 
 //====================ALL_LIST======================//
@@ -270,6 +286,8 @@ void	free_list(t_env **list);
 
 void	free_parsing(t_parsing *prs);
 
+void	free_token(t_tokens *t);
+
 //==================================================//
 
 int		check_minishell_exec(t_cmd *cmd, t_env **env);
@@ -281,4 +299,28 @@ void	sig_handler(int sig);
 void	push_cmd_init_data(t_cmd *new_node, t_tokens *tokens);
 
 void	push_rdr_init_data(t_rdr *new_node, t_tokens *tokens);
+
+void	ft_closer(t_cmd *cmd);
+
+void	reset_fd(void);
+
+int		prep_heredog(t_cmd	*cmd, int heredogs);
+
+int		heredogs_count(t_cmd *cmd);
+
+int		cmdline_heredogs_count(t_cmd *cmd);
+
+int		*prep_heredogs(t_cmd *cmd);
+
+int 	open_files_input(t_cmd *cmd);
+
+int 	open_files_output(t_cmd *cmd);
+
+void	cur_cmd_cpy_rdr(t_cmd *cmd, t_rdr **input, t_rdr **output);
+
+void	close_unused_fds(t_cmd *cmd, int counter);
+
+void	ft_dup2(t_cmd *cmd, int *prev_fd);
+
+
 #endif

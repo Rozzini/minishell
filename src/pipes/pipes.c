@@ -6,83 +6,87 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/06 21:10:45 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/11/18 18:23:20 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 
-int make_baby_pipe(int *prev_new_fd, t_cmd *cmd, t_env **env)
-{
-	pid_t pid;
 
-	if (try_parent_builtins(cmd, env) == 1)
-		return (0);
-	pid = fork();
-	if (pid == 0)
+void	create_pipes(t_cmd *cmd)
+{
+	t_cmd	*temp;
+
+	temp = cmd;
+	while (temp->next != NULL)
 	{
-		if (prev_new_fd[0] != 0)
+		if (pipe(temp->fd) < 0)
 		{
-			dup2(prev_new_fd[0], STDIN_FILENO);
-			close(prev_new_fd[0]);
+			printf("piping error\n");
+			return ;
 		}
-		if (prev_new_fd[1] != 1)
-		{
-			dup2(prev_new_fd[1], STDOUT_FILENO);
-			close(prev_new_fd[1]);
-		}
-		if (cmd->input || cmd->output)
-			return (exec_redir(cmd, env));
-		else
-			ft_execs(cmd, env);
+		temp = temp->next;
 	}
-	return (pid);
 }
 
-void exec_pipes(t_cmd *cmd, t_env **env)
-{
-	int fd[2]; // fd[0]->read fd[1]->write
-	int prev_new_fd[2]; //prev_new[0] is the original and prev_new[1] is the write end from fd[1]
-	pid_t pid;
 
-	//first process  getS input from the stdin->0
-	prev_new_fd[0] = STDIN_FILENO;
-	//make all child processes except for last which we will redirect to stdout
-	// printf("	no of cmds:%d\n", n_cmd);
-	while (cmd->next != NULL)
+void	exec_pipes_helper(t_cmd	*temp, t_cmd *cmd, t_env **env, int *prev_fd)
+{
+	static int	counter;
+
+	if (temp->pid == 0)
 	{
-		if (pipe(fd) == -1)
+		ft_dup2(temp, prev_fd);
+		close_unused_fds(cmd, counter);
+		if (try_parent_builtins(temp, env) == 1
+				|| try_child_builtins(temp, env) == 1
+				|| ft_strcmp(temp->args[0], "./minishell") == 0)
 		{
-			printf("pipe fked\n");
+			ft_closer(cmd);
+			free_cmd(&cmd);
+			free_list(env);
+			exit (g_global.signal);
 		}
-		// f[1]->write end of the pipe
-		// carry `prev` from the prev iteration.
-		prev_new_fd[1] = fd[1]; // ***
-		pid = make_baby_pipe(prev_new_fd, cmd, env);
-		if (pid == -1)
-		{
-			printf("fork error");
-			return ;
-		}
-		//no need for write end bcz child process will use it
-		close(fd[1]);
-		//save fd[0] to give it to next child
-		prev_new_fd[0] = fd[0];
-		cmd = cmd->next;
+		if (temp->input || temp->output)
+			exec_redir(temp, env);
+		else
+			ft_execs(temp, env);
 	}
-	//last cmd on pipe: set stdin be the read end of the prev pipe
-	//and output to the original STDOUT
-	// if (prev_new_fd[0] != 0)
-		dup2(prev_new_fd[0], STDIN_FILENO);
-	close(prev_new_fd[0]);
-	if (cmd->output || cmd->input)
-		exec_redir(cmd, env);
-	else
+	counter++;
+	if (temp->next == NULL)
+		counter = 0;
+}
+
+void	exec_pipes(t_cmd *cmd, t_env **env)
+{
+	t_cmd	*temp;
+	int		*prev_fd;
+	int		i;
+
+	i = 0;
+	create_pipes(cmd);
+	temp = cmd;
+	prev_fd = NULL;
+	while (temp != NULL)
 	{
-		if (try_parent_builtins(cmd, env) == 1)
+		temp->pid = fork();
+		if (temp->pid < 0)
 			return ;
-		ft_execs(cmd, env);
+		exec_pipes_helper(temp, cmd, env, prev_fd);
+		prev_fd = temp->fd;
+		temp = temp->next;
+		i++;
 	}
-	return ;
+	ft_closer(cmd);
+	temp = cmd;
+	while (temp != NULL)
+	{
+		waitpid(temp->pid, &g_global.signal, 0);
+		g_global.signal = WEXITSTATUS(g_global.signal);
+		temp = temp->next;
+	}
+	free_cmd(&cmd);
+	free_list(env);
+	exit(g_global.signal);
 }
