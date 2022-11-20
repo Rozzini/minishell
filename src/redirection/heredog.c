@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 18:02:01 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/20 21:25:53 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/20 21:55:14 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,16 @@ int check_heredog(t_rdr *file)
 
 char	*generate_filename(int rand)
 {
-	return (ft_strjoin("tmp",ft_itoa(rand)));
+	char	*n;
+	char	*s;
+
+	n = ft_itoa(rand);
+	s = ft_strjoin("tmp", n);
+	free(n);
+	return (s);
 }
 
-int	prep_heredog(t_cmd	*cmd, int heredogs)
+void	prep_heredog(t_cmd	*cmd, int heredogs)
 {
 	char	*line;
 	int		fd;
@@ -143,12 +149,15 @@ int	prep_heredog(t_cmd	*cmd, int heredogs)
 				write(fd, "\n", 1);
 			}
 		}
+		if (file->file != NULL)
+			free(file->file);
 		file->file = ft_strdup(filename);
 		file->type = PREPPED_HEREDOC;
 		file = file->next;
 		heredogs--;
 	}
-	return (fd);
+	free(filename);
+	close(fd);
 }
 
 int		*prep_heredogs(t_cmd *cmd)
@@ -161,7 +170,7 @@ int		*prep_heredogs(t_cmd *cmd)
 	{
 		hd_c = heredogs_count(temp);
 		if (hd_c > 0)
-			temp->input->fd_in = prep_heredog(temp, hd_c);
+			prep_heredog(temp, hd_c);
 		temp = temp->next;
 	}
 	return (0);

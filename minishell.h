@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/20 21:33:26 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/20 21:51:44 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,7 +303,7 @@ void	ft_closer(t_cmd *cmd);
 
 void	reset_fd(void);
 
-int		prep_heredog(t_cmd	*cmd, int heredogs);
+void	prep_heredog(t_cmd	*cmd, int heredogs);
 
 int		heredogs_count(t_cmd *cmd);
 
