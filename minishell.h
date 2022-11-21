@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/20 23:26:33 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/21 15:49:26 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,13 +303,13 @@ void	push_rdr_init_data(t_rdr *new_node, t_tokens *tokens);
 
 void	ft_closer(t_cmd *cmd);
 
-void	prep_heredog(t_cmd	*cmd, int heredogs);
+void	prep_heredog(t_cmd	*cmd, int heredogs, t_env **env);
 
 int		heredogs_count(t_cmd *cmd);
 
 int		cmdline_heredogs_count(t_cmd *cmd);
 
-int		*prep_heredogs(t_cmd *cmd);
+int		*prep_heredogs(t_cmd *cmd, t_env **env);
 
 int		open_files_input(t_cmd *cmd);
 
@@ -337,5 +337,9 @@ int		check_heredog(t_rdr *file);
 
 t_cmd	*get_heredog_cmd(t_cmd *cmd);
 
-void	prep_redirections(t_cmd *cmd);
+void	prep_redirections(t_cmd *cmd, t_env **env);
+
+int		exp_count(char	*s);
+
+void	save_exp_data(char *string, t_parsing *parsing);
 #endif

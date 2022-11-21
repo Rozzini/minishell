@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/20 23:25:03 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/21 15:45:05 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	try_execute(t_cmd **commands, t_env **env)
 
 	pid = 0;
 	cmd = *commands;
-	prep_redirections(cmd);
+	prep_redirections(cmd, env);
 	try_execute_helper(cmd, env, &pid);
 	if (g_global.fd_in > -1)
 		close(g_global.fd_in);

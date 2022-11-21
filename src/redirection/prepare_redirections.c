@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/20 23:09:10 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/20 23:09:36 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/21 15:46:49 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,13 @@ void	prep_out_files(t_cmd *cmd)
 	}
 }
 
-void	prep_redirections(t_cmd *cmd)
+void	prep_redirections(t_cmd *cmd, t_env **env)
 {
 	int	hd_c;
 
 	hd_c = cmdline_heredogs_count(cmd);
 	if (hd_c > 0)
-		prep_heredogs(cmd);
+		prep_heredogs(cmd, env);
 	while (cmd)
 	{
 		if (cmd->input)
