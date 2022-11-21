@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/21 15:49:26 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/21 20:02:46 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -342,4 +342,6 @@ void	prep_redirections(t_cmd *cmd, t_env **env);
 int		exp_count(char	*s);
 
 void	save_exp_data(char *string, t_parsing *parsing);
+
+int		start_parsing_err(t_tokens *tokens);
 #endif

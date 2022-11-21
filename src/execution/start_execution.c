@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/21 15:45:05 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/21 19:57:49 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	ft_execve(t_cmd *cmd, t_env **env)
 
 	i = 0;
 	env_s = env_list_to_string(*env);
+	if (ft_strchr(cmd->args[0], '/') != NULL)
+		execve(cmd->args[0], cmd->args, env_s);
 	path = ft_split(find_node_by_key(*env, "PATH")->val, ':');
 	while (path[i] != NULL)
 	{
@@ -38,6 +40,12 @@ void	ft_execve(t_cmd *cmd, t_env **env)
 
 void	ft_execs(t_cmd *cmd, t_env **env)
 {
+	if (cmd->args == NULL)
+	{
+		free_cmd(&cmd);
+		free_list(env);
+		exit(0);
+	}
 	if (check_minishell_exec(cmd, env) == 1
 		|| try_child_builtins(cmd, env) == 1)
 	{
@@ -90,10 +98,6 @@ void	try_execute(t_cmd **commands, t_env **env)
 	cmd = *commands;
 	prep_redirections(cmd, env);
 	try_execute_helper(cmd, env, &pid);
-	if (g_global.fd_in > -1)
-		close(g_global.fd_in);
-	if (g_global.fd_out > -1)
-		close(g_global.fd_out);
 	waitpid(pid, &g_global.signal, 0);
 	g_global.signal = WEXITSTATUS(g_global.signal);
 }

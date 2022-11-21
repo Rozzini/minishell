@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 13:57:31 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/05 07:42:23 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/21 19:52:40 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,10 @@ void	increment_shlvl(t_env **env)
 
 	shlvl = find_node_by_key(*env, "SHLVL");
 	if (shlvl == NULL)
+	{
+		push(env, "SHLVL", "1");
 		return ;
+	}
 	lvl = ft_atoi(shlvl->val);
 	lvl++;
 	if (lvl < 0)

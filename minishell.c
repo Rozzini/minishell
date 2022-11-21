@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 02:25:11 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/20 21:26:11 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/21 19:48:34 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,6 @@ int	main(int argc, char **argv, char **env)
 	g_global.signal = 0;
 	env_list = NULL;
 	rl_catch_signals = 0;
-	g_global.fd_in = dup(0);
-	g_global.fd_out = dup(1);
 	signals_env_init(argc, argv);
 	init_env_list(&env_list, env);
 	increment_shlvl(&env_list);
