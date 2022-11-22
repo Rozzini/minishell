@@ -3,78 +3,57 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 01:22:37 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/18 18:21:29 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/11/20 22:55:18 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 //gotta read from file
-int open_files_input(t_cmd *cmd)
+int	open_files_input(t_cmd *cmd)
 {
-	int fd;
-	t_rdr *file;
+	int		fd;
+	t_rdr	*file;
 
 	file = cmd->input;
-	if (file->type == PREPPED_HEREDOC && file->next == NULL)
-		return (open(file->file, O_RDONLY));
+	if (file == NULL)
+		return (-2);
 	while (file->next != NULL)
-	{
-		if (file->type == REDL)
-			fd = (open(file->file, O_RDONLY));
-		if (fd < 0)
-		{
-			printf("%s: No such file or directory\n", file->file); //make it >
-			return (-1);
-		}
-		if (file->args != NULL)
-			update_in_args(cmd, file);
-		file = file->next;
-		close(fd);
-	}
-	if (file->type == REDL)
 	{
 		fd = open(file->file, O_RDONLY);
 		if (fd < 0)
-		{
-			printf("%s: No such file or directory\n", file->file); //make it >
-			return (-1);
-		}
-		if (file->args != NULL)
-			update_in_args(cmd, file);
-		return (fd);
+			return (er_rdr_no_file(file->file));
+		file = file->next;
+		close(fd);
 	}
-	return (0);
+	fd = open(file->file, O_RDONLY);
+	if (fd < 0)
+		return (er_rdr_no_file(file->file));
+	return (fd);
 }
 
-
-//check by cmd->output.. -> next.. -> next
-//the last output file gets opened and returned.
-int open_files_output(t_cmd *cmd)
+int	open_files_output(t_cmd *cmd)
 {
-	int fd;
-	t_rdr *file;
+	int		fd;
+	t_rdr	*file;
 
 	file = cmd->output;
+	if (file == NULL)
+		return (-2);
 	while (file->next != NULL)
 	{
 		if (file->type == REDR)
-			fd = (open(file->file, O_WRONLY | O_CREAT | O_TRUNC, 0666)); //O_TRUNC delete past shit
+			fd = (open(file->file, O_WRONLY | O_CREAT | O_TRUNC, 0666));
 		else if (file->type == REDRR)
 			fd = (open(file->file, O_WRONLY | O_APPEND | O_CREAT, 0666));
 		if (fd < 0)
 			return (1);
-		// if current node has args then add them to cmd->args so they get executed right
-		if (file->args != NULL)
-			update_out_args(cmd, file);
 		file = file->next;
 		close(fd);
 	}
-	if (file->args != NULL)
-	 	update_out_args(cmd, file);
 	if (file->type == REDR)
 		return (open(file->file, O_WRONLY | O_CREAT | O_TRUNC, 0666));
 	else if (file->type == REDRR)
@@ -83,77 +62,41 @@ int open_files_output(t_cmd *cmd)
 }
 
 //maybe split input/output redir into diff functions
-int redirect(t_cmd *cmd, t_env **env)
+int	redirect(t_cmd *cmd, t_env **env)
 {
-	pid_t pid;
-	int fd_in;
-	int fd_out;
-
-	fd_in = STDIN_FILENO;
-	fd_out = STDOUT_FILENO;
-	pid = fork();
-	if (pid < 0)
+	g_global.fd_out = open_files_output(cmd);
+	g_global.fd_in = open_files_input(cmd);
+	if (g_global.fd_out != -2)
 	{
-		printf("fork failed\n");
-		exit(0);
+		if (dup2(g_global.fd_out, STDOUT_FILENO) == -1)
+			return (-1);
+		close(g_global.fd_out);
 	}
-	else if (pid == 0)
+	if (g_global.fd_in != -2)
 	{
-		//-------CHILD-----------
-		//if cmd has outputs
-		if (cmd->output)
-		{
-			//open needed files. last file to open will be stored in fd_out
-			fd_out = open_files_output(cmd);
-			if (fd_out < 0)
-			{
-				printf("error opening file\n");
-				return (1);
-			}
-			//wtvr will be output to STDOUT will now be in fd_out (which is our file)
-			if (dup2(fd_out, STDOUT_FILENO) == -1)
-			{
-				printf("error dup\n");
-				return (1);
-			}
-			close(fd_out); //since stdout now points to fd_out we close fd_out.. no longer needed
-			ft_execs(cmd, env); //this will output in our new stdout which is fd_out which is our file
-		}
-		//if cmd has inputs
-		if (cmd->input)
-		{
-			//open needed files. last input file will be stored in fd_in
-			fd_in = open_files_input(cmd);
-			if (cmd->input->type == PREPPED_HEREDOC)
-				unlink("tmp.txt");
-			if (fd_in < 0)
-				return (1);
-			if (dup2(fd_in, STDIN_FILENO) == -1)
-			{
-				printf("error dup\n");
-				return (1);
-			}
-			close(fd_in);
-			ft_execs(cmd, env);
-		}
-		return (0);
+		if (cmd->input->type == PREPPED_HEREDOC)
+			unlink(cmd->input->file);
+		if (dup2(g_global.fd_in, STDIN_FILENO) == -1)
+			return (-1);
+		close(g_global.fd_in);
 	}
-	else
+	if (try_parent_builtins(cmd, env) == 1)
 	{
-		// ----PARENT----
-		close(fd_out);
-		close(fd_in);
-		wait(0);
+		while (cmd->prev != NULL)
+			cmd = cmd->prev;
+		free_cmd(&cmd);
+		free_list(env);
 	}
+	ft_execs(cmd, env);
 	return (0);
 }
 
-int exec_redir(t_cmd *cmd, t_env **env)
+void	exec_redir(t_cmd *cmd, t_env **env)
 {
 	if (redirect(cmd, env) == -1)
 	{
-		printf("redir fork/dup error\n");
-		return (1);
+		free_cmd(&cmd);
+		free_list(env);
+		exit (1);
 	}
-	return (0);
 }

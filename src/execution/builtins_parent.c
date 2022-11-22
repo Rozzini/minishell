@@ -6,13 +6,13 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:31:15 by mrizk             #+#    #+#             */
-/*   Updated: 2022/11/16 22:08:31 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/20 23:24:41 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int		exit_check_arg(char *s)
+int	exit_check_arg(char *s)
 {
 	int	i;
 
@@ -26,7 +26,7 @@ int		exit_check_arg(char *s)
 	return (0);
 }
 
-int		ft_exit(t_cmd *cmd, t_env **env_list)
+int	ft_exit(t_cmd *cmd, t_env **env_list)
 {
 	int	n;
 
@@ -35,11 +35,8 @@ int		ft_exit(t_cmd *cmd, t_env **env_list)
 	if (ft_strcmp("exit", cmd->args[0]) == 0)
 	{
 		n = 0;
-		if (cmd->arg_c > 2)
-		{
-			printf("minishell:  exit: too many arguments\n");
+		if (ft_exit_helper(cmd) == 1)
 			return (1);
-		}
 		printf("exit\n");
 		if (cmd->args[1] != NULL)
 		{
@@ -101,20 +98,10 @@ int	ft_cd(t_cmd *cmd, t_env **env_list)
 	t_env	*old_temp;
 
 	if (find_node_by_key(*env_list, "PWD") == NULL
-			|| find_node_by_key(*env_list, "OLDPWD") == NULL)
+		|| find_node_by_key(*env_list, "OLDPWD") == NULL)
 		return (1);
-	if (cmd->arg_c == 1 || ft_strcmp(cmd->args[1], "~") == 0)
-	{
-		ft_cd_helper(env_list);
-		g_global.signal = 0;
+	if (ft_cd_error(cmd, env_list) == 1)
 		return (1);
-	}
-	if (chdir(cmd->args[1]) == -1)
-	{
-		printf("cd: no such file or directory: %s\n", cmd->args[1]);
-		g_global.signal = 1;
-		return (1);
-	}
 	temp = find_node_by_key(*env_list, "PWD");
 	old_temp = find_node_by_key(*env_list, "OLDPWD");
 	free(old_temp->val);

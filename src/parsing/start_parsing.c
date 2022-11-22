@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 22:13:41 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/15 23:26:38 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/21 20:02:34 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,15 +113,8 @@ int	check_tokens_validity(t_tokens *tokens)
 //also amount of arguments to tokens structure
 int	start_parsing(t_tokens *tokens, t_env **env, t_cmd **cmd)
 {
-	if (tokens->cmdl[0] == '\0')
+	if (start_parsing_err(tokens) == 1)
 		return (1);
-	add_history(tokens->cmdl);
-	if (check_q(tokens->cmdl) == 1)
-	{
-		free(tokens->cmdl);
-		free(tokens);
-		return (1);
-	}
 	tokens->arg_c = 0;
 	count_tokens(tokens->cmdl, tokens);
 	tokens->args = malloc(sizeof(char *) * (tokens->arg_c + 1));
@@ -130,14 +123,10 @@ int	start_parsing(t_tokens *tokens, t_env **env, t_cmd **cmd)
 	quotes_exp_check(tokens, env);
 	if (check_tokens_validity(tokens) == 1)
 	{
-		free_doublptr(tokens->args);
-		free(tokens->cmdl);
-		free(tokens);
+		free_for_start_parsing(tokens);
 		return (1);
 	}
 	start_pipes_parsing(tokens, cmd);
-	free_doublptr(tokens->args);
-	free(tokens->cmdl);
-	free(tokens);
+	free_for_start_parsing(tokens);
 	return (0);
 }
