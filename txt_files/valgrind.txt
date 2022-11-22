@@ -20,4 +20,3 @@ to ignore some errors in valgrind
 	...
 	fun:add_history
 }
-
