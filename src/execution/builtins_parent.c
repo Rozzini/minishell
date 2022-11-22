@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:31:15 by mrizk             #+#    #+#             */
-/*   Updated: 2022/11/20 23:24:41 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/22 21:56:02 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,40 +74,51 @@ int	ft_unset(t_cmd *cmd, t_env **env_list)
 	return (1);
 }
 
-void	ft_cd_helper(t_env **env_list)
+void	ft_cd_helper(t_env **env_list, t_env *home)
 {
 	t_env	*temp;
 	t_env	*old_temp;
-	t_env	*home;
+	char	*s;
 
-	home = find_node_by_key(*env_list, "HOME");
-	if (home == NULL)
-		return ;
 	temp = find_node_by_key(*env_list, "PWD");
 	old_temp = find_node_by_key(*env_list, "OLDPWD");
+	s = getcwd(NULL, 0);
+	if (temp->val == NULL || s == NULL)
+	{
+		if (s)
+			free(s);
+		temp->val = ft_strdup(home->val);
+		old_temp->val = ft_strdup(home->val);
+		return ;
+	}
+	if (s)
+		free(s);
 	free(old_temp->val);
 	old_temp->val = ft_strdup(temp->val);
-	chdir(home->val);
 	free(temp->val);
 	temp->val = getcwd(NULL, 0);
 }
 
 int	ft_cd(t_cmd *cmd, t_env **env_list)
 {
-	t_env	*temp;
-	t_env	*old_temp;
+	t_env	*home;
+	int		ret;
 
+	home = find_node_by_key(*env_list, "HOME");
 	if (find_node_by_key(*env_list, "PWD") == NULL
-		|| find_node_by_key(*env_list, "OLDPWD") == NULL)
+		|| find_node_by_key(*env_list, "OLDPWD") == NULL || home == NULL)
 		return (1);
-	if (ft_cd_error(cmd, env_list) == 1)
+	if (cmd->arg_c == 1 || ft_strcmp(cmd->args[1], "~") == 0)
+	{
+		chdir(home->val);
+		ft_cd_helper(env_list, home);
+		g_global.signal = 0;
 		return (1);
-	temp = find_node_by_key(*env_list, "PWD");
-	old_temp = find_node_by_key(*env_list, "OLDPWD");
-	free(old_temp->val);
-	old_temp->val = ft_strdup(temp->val);
-	free(temp->val);
-	temp->val = getcwd(NULL, 0);
+	}
+	ret = chdir(cmd->args[1]);
+	if (ft_cd_error(cmd, env_list, ret) == 1)
+		return (1);
+	ft_cd_helper(env_list, home);
 	g_global.signal = 0;
 	return (1);
 }

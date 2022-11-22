@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 22:22:36 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/12 20:45:57 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/22 18:13:48 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,11 @@ int	ft_pwd(void)
 	char	*s;
 
 	s = getcwd(NULL, 0);
-	printf("%s\n", s);
-	free(s);
+	if (s != NULL)
+	{
+		printf("%s\n", s);
+		free(s);
+	}
 	return (1);
 }
 

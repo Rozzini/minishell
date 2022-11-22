@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 20:37:03 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/20 23:24:20 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/22 22:44:46 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	exec_pipes_helper(t_cmd	*temp, t_cmd *cmd, t_env **env, int *prev_fd)
 
 	if (temp->pid == 0)
 	{
+		write(2, temp->args[0], ft_strlen(temp->args[0]));
+		write(2, "\n", 1);
 		ft_dup2(temp, prev_fd);
 		close_unused_fds(cmd, counter);
 		if (try_parent_builtins(temp, env) == 1

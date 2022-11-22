@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/20 22:56:34 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/20 23:07:11 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/22 21:52:56 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,18 @@ int	try_child_builtins(t_cmd *cmd, t_env **env)
 	return (0);
 }
 
-int	ft_cd_error(t_cmd *cmd, t_env **env_list)
+int	ft_cd_error(t_cmd *cmd, t_env **env_list, int ret)
 {
-	if (cmd->arg_c == 1 || ft_strcmp(cmd->args[1], "~") == 0)
-	{
-		ft_cd_helper(env_list);
-		g_global.signal = 0;
-		return (1);
-	}
-	if (chdir(cmd->args[1]) == -1)
+	char	*s;
+	t_env	*home;
+
+	s = getcwd(NULL, 0);
+	home = find_node_by_key(*env_list, "HOME");
+	if (s == NULL)
+		chdir(home->val);
+	if (s)
+		free(s);
+	if (ret < 0)
 	{
 		write(2, "cd: no such file or directory: ", 31);
 		write(2, cmd->args[1], ft_strlen(cmd->args[1]));

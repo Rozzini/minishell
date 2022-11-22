@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/20 19:58:19 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/21 20:02:06 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/22 22:37:58 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,21 @@ int	start_parsing_err(t_tokens *tokens)
 		return (1);
 	}
 	return (0);
+}
+
+void	create_pwd(t_env **env)
+{
+	t_env	*temp;
+	t_env	*old_temp;
+	t_env	*home;
+
+	home = find_node_by_key(*env, "HOME");
+	if (home == NULL)
+		return ;
+	temp = find_node_by_key(*env, "PWD");
+	old_temp = find_node_by_key(*env, "OLDPWD");
+	if (temp == NULL)
+		push(env, "PWD", home->val);
+	if (old_temp == NULL)
+		push(env, "OLDPWD", home->val);
 }

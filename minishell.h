@@ -6,7 +6,7 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 15:53:48 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/21 20:02:46 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/22 22:38:10 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,8 @@ int		try_parent_builtins(t_cmd *cmd, t_env **env);
 
 int		try_child_builtins(t_cmd *cmd, t_env **env);
 
-void	ft_cd_helper(t_env **env_list);
+void	ft_cd_helper(t_env **env_list, t_env *home);
+
 //=================================================//
 
 //====================ENV_LIST=====================//
@@ -327,8 +328,6 @@ void	er_ft_execs(char *s);
 
 void	do_export(t_env	*export_d, t_env **env_list);
 
-int		ft_cd_error(t_cmd *cmd, t_env **env_list);
-
 int		ft_exit_helper(t_cmd *cmd);
 
 char	*generate_filename(int rand);
@@ -344,4 +343,8 @@ int		exp_count(char	*s);
 void	save_exp_data(char *string, t_parsing *parsing);
 
 int		start_parsing_err(t_tokens *tokens);
+
+int		ft_cd_error(t_cmd *cmd, t_env **env_list, int ret);
+
+void	create_pwd(t_env **env);
 #endif

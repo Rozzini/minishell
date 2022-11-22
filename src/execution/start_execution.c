@@ -6,26 +6,22 @@
 /*   By: mraspors <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 14:44:22 by mraspors          #+#    #+#             */
-/*   Updated: 2022/11/21 19:57:49 by mraspors         ###   ########.fr       */
+/*   Updated: 2022/11/22 22:39:41 by mraspors         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	ft_execve(t_cmd *cmd, t_env **env)
+void	ft_execve_helper(t_cmd *cmd, t_env *p, char **env_s)
 {
 	int		i;
 	char	*str;
 	char	*temp;
-	char	**env_s;
 	char	**path;
 
 	i = 0;
-	env_s = env_list_to_string(*env);
-	if (ft_strchr(cmd->args[0], '/') != NULL)
-		execve(cmd->args[0], cmd->args, env_s);
-	path = ft_split(find_node_by_key(*env, "PATH")->val, ':');
-	while (path[i] != NULL)
+	path = ft_split(p->val, ':');
+	while (path[i] != NULL && path != NULL)
 	{
 		temp = ft_strjoin(path[i], "/");
 		str = ft_strjoin(temp, cmd->args[0]);
@@ -36,6 +32,23 @@ void	ft_execve(t_cmd *cmd, t_env **env)
 	}
 	free_doublptr(env_s);
 	free_doublptr(path);
+}
+
+void	ft_execve(t_cmd *cmd, t_env **env)
+{
+	char	**env_s;
+	t_env	*p;
+
+	env_s = env_list_to_string(*env);
+	if (ft_strchr(cmd->args[0], '/') != NULL)
+		execve(cmd->args[0], cmd->args, env_s);
+	p = find_node_by_key(*env, "PATH");
+	if (p == NULL)
+	{
+		free_doublptr(env_s);
+		return ;
+	}
+	ft_execve_helper(cmd, p, env_s);
 }
 
 void	ft_execs(t_cmd *cmd, t_env **env)
